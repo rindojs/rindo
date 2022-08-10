@@ -6,11 +6,7 @@ import { HYDRATE_FACTORY_INTRO, HYDRATE_FACTORY_OUTRO } from './hydrate-factory-
 import { updateToHydrateComponents } from './update-to-hydrate-components';
 import { writeHydrateOutputs } from './write-hydrate-outputs';
 import { RollupOptions } from 'rollup';
-import {
-  RINDO_HYDRATE_FACTORY_ID,
-  RINDO_INTERNAL_HYDRATE_ID,
-  RINDO_MOCK_DOC_ID,
-} from '../../bundle/entry-alias-ids';
+import { RINDO_HYDRATE_FACTORY_ID, RINDO_INTERNAL_HYDRATE_ID, RINDO_MOCK_DOC_ID } from '../../bundle/entry-alias-ids';
 import MagicString from 'magic-string';
 import { rollup } from 'rollup';
 import { join } from 'path';

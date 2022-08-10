@@ -31,8 +31,7 @@ export const getRindoModuleUrl = (compilerExe: string, p: string) => {
   return new URL('./' + p, getRindoRootUrl(compilerExe)).href;
 };
 
-export const getRindoInternalDtsUrl = (compilerExe: string) =>
-  getRindoModuleUrl(compilerExe, 'internal/index.d.ts');
+export const getRindoInternalDtsUrl = (compilerExe: string) => getRindoModuleUrl(compilerExe, 'internal/index.d.ts');
 
 export const getCommonDirUrl = (
   sys: d.CompilerSystem,

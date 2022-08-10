@@ -26,13 +26,7 @@ import type {
   TaskCommand,
 } from './rindo-public-compiler';
 
-import type {
-  ComponentInterface,
-  ListenOptions,
-  ListenTargetOptions,
-  VNode,
-  VNodeData,
-} from './rindo-public-runtime';
+import type { ComponentInterface, ListenOptions, ListenTargetOptions, VNode, VNodeData } from './rindo-public-runtime';
 
 export interface SourceMap {
   file: string;
