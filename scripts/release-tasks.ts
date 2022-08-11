@@ -1,4 +1,3 @@
-import fs from 'fs-extra';
 import color from 'ansi-colors';
 import execa from 'execa';
 import Listr, { ListrTask } from 'listr';
@@ -208,21 +207,6 @@ export function runReleaseTasks(opts: BuildOptions, args: ReadonlyArray<string>)
         },
       }
     );
-
-    if (opts.tag !== 'next' && opts.tag !== 'test') {
-      tasks.push({
-        title: 'Also set "next" npm tag on @rindo/core',
-        task: () => {
-          const cmd = 'npm';
-          const cmdArgs = ['dist-tag', 'add', '@rindo/core@' + opts.version, 'next'];
-
-          if (isDryRun) {
-            return console.log(`[dry-run] ${cmd} ${cmdArgs.join(' ')}`);
-          }
-          return execa(cmd, cmdArgs, { cwd: rootDir });
-        },
-      });
-    }
   }
 
   if (opts.isPublishRelease) {
