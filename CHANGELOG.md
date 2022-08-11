@@ -1,11 +1,4 @@
-# 🎉 2.16.0-beta.1
-
-### Bug Fixes
-
-* **template:** change favicon base 64
-
-
-# 2.16.0-beta.0
+# 🍤 2.16.0 (2022-08-11)
 
 ### Bug Fixes
 
