@@ -25,6 +25,7 @@
   ],
   "scripts": {
     "build": "node scripts --prepare && npm run tsc.prod && npm run rollup.prod.ci",
+    "changelog": "conventional-changelog -p angular -o -i CHANGELOG.md -s",
     "clean": "rm -rf build/ cli/ compiler/ dev-server/ internal/ mock-doc/ sys/ testing/ && npm run clean-scripts",
     "clean-scripts": "rm -rf scripts/build",
     "license": "node scripts --license",
