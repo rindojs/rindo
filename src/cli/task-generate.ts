@@ -70,7 +70,8 @@ export const taskGenerate = async (coreCompiler: CoreCompiler, config: Config): 
     return config.sys.exit(1);
   }
 
-  // TODO: Investigate moving these console.log calls to config.logger.info
+  // We use `console.log` here rather than our `config.logger` because we don't want
+  // our TUI messages to be prefixed with timestamps and so on.
   console.log();
   console.log(`${config.logger.gray('$')} rindo generate ${input}`);
   console.log();
