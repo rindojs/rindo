@@ -62,6 +62,8 @@ export const createTestingSystem = (): TestingSystem => {
   sys.writeFile = wrapWrite(sys.writeFile);
   sys.writeFileSync = wrapWrite(sys.writeFileSync);
 
+  sys.getCompilerExecutingPath = () => 'bin/rindo.js';
+
   Object.defineProperties(sys, {
     diskReads: {
       get() {

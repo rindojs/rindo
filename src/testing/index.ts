@@ -11,6 +11,7 @@ export {
   mockLogger,
   mockRindoSystem,
   mockWindow,
+  mockModule,
 } from './mocks';
 export {
   MockHeaders,

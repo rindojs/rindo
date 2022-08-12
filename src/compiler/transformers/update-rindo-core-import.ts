@@ -69,6 +69,9 @@ export const updateRindoCoreImports = (updatedCoreImportPath: string): ts.Transf
   };
 };
 
+/**
+ * A set of imports which we don't want to remove from an output file
+ */
 const KEEP_IMPORTS = new Set([
   'h',
   'setMode',
