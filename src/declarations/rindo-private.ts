@@ -26,7 +26,13 @@ import type {
   TaskCommand,
 } from './rindo-public-compiler';
 
-import type { ComponentInterface, ListenOptions, ListenTargetOptions, VNode, VNodeData } from './rindo-public-runtime';
+import type {
+  ComponentInterface,
+  ListenOptions,
+  ListenTargetOptions,
+  VNode,
+  VNodeData
+} from './rindo-public-runtime';
 
 export interface SourceMap {
   file: string;
@@ -2629,6 +2635,7 @@ export interface TrackableData {
   build: string;
   rindo: string;
   has_app_pwa_config: boolean;
+  config: Config;
 }
 
 /**
