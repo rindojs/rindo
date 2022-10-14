@@ -1,0 +1,6 @@
+{
+  "name": "@rindo/core/internal",
+  "private": true,
+  "main": "./index.js",
+  "types": "./index.d.ts"
+}

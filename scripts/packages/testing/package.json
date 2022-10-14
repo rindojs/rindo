@@ -1,0 +1,6 @@
+{
+  "name": "@rindo/core/testing",
+  "private": true,
+  "main": "./index.js",
+  "types": "../dist/testing/index.d.ts"
+}

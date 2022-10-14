@@ -1,0 +1,2 @@
+/*  @rindo/core/sys/node  */
+module.exports = require('../../dist/sys/node');
