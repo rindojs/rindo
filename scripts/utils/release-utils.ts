@@ -55,7 +55,7 @@ export function prettyVersionDiff(oldVersion: any, inc: any) {
 
 export async function updateChangeLog(opts: BuildOptions) {
   const ccPath = join(opts.nodeModulesDir, '.bin', 'conventional-changelog');
-  await execa('node', [ccPath, '-p', 'angular', '-o', '-i', opts.changelogPath, '-s'], { cwd: opts.rootDir });
+  await execa('npm', ['run', 'changelog'], { cwd: opts.rootDir });
 
   let changelog = await fs.readFile(opts.changelogPath, 'utf8');
   changelog = changelog.replace(/\# \[/, '# ' + opts.vermoji + ' [');
