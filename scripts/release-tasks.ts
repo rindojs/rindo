@@ -120,14 +120,6 @@ export function runReleaseTasks(opts: BuildOptions, args: string[]) {
         task: () => bundleBuild(opts),
       },
       {
-        title: 'Run jest tests',
-        task: () => execa('npm', ['run', 'test.jest'], { cwd: rootDir }),
-      },
-      {
-        title: 'Run karma tests',
-        task: () => execa('npm', ['run', 'test.karma.prod'], { cwd: rootDir }),
-      },
-      {
         title: 'Build license',
         task: () => createLicense(rootDir),
       },
