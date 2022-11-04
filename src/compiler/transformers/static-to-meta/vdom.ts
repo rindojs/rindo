@@ -1,7 +1,6 @@
 import * as d from '../../../declarations';
 import ts from 'typescript';
 
-
 export const gatherVdomMeta = (m: d.Module | d.ComponentCompilerMeta, args: ts.NodeArray<ts.Expression>) => {
   m.hasVdomRender = true;
 
@@ -23,7 +22,6 @@ export const gatherVdomMeta = (m: d.Module | d.ComponentCompilerMeta, args: ts.N
       m.hasVdomRef = true;
       m.hasVdomStyle = true;
       m.hasVdomXlink = true;
-
     } else if (ts.isObjectLiteralExpression(objectLiteral)) {
       objectLiteral.properties.forEach(prop => {
         m.hasVdomAttribute = true;
@@ -35,7 +33,6 @@ export const gatherVdomMeta = (m: d.Module | d.ComponentCompilerMeta, args: ts.N
           m.hasVdomRef = true;
           m.hasVdomStyle = true;
           m.hasVdomXlink = true;
-
         } else if (prop.name && (prop.name as any).text && (prop.name as any).text.length > 0) {
           const attrName = (prop.name as any).text;
           if (attrName === 'key') {
@@ -54,6 +51,15 @@ export const gatherVdomMeta = (m: d.Module | d.ComponentCompilerMeta, args: ts.N
           } else {
             m.hasVdomPropOrAttr = true;
           }
+          ts.SyntaxKind.StringLiteral;
+          if (attrName === 'part' && ts.isPropertyAssignment(prop) && ts.isStringLiteral(prop.initializer)) {
+            m.htmlParts.push(
+              ...prop.initializer.text
+                .toLowerCase()
+                .split(' ')
+                .filter(part => part.length > 0),
+            );
+          }
           m.htmlAttrNames.push(attrName);
         }
       });
@@ -64,7 +70,7 @@ export const gatherVdomMeta = (m: d.Module | d.ComponentCompilerMeta, args: ts.N
   if (!m.hasVdomText) {
     for (let i = 2; i < args.length; i++) {
       const arg = args[i];
-      if (!ts.isCallExpression(arg) || !ts.isIdentifier(arg.expression) || (arg.expression.text !== 'h')) {
+      if (!ts.isCallExpression(arg) || !ts.isIdentifier(arg.expression) || arg.expression.text !== 'h') {
         m.hasVdomText = true;
         break;
       }

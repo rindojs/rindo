@@ -1,13 +1,10 @@
-import * as d from '../../declarations';
+import { E2EProcessEnv, JestEnvironmentGlobal } from '@rindo/core/internal';
 import { connectBrowser, disconnectBrowser, newBrowserPage } from '../puppeteer/puppeteer-browser';
-import NodeEnvironment from 'jest-environment-node';
-
 
 export function createJestPuppeteerEnvironment() {
-
-  const JestEnvironment = class extends NodeEnvironment {
-
-    global: d.JestEnvironmentGlobal;
+  const NodeEnvironment = require('jest-environment-node');
+  const JestEnvironment = class extends (NodeEnvironment as any) {
+    global: JestEnvironmentGlobal;
     browser: any = null;
     pages: any[] = [];
 
@@ -16,7 +13,7 @@ export function createJestPuppeteerEnvironment() {
     }
 
     async setup() {
-      if ((process.env as d.E2EProcessEnv).__RINDO_E2E_TESTS__ === 'true') {
+      if ((process.env as E2EProcessEnv).__RINDO_E2E_TESTS__ === 'true') {
         this.global.__NEW_TEST_PAGE__ = this.newPuppeteerPage.bind(this);
         this.global.__CLOSE_OPEN_PAGES__ = this.closeOpenPages.bind(this);
       }
@@ -30,17 +27,15 @@ export function createJestPuppeteerEnvironment() {
 
       const page = await newBrowserPage(this.browser);
       this.pages.push(page);
-      const env: d.E2EProcessEnv = process.env;
+      const env: E2EProcessEnv = process.env;
       if (typeof env.__RINDO_DEFAULT_TIMEOUT__ === 'string') {
-        page.setDefaultTimeout(parseInt(env.__RINDO_DEFAULT_TIMEOUT__, 10) * 0.5);
+        page.setDefaultTimeout(parseInt(env.__RINDO_DEFAULT_TIMEOUT__, 10));
       }
       return page;
     }
 
     async closeOpenPages() {
-      await Promise.all(
-        this.pages.map(page => page.close())
-      );
+      await Promise.all(this.pages.map(page => page.close()));
       this.pages.length = 0;
     }
 
@@ -51,7 +46,6 @@ export function createJestPuppeteerEnvironment() {
       this.browser = null;
     }
   };
-
 
   return JestEnvironment;
 }

@@ -1,110 +1,108 @@
-import * as d from '../declarations';
+import { CompilerBuildResults, Compiler, Config, DevServer, E2EProcessEnv, OutputTargetWww, Testing, TestingRunOptions } from '@rindo/core/internal';
+import { getAppScriptUrl, getAppStyleUrl } from './testing-utils';
 import { hasError } from '@utils';
-import { isOutputTargetDistLazy, isOutputTargetWww } from '../compiler/output-targets/output-utils';
 import { runJest } from './jest/jest-runner';
 import { runJestScreenshot } from './jest/jest-screenshot';
 import { startPuppeteerBrowser } from './puppeteer/puppeteer-browser';
+import { start } from '@rindo/core/dev-server';
 import * as puppeteer from 'puppeteer';
 
+export const createTesting = async (config: Config): Promise<Testing> => {
+  config = setupTestingConfig(config);
 
-export class Testing implements d.Testing {
-  isValid = false;
-  compiler: d.Compiler;
-  config: d.Config;
-  devServer: d.DevServer;
-  puppeteerBrowser: puppeteer.Browser;
+  const { createCompiler } = require('../compiler/rindo.js');
+  const compiler: Compiler = await createCompiler(config);
 
-  constructor(config: d.Config) {
-    const { Compiler } = require('../compiler/index.js');
+  let devServer: DevServer;
+  let puppeteerBrowser: puppeteer.Browser;
 
-    this.compiler = new Compiler(setupTestingConfig(config));
-    this.config = this.compiler.config;
-
-    this.isValid = this.compiler.isValid;
-
-    if (this.isValid) {
-      if (!config.flags.spec && !config.flags.e2e) {
-        config.logger.error(`Testing requires either the --spec or --e2e command line flags, or both. For example, to run unit tests, use the command: rindo test --spec`);
-        this.isValid = false;
-      }
-    }
-  }
-
-  async runTests() {
-    if (!this.isValid || !this.compiler) {
-      return false;
-    }
-
-    const env: d.E2EProcessEnv = process.env;
-    const compiler = this.compiler;
-    const config = this.config;
+  const run = async (opts: TestingRunOptions = {}) => {
+    let doScreenshots = false;
+    let passed = false;
+    let env: E2EProcessEnv;
     const msg: string[] = [];
 
-    if (config.flags.e2e) {
-      msg.push('e2e');
-      env.__RINDO_E2E_TESTS__ = 'true';
-    }
-
-    if (config.flags.spec) {
-      msg.push('spec');
-      env.__RINDO_SPEC_TESTS__ = 'true';
-    }
-
-    this.config.logger.info(this.config.logger.magenta(`testing ${msg.join(' and ')} files`));
-
-    const doScreenshots = !!(config.flags.e2e && config.flags.screenshot);
-    if (doScreenshots) {
-      env.__RINDO_SCREENSHOT__ = 'true';
-
-      if (config.flags.updateScreenshot) {
-        this.config.logger.info(this.config.logger.magenta(`updating master screenshots`));
-      } else {
-        this.config.logger.info(this.config.logger.magenta(`comparing against master screenshots`));
-      }
-    }
-
-    if (config.flags.e2e) {
-      // e2e tests only
-      // do a build, start a dev server
-      // and spin up a puppeteer browser
-
-      let buildTask: Promise<d.BuildResults> = null;
-
-      (config.outputTargets as d.OutputTargetWww[]).forEach(outputTarget => {
-        outputTarget.empty = false;
-      });
-
-      const doBuild = !(config.flags && config.flags.build === false);
-      if (doBuild) {
-        buildTask = compiler.build();
+    try {
+      if (!opts.spec && !opts.e2e) {
+        config.logger.error(`Testing requires either the --spec or --e2e command line flags, or both. For example, to run unit tests, use the command: rindo test --spec`);
+        return false;
       }
 
-      const startupResults = await Promise.all([
-        compiler.startDevServer(),
-        startPuppeteerBrowser(config),
-      ]);
+      env = process.env;
 
-      this.devServer = startupResults[0];
-      this.puppeteerBrowser = startupResults[1];
+      if (opts.e2e) {
+        msg.push('e2e');
+        env.__RINDO_E2E_TESTS__ = 'true';
+      }
 
-      if (doBuild) {
-        const results = await buildTask;
-        if (!results || (!config.watch && hasError(results && results.diagnostics))) {
-          await this.destroy();
-          return false;
+      if (opts.spec) {
+        msg.push('spec');
+        env.__RINDO_SPEC_TESTS__ = 'true';
+      }
+
+      config.logger.info(config.logger.magenta(`testing ${msg.join(' and ')} files`));
+
+      doScreenshots = !!(opts.e2e && opts.screenshot);
+      if (doScreenshots) {
+        env.__RINDO_SCREENSHOT__ = 'true';
+
+        if (opts.updateScreenshot) {
+          config.logger.info(config.logger.magenta(`updating master screenshots`));
+        } else {
+          config.logger.info(config.logger.magenta(`comparing against master screenshots`));
         }
       }
 
-      if (this.devServer) {
-        env.__RINDO_BROWSER_URL__ = this.devServer.browserUrl;
-        this.config.logger.debug(`e2e dev server url: ${env.__RINDO_BROWSER_URL__}`);
+      if (opts.e2e) {
+        // e2e tests only
+        // do a build, start a dev server
+        // and spin up a puppeteer browser
+        let buildTask: Promise<CompilerBuildResults> = null;
 
-        env.__RINDO_APP_URL__ = getAppUrl(config, this.devServer.browserUrl);
-        this.config.logger.debug(`e2e app url: ${env.__RINDO_APP_URL__}`);
+        (config.outputTargets as OutputTargetWww[]).forEach(outputTarget => {
+          outputTarget.empty = false;
+        });
+
+        const doBuild = !(config.flags && config.flags.build === false);
+        if (doBuild) {
+          buildTask = compiler.build();
+        }
+
+        config.devServer.openBrowser = false;
+        config.devServer.gzip = false;
+        config.devServer.reloadStrategy = null;
+
+        const startupResults = await Promise.all([start(config.devServer, config.logger), startPuppeteerBrowser(config)]);
+
+        devServer = startupResults[0];
+        puppeteerBrowser = startupResults[1];
+
+        if (doBuild) {
+          const results = await buildTask;
+          if (!results || (!config.watch && hasError(results && results.diagnostics))) {
+            await destroy();
+            return false;
+          }
+        }
+
+        if (devServer) {
+          env.__RINDO_BROWSER_URL__ = devServer.browserUrl;
+          config.logger.debug(`e2e dev server url: ${env.__RINDO_BROWSER_URL__}`);
+
+          env.__RINDO_APP_SCRIPT_URL__ = getAppScriptUrl(config, devServer.browserUrl);
+          config.logger.debug(`e2e app script url: ${env.__RINDO_APP_SCRIPT_URL__}`);
+
+          const styleUrl = getAppStyleUrl(config, devServer.browserUrl);
+          if (styleUrl) {
+            env.__RINDO_APP_STYLE_URL__ = getAppStyleUrl(config, devServer.browserUrl);
+            config.logger.debug(`e2e app style url: ${env.__RINDO_APP_STYLE_URL__}`);
+          }
+        }
       }
+    } catch (e) {
+      config.logger.error(e);
+      return false;
     }
-
-    let passed = false;
 
     try {
       if (doScreenshots) {
@@ -112,39 +110,52 @@ export class Testing implements d.Testing {
       } else {
         passed = await runJest(config, env);
       }
-      this.config.logger.info('');
-
+      config.logger.info('');
     } catch (e) {
-      this.config.logger.error(e);
+      config.logger.error(e);
     }
 
     return passed;
-  }
+  };
 
-  async destroy() {
-    if (this.config) {
-      this.config.sys.destroy();
-      this.config = null;
+  const destroy = async () => {
+    const closingTime: Promise<any>[] = []; // you don't have to go home but you can't stay here
+    if (config) {
+      if (config.sys && config.sys.destroy) {
+        closingTime.push(config.sys.destroy());
+      }
+      config = null;
     }
 
-    if (this.devServer) {
-      await this.devServer.close();
-      this.devServer = null;
+    if (devServer) {
+      if (devServer.close) {
+        closingTime.push(devServer.close());
+      }
+      devServer = null;
     }
 
-    if (this.puppeteerBrowser) {
-      await this.puppeteerBrowser.close();
-      this.puppeteerBrowser = null;
+    if (puppeteerBrowser) {
+      if (puppeteerBrowser.close) {
+        closingTime.push(puppeteerBrowser.close());
+      }
+      puppeteerBrowser = null;
     }
 
-    this.compiler = null;
-  }
-}
+    await Promise.all(closingTime);
+  };
 
+  return {
+    destroy,
+    run,
+  };
+};
 
-function setupTestingConfig(config: d.Config) {
+function setupTestingConfig(config: Config) {
   config.buildEs5 = false;
   config.devMode = true;
+  config.minifyCss = false;
+  config.minifyJs = false;
+  config.hashFileNames = false;
   config.validateTypes = false;
   config._isTesting = true;
   config.buildDist = true;
@@ -153,29 +164,11 @@ function setupTestingConfig(config: d.Config) {
   config.flags.serve = false;
   config.flags.open = false;
 
+  config.outputTargets.forEach(o => {
+    if (o.type === 'www') {
+      o.serviceWorker = null;
+    }
+  });
+
   return config;
-}
-
-
-
-function getAppUrl(config: d.Config, browserUrl: string) {
-  const appFileName = `${config.fsNamespace}.esm.js`;
-
-  const wwwOutput = config.outputTargets.find(isOutputTargetWww);
-  if (wwwOutput) {
-    const appBuildDir = wwwOutput.buildDir;
-    const appFilePath = config.sys.path.join(appBuildDir, appFileName);
-    const appUrlPath = config.sys.path.relative(wwwOutput.dir, appFilePath);
-    return browserUrl + appUrlPath;
-  }
-
-  const distOutput = config.outputTargets.find(isOutputTargetDistLazy);
-  if (distOutput) {
-    const appBuildDir = distOutput.esmDir;
-    const appFilePath = config.sys.path.join(appBuildDir, appFileName);
-    const appUrlPath = config.sys.path.relative(config.rootDir, appFilePath);
-    return browserUrl + appUrlPath;
-  }
-
-  return browserUrl;
 }

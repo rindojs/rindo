@@ -1,18 +1,19 @@
 import * as d from '../../declarations';
 import { connectedCallback, insertVdomAnnotations } from '@runtime';
-import { doc, getComponent, getHostRef, plt, registerHost } from '@platform';
+import { doc, getHostRef, loadModule, plt, registerHost } from '@platform';
 import { proxyHostElement } from './proxy-host-element';
-
+import { globalScripts } from '@app-globals';
 
 export function hydrateApp(
-  win: Window,
+  win: Window & typeof globalThis,
   opts: d.HydrateFactoryOptions,
   results: d.HydrateResults,
   afterHydrate: (win: Window, opts: d.HydrateFactoryOptions, results: d.HydrateResults, resolve: (results: d.HydrateResults) => void) => void,
-  resolve: (results: d.HydrateResults) => void
+  resolve: (results: d.HydrateResults) => void,
 ) {
   const connectedElements = new Set<any>();
   const createdElements = new Set<HTMLElement>();
+  const waitingElements = new Set<HTMLElement>();
   const orgDocumentCreateElement = win.document.createElement;
   const orgDocumentCreateElementNS = win.document.createElementNS;
   const resolved = Promise.resolve();
@@ -26,11 +27,10 @@ export function hydrateApp(
 
     try {
       if (opts.clientHydrateAnnotations) {
-        insertVdomAnnotations(win.document);
+        insertVdomAnnotations(win.document, opts.staticComponents);
       }
       win.document.createElement = orgDocumentCreateElement;
       win.document.createElementNS = orgDocumentCreateElementNS;
-
     } catch (e) {
       renderCatchError(opts, results, e);
     }
@@ -44,11 +44,10 @@ export function hydrateApp(
   }
 
   function timeoutExceeded() {
-    hydratedError(`Hydrate exceeded timeout`);
+    hydratedError(`Hydrate exceeded timeout${waitingOnElementsMsg(waitingElements)}`);
   }
 
   try {
-
     function patchedConnectedCallback(this: d.HostElement) {
       return connectElement(this);
     }
@@ -59,10 +58,16 @@ export function hydrateApp(
 
         const hostRef = getHostRef(elm);
         if (!hostRef) {
-          // we haven't register this component's host element yet
+          // we haven't registered this component's host element yet
 
           // get the component's constructor
-          const Cstr = getComponent(elm.nodeName.toLowerCase());
+          const Cstr = loadModule(
+            {
+              $tagName$: elm.nodeName.toLowerCase(),
+              $flags$: null,
+            },
+            null,
+          ) as d.ComponentConstructor;
 
           if (Cstr != null && Cstr.cmpMeta != null) {
             // we found valid component metadata
@@ -70,7 +75,7 @@ export function hydrateApp(
             elm.connectedCallback = patchedConnectedCallback;
 
             // register the host element
-            registerHost(elm);
+            registerHost(elm, Cstr.cmpMeta);
 
             // proxy the host element with the component's metadata
             proxyHostElement(elm, Cstr.cmpMeta);
@@ -102,7 +107,7 @@ export function hydrateApp(
 
           // add it to our Set so we know it's already being connected
           connectedElements.add(elm);
-          return hydrateComponent(win, results, elm.nodeName, elm);
+          return hydrateComponent(win, results, elm.nodeName, elm, waitingElements);
         }
       }
 
@@ -112,8 +117,7 @@ export function hydrateApp(
     function waitLoop(): Promise<void> {
       const toConnect = Array.from(createdElements).filter(elm => elm.parentElement);
       if (toConnect.length > 0) {
-        return Promise.all(toConnect.map(connectElement))
-          .then(waitLoop);
+        return Promise.all(toConnect.map(connectElement)).then(waitLoop);
       }
       return resolved;
     }
@@ -130,33 +134,38 @@ export function hydrateApp(
       return elm;
     };
 
-    // ensure we use nodejs's native setTimeout, not the mocked one
+    // ensure we use nodejs's native setTimeout, not the mocked hydrate app scoped one
     tmrId = global.setTimeout(timeoutExceeded, opts.timeout);
 
     plt.$resourcesUrl$ = new URL(opts.resourcesUrl || './', doc.baseURI).href;
 
+    globalScripts();
+
     patchChild(win.document.body);
 
-    waitLoop()
-      .then(hydratedComplete)
-      .catch(hydratedError);
-
+    waitLoop().then(hydratedComplete).catch(hydratedError);
   } catch (e) {
     hydratedError(e);
   }
 }
 
-
-async function hydrateComponent(win: Window, results: d.HydrateResults, tagName: string, elm: d.HostElement) {
+async function hydrateComponent(win: Window & typeof globalThis, results: d.HydrateResults, tagName: string, elm: d.HostElement, waitingElements: Set<HTMLElement>) {
   tagName = tagName.toLowerCase();
-  const Cstr = getComponent(tagName);
+  const Cstr = loadModule(
+    {
+      $tagName$: tagName,
+      $flags$: null,
+    },
+    null,
+  ) as d.ComponentConstructor;
 
   if (Cstr != null) {
     const cmpMeta = Cstr.cmpMeta;
 
     if (cmpMeta != null) {
+      waitingElements.add(elm);
       try {
-        connectedCallback(elm, cmpMeta);
+        connectedCallback(elm);
         await elm.componentOnReady();
 
         results.hydratedCount++;
@@ -174,6 +183,7 @@ async function hydrateComponent(win: Window, results: d.HydrateResults, tagName:
       } catch (e) {
         win.console.error(e);
       }
+      waitingElements.delete(elm);
     }
   }
 }
@@ -212,22 +222,7 @@ function shouldHydrate(elm: Element): boolean {
   return shouldHydrate(parentNode as Element);
 }
 
-const NO_HYDRATE_TAGS = new Set([
-  'CODE',
-  'HEAD',
-  'IFRAME',
-  'INPUT',
-  'OBJECT',
-  'OUTPUT',
-  'NOSCRIPT',
-  'PRE',
-  'SCRIPT',
-  'SELECT',
-  'STYLE',
-  'TEMPLATE',
-  'TEXTAREA'
-]);
-
+const NO_HYDRATE_TAGS = new Set(['CODE', 'HEAD', 'IFRAME', 'INPUT', 'OBJECT', 'OUTPUT', 'NOSCRIPT', 'PRE', 'SCRIPT', 'SELECT', 'STYLE', 'TEMPLATE', 'TEXTAREA']);
 
 function renderCatchError(opts: d.HydrateFactoryOptions, results: d.HydrateResults, err: any) {
   const diagnostic: d.Diagnostic = {
@@ -237,7 +232,7 @@ function renderCatchError(opts: d.HydrateFactoryOptions, results: d.HydrateResul
     messageText: '',
     relFilePath: null,
     absFilePath: null,
-    lines: []
+    lines: [],
   };
 
   if (opts.url) {
@@ -260,4 +255,44 @@ function renderCatchError(opts: d.HydrateFactoryOptions, results: d.HydrateResul
   }
 
   results.diagnostics.push(diagnostic);
+}
+
+function printTag(elm: HTMLElement) {
+  let tag = `<${elm.nodeName.toLowerCase()}`;
+  if (Array.isArray(elm.attributes)) {
+    for (let i = 0; i < elm.attributes.length; i++) {
+      const attr = elm.attributes[i];
+      tag += ` ${attr.name}`;
+      if (attr.value !== '') {
+        tag += `="${attr.value}"`;
+      }
+    }
+  }
+  tag += `>`;
+  return tag;
+}
+
+function waitingOnElementMsg(waitingElement: HTMLElement) {
+  let msg = '';
+  if (waitingElement) {
+    const lines = [];
+
+    msg = ' - waiting on:';
+    let elm = waitingElement;
+    while (elm && elm.nodeType !== 9 && elm.nodeName !== 'BODY') {
+      lines.unshift(printTag(elm));
+      elm = elm.parentElement;
+    }
+
+    let indent = '';
+    for (const ln of lines) {
+      indent += '  ';
+      msg += `\n${indent}${ln}`;
+    }
+  }
+  return msg;
+}
+
+function waitingOnElementsMsg(waitingElements: Set<HTMLElement>) {
+  return Array.from(waitingElements).map(waitingOnElementMsg);
 }

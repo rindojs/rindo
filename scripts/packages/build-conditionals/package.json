@@ -1,6 +1,0 @@
-{
-  "name": "@rindo/core/build-conditionals",
-  "private": true,
-  "module": "./index.mjs",
-  "types": "../dist/runtime/index.d.ts"
-}

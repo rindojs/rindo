@@ -1,10 +1,10 @@
 import * as d from '../../../declarations';
+import { basename, dirname, extname, join } from 'path';
 import { ConvertIdentifier, convertValueToLiteral, createStaticGetter } from '../transform-utils';
 import { DEFAULT_STYLE_MODE } from '@utils';
 import ts from 'typescript';
 
-
-export const styleToStatic = (config: d.Config, newMembers: ts.ClassElement[], componentOptions: d.ComponentOptions) => {
+export const styleToStatic = (newMembers: ts.ClassElement[], componentOptions: d.ComponentOptions) => {
   const defaultModeStyles = [];
 
   if (componentOptions.styleUrls) {
@@ -32,7 +32,7 @@ export const styleToStatic = (config: d.Config, newMembers: ts.ClassElement[], c
     const originalStyleUrls = convertValueToLiteral(styleUrls);
     newMembers.push(createStaticGetter('originalStyleUrls', originalStyleUrls));
 
-    const norlizedStyleExt = normalizeExtension(config, styleUrls);
+    const norlizedStyleExt = normalizeExtension(styleUrls);
     const normalizedStyleExp = convertValueToLiteral(norlizedStyleExt);
     newMembers.push(createStaticGetter('styleUrls', normalizedStyleExp));
   }
@@ -40,31 +40,49 @@ export const styleToStatic = (config: d.Config, newMembers: ts.ClassElement[], c
   if (typeof componentOptions.styles === 'string') {
     const styles = componentOptions.styles.trim();
     if (styles.length > 0) {
+      // @Component({
+      //   styles: ":host {...}"
+      // })
       newMembers.push(createStaticGetter('styles', ts.createLiteral(styles)));
     }
-
   } else if (componentOptions.styles) {
     const convertIdentifier = (componentOptions.styles as any) as ConvertIdentifier;
     if (convertIdentifier.__identifier) {
-      newMembers.push(createStaticGetter('styles', ts.createIdentifier(convertIdentifier.__escapedText)));
+      // import styles from './styles.css';
+      // @Component({
+      //   styles
+      // })
+      const stylesIdentifier = convertIdentifier.__escapedText;
+      newMembers.push(createStaticGetter('styles', ts.createIdentifier(stylesIdentifier)));
+    } else if (typeof convertIdentifier === 'object') {
+      // import ios from './ios.css';
+      // import md from './md.css';
+      // @Component({
+      //   styles: {
+      //     ios
+      //     md
+      //   }
+      // })
+      if (Object.keys(convertIdentifier).length > 0) {
+        newMembers.push(createStaticGetter('styles', convertValueToLiteral(convertIdentifier)));
+      }
     }
   }
 };
 
-
-const normalizeExtension = (config: d.Config, styleUrls: d.CompilerModeStyles) => {
+const normalizeExtension = (styleUrls: d.CompilerModeStyles) => {
   const compilerStyleUrls: d.CompilerModeStyles = {};
   Object.keys(styleUrls).forEach(key => {
-    compilerStyleUrls[key] = styleUrls[key].map(s => useCss(config, s));
+    compilerStyleUrls[key] = styleUrls[key].map(s => useCss(s));
   });
   return compilerStyleUrls;
 };
 
-const useCss = (config: d.Config, stylePath: string) => {
-  const sourceFileDir = config.sys.path.dirname(stylePath);
-  const sourceFileExt = config.sys.path.extname(stylePath);
-  const sourceFileName = config.sys.path.basename(stylePath, sourceFileExt);
-  return config.sys.path.join(sourceFileDir, sourceFileName + '.css');
+const useCss = (stylePath: string) => {
+  const sourceFileDir = dirname(stylePath);
+  const sourceFileExt = extname(stylePath);
+  const sourceFileName = basename(stylePath, sourceFileExt);
+  return join(sourceFileDir, sourceFileName + '.css');
 };
 
 const normalizeStyleUrls = (styleUrls: d.ModeStyles): d.CompilerModeStyles => {

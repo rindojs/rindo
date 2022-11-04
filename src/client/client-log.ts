@@ -1,5 +1,8 @@
+import { BUILD } from '@app-data';
 
-export const RINDO_DEV_MODE = ['%c[RINDO-DEV-MODE]', 'color:#4c47ff;font-weight: bold'];
+export const RINDO_DEV_MODE = BUILD.isTesting
+  ? ['RINDO:'] // E2E testing
+  : ['%crindo', 'color: white;background:#4c47ff;font-weight: bold; font-size:10px; padding:2px 6px; border-radius: 5px'];
 
 export const consoleDevError = (...m: any[]) => console.error(...RINDO_DEV_MODE, ...m);
 

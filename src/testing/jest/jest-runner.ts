@@ -1,7 +1,7 @@
-import * as d from '../../declarations';
+import * as d from '@rindo/core/internal';
 import { buildJestArgv, getProjectListFromCLIArgs } from './jest-config';
 import { setScreenshotEmulateData } from '../puppeteer/puppeteer-emulate';
-
+import type { AggregatedResult } from '@jest/test-result';
 
 export async function runJest(config: d.Config, env: d.E2EProcessEnv) {
   let success = false;
@@ -19,6 +19,7 @@ export async function runJest(config: d.Config, env: d.E2EProcessEnv) {
     if (config.flags.devtools) {
       env.__RINDO_DEFAULT_TIMEOUT__ = '300000000';
     }
+    config.logger.debug(`default timeout: ${env.__RINDO_DEFAULT_TIMEOUT__}`);
 
     // build up our args from our already know list of args in the config
     const jestArgv = buildJestArgv(config);
@@ -26,13 +27,14 @@ export async function runJest(config: d.Config, env: d.E2EProcessEnv) {
     // build up the project paths, which is basically the app's root dir
     const projects = getProjectListFromCLIArgs(config, jestArgv);
 
-    // run the jest-cli with our data rather than letting the
-    // jest-cli parse the args itself
-    const { runCLI } = require('jest-cli');
-    const cliResults = await runCLI(jestArgv, projects);
+    // run the @jest/core with our data rather than letting the
+    // @jest/core parse the args itself
+    const { runCLI } = require('@jest/core');
+    const cliResults = (await runCLI(jestArgv, projects)) as {
+      results: AggregatedResult;
+    };
 
     success = !!cliResults.results.success;
-
   } catch (e) {
     config.logger.error(`runJest: ${e}`);
   }
@@ -40,17 +42,14 @@ export async function runJest(config: d.Config, env: d.E2EProcessEnv) {
   return success;
 }
 
-
 export function createTestRunner(): any {
-
   const TestRunner = require('jest-runner');
 
   class RindoTestRunner extends TestRunner {
-
     async runTests(tests: { path: string }[], watcher: any, onStart: any, onResult: any, onFailure: any, options: any) {
-      const env = (process.env as d.E2EProcessEnv);
+      const env = process.env as d.E2EProcessEnv;
 
-        // filter out only the tests the flags said we should run
+      // filter out only the tests the flags said we should run
       tests = tests.filter(t => includeTestFile(t.path, env));
 
       if (env.__RINDO_SCREENSHOT__ === 'true') {
@@ -71,19 +70,16 @@ export function createTestRunner(): any {
           // run the test for each emulate config
           await super.runTests(tests, watcher, onStart, onResult, onFailure, options);
         }
-
       } else {
         // not doing e2e screenshot tests
         // so just run each test once
         await super.runTests(tests, watcher, onStart, onResult, onFailure, options);
       }
     }
-
   }
 
   return RindoTestRunner;
 }
-
 
 export function includeTestFile(testPath: string, env: d.E2EProcessEnv) {
   testPath = testPath.toLowerCase().replace(/\\/g, '/');
@@ -100,7 +96,6 @@ export function includeTestFile(testPath: string, env: d.E2EProcessEnv) {
   }
   return false;
 }
-
 
 export function getEmulateConfigs(testing: d.TestingConfig, flags: d.ConfigFlags) {
   let emulateConfigs = testing.emulate.slice();

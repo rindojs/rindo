@@ -3,11 +3,8 @@ import { catchError, hasError, normalizeDiagnostics } from '@utils';
 import { BuildContext } from '../build/build-ctx';
 import { transpileApp } from '../transpile/transpile-app';
 
-
 export async function docs(config: d.Config, compilerCtx: d.CompilerCtx) {
   const buildCtx = new BuildContext(config, compilerCtx);
-
-  config.logger.info(config.logger.cyan(`${config.sys.compiler.name} v${config.sys.compiler.version}`));
 
   // keep track of how long the entire build process takes
   const timeSpan = config.logger.createTimeSpan(`generate docs, ${config.fsNamespace}, started`);
@@ -20,7 +17,6 @@ export async function docs(config: d.Config, compilerCtx: d.CompilerCtx) {
 
     // generate each of the docs
     // await createPluginOutput(config, compilerCtx, buildCtx, [docsPlugin, jsonDocsPlugin, vscodeDocsPlugin]);
-
   } catch (e) {
     // catch all phase
     catchError(buildCtx.diagnostics, e);
@@ -41,4 +37,3 @@ export async function docs(config: d.Config, compilerCtx: d.CompilerCtx) {
 
   timeSpan.finish(`generate docs ${buildStatus}`, statusColor, true, true);
 }
-

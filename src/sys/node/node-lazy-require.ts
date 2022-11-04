@@ -1,25 +1,16 @@
 import * as d from '../../declarations';
-import { dirname } from 'path';
+import path from 'path';
 import { NodeResolveModule } from './node-resolve-module';
-import { readFile } from 'graceful-fs';
+import { readFile } from './node-fs-promisify';
 import { SpawnOptions, spawn } from 'child_process';
-
+import semiver from 'semiver';
 
 export class NodeLazyRequire implements d.LazyRequire {
-  private moduleData = new Map<string, { fromDir: string, modulePath: string }>();
+  private moduleData = new Map<string, { fromDir: string; modulePath: string }>();
 
-  constructor(private semver: d.Semver, private nodeResolveModule: NodeResolveModule, private rindoPackageJson: d.PackageJsonData) {
-  }
+  constructor(private nodeResolveModule: NodeResolveModule, private lazyDependencies: { [dep: string]: [string, string] }) {}
 
   async ensure(logger: d.Logger, fromDir: string, ensureModuleIds: string[]) {
-    if (!this.rindoPackageJson || !this.rindoPackageJson.lazyDependencies) {
-      return Promise.resolve();
-    }
-
-    if (!this.rindoPackageJson.lazyDependencies) {
-      return Promise.resolve();
-    }
-
     const depsToInstall: DepToInstall[] = [];
     let isUpdate = false;
 
@@ -29,7 +20,7 @@ export class NodeLazyRequire implements d.LazyRequire {
         return;
       }
 
-      const requiredVersionRange = this.rindoPackageJson.lazyDependencies[ensureModuleId];
+      const [minVersion, maxVersion] = this.lazyDependencies[ensureModuleId];
 
       try {
         const resolvedPkgJsonPath = this.nodeResolveModule.resolveModule(fromDir, ensureModuleId);
@@ -38,10 +29,10 @@ export class NodeLazyRequire implements d.LazyRequire {
 
         isUpdate = true;
 
-        if (this.semver.satisfies(installedPkgJson.version, requiredVersionRange)) {
+        if (semiver(installedPkgJson.version, minVersion) >= 0) {
           this.moduleData.set(ensureModuleId, {
             fromDir: fromDir,
-            modulePath: dirname(resolvedPkgJsonPath)
+            modulePath: path.dirname(resolvedPkgJsonPath),
           });
           return;
         }
@@ -49,7 +40,7 @@ export class NodeLazyRequire implements d.LazyRequire {
 
       depsToInstall.push({
         moduleId: ensureModuleId,
-        requiredVersionRange: requiredVersionRange
+        requiredVersionRange: maxVersion,
       });
     });
 
@@ -80,12 +71,11 @@ export class NodeLazyRequire implements d.LazyRequire {
       depsToInstall.forEach(installedDep => {
         this.moduleData.set(installedDep.moduleId, {
           fromDir: fromDir,
-          modulePath: null
+          modulePath: null,
         });
       });
 
       timeSpan.finish(`installing dependencies finished`);
-
     } catch (e) {
       logger.error(`lazy require failed: ${e}`);
     }
@@ -100,7 +90,7 @@ export class NodeLazyRequire implements d.LazyRequire {
 
     if (!moduleData.modulePath) {
       const modulePkgJsonPath = this.nodeResolveModule.resolveModule(moduleData.fromDir, moduleId);
-      moduleData.modulePath = dirname(modulePkgJsonPath);
+      moduleData.modulePath = path.dirname(modulePkgJsonPath);
       this.moduleData.set(moduleId, moduleData);
     }
 
@@ -116,27 +106,19 @@ export class NodeLazyRequire implements d.LazyRequire {
 
     if (!moduleData.modulePath) {
       const modulePkgJsonPath = this.nodeResolveModule.resolveModule(moduleData.fromDir, moduleId);
-      moduleData.modulePath = dirname(modulePkgJsonPath);
+      moduleData.modulePath = path.dirname(modulePkgJsonPath);
       this.moduleData.set(moduleId, moduleData);
     }
 
     return moduleData.modulePath;
   }
-
 }
-
 
 function npmInstall(logger: d.Logger, fromDir: string, moduleIds: string[]) {
   return new Promise<void>((resolve, reject) => {
     const cmd = 'npm';
 
-    const args = [
-      'install',
-      ...moduleIds,
-      '--no-audit',
-      '--save-exact',
-      '--save-dev'
-    ];
+    const args = ['install', ...moduleIds, '--no-audit', '--save-exact', '--save-dev'];
 
     const opts: SpawnOptions = {
       shell: true,
@@ -145,7 +127,7 @@ function npmInstall(logger: d.Logger, fromDir: string, moduleIds: string[]) {
     };
     opts.env.NODE_ENV = 'development';
 
-    if (logger.level === 'debug') {
+    if (logger.getLevel() === 'debug') {
       args.push('--verbose');
     }
 
@@ -171,7 +153,7 @@ function npmInstall(logger: d.Logger, fromDir: string, moduleIds: string[]) {
     }
 
     childProcess.once('exit', exitCode => {
-      if (logger.level === 'debug') {
+      if (logger.getLevel() === 'debug') {
         logger.debug(`${cmd}, exit ${exitCode}`);
       }
 
@@ -181,26 +163,12 @@ function npmInstall(logger: d.Logger, fromDir: string, moduleIds: string[]) {
         reject(`failed to install: ${moduleIds.join(', ')}${output ? ', ' + output : ''}`);
       }
     });
-
   });
 }
 
-
-function readPackageJson(pkgJsonPath: string) {
-  return new Promise<d.PackageJsonData>((resolve, reject) => {
-    readFile(pkgJsonPath, 'utf8', (err, data) => {
-      if (err) {
-        reject(err);
-
-      } else {
-        try {
-          resolve(JSON.parse(data));
-        } catch (e) {
-          reject(e);
-        }
-      }
-    });
-  });
+async function readPackageJson(pkgJsonPath: string) {
+  const data = await readFile(pkgJsonPath, 'utf8');
+  return JSON.parse(data) as d.PackageJsonData;
 }
 
 interface DepToInstall {

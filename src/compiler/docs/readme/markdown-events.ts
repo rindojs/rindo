@@ -1,9 +1,7 @@
 import * as d from '../../../declarations';
 import { MarkdownTable } from './docs-util';
 
-
-export function eventsToMarkdown(events: d.JsonDocsEvent[]) {
-
+export const eventsToMarkdown = (events: d.JsonDocsEvent[]) => {
   const content: string[] = [];
   if (events.length === 0) {
     return content;
@@ -14,18 +12,10 @@ export function eventsToMarkdown(events: d.JsonDocsEvent[]) {
 
   const table = new MarkdownTable();
 
-  table.addHeader([
-    'Event',
-    'Description',
-    'Type'
-  ]);
+  table.addHeader(['Event', 'Description', 'Type']);
 
   events.forEach(ev => {
-    table.addRow([
-      `\`${ev.event}\``,
-      getDocsField(ev),
-      `\`CustomEvent<${ev.detail}>\``,
-    ]);
+    table.addRow([`\`${ev.event}\``, getDocsField(ev), `\`CustomEvent<${ev.detail}>\``]);
   });
 
   content.push(...table.toMarkdown());
@@ -33,11 +23,8 @@ export function eventsToMarkdown(events: d.JsonDocsEvent[]) {
   content.push(``);
 
   return content;
-}
+};
 
-function getDocsField(prop: d.JsonDocsEvent) {
-  return `${prop.deprecation !== undefined
-    ? `<span style="color:red">**[DEPRECATED]**</span> ${prop.deprecation}<br/><br/>`
-    : ''
-  }${prop.docs}`;
-}
+const getDocsField = (prop: d.JsonDocsEvent) => {
+  return `${prop.deprecation !== undefined ? `<span style="color:red">**[DEPRECATED]**</span> ${prop.deprecation}<br/><br/>` : ''}${prop.docs}`;
+};

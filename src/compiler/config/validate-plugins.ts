@@ -1,37 +1,39 @@
 import * as d from '../../declarations';
-import { setArrayConfig } from './config-utils';
 import { buildWarn } from '@utils';
-import { Plugin } from 'rollup';
 
+export const validatePlugins = (config: d.Config, diagnostics: d.Diagnostic[]) => {
+  const userPlugins = config.plugins;
 
-export function validatePlugins(config: d.Config, diagnostics: d.Diagnostic[]) {
-  setArrayConfig(config, 'plugins');
-  const rollupPlugins = getRollupPlugins(config.plugins);
-  const hasResolveNode = config.plugins.some(p => p.name === 'node-resolve');
-  const hasCommonjs = config.plugins.some(p => p.name === 'commonjs');
-  if (hasCommonjs) {
-    const warn = buildWarn(diagnostics);
-    warn.messageText = `Rindo already uses "rollup-plugin-commonjs", please remove it from your "rindo.config.ts" plugins.
-    You can configure the commonjs settings using the "commonjs" property in "rindo.config.ts`;
+  if (!config.rollupPlugins) {
+    config.rollupPlugins = {};
   }
-  if (hasResolveNode) {
-    const warn = buildWarn(diagnostics);
-    warn.messageText = `Rindo already uses "rollup-plugin-commonjs", please remove it from your "rindo.config.ts" plugins.
-    You can configure the commonjs settings using the "commonjs" property in "rindo.config.ts`;
+  if (!Array.isArray(userPlugins)) {
+    config.plugins = [];
+    return;
   }
-  config.rollupPlugins = rollupPlugins.filter(({name}) => name !== 'node-resolve' && name !== 'commonjs');
-  config.plugins = getPlugins(config.plugins);
-}
 
-function getPlugins(plugins: any[]): d.Plugin[] {
-  return plugins.filter(plugin => {
-    return !!(plugin && typeof plugin === 'object' && plugin.pluginType);
-  });
-}
-
-function getRollupPlugins(plugins: any[]): Plugin[] {
-  return plugins.filter(plugin => {
+  const rollupPlugins = userPlugins.filter(plugin => {
     return !!(plugin && typeof plugin === 'object' && !plugin.pluginType);
   });
-}
 
+  const hasResolveNode = rollupPlugins.some(p => p.name === 'node-resolve');
+  const hasCommonjs = rollupPlugins.some(p => p.name === 'commonjs');
+
+  if (hasCommonjs) {
+    const warn = buildWarn(diagnostics);
+    warn.messageText = `Rindo already uses "@rollup/plugin-commonjs", please remove it from your "rindo.config.ts" plugins.
+    You can configure the commonjs settings using the "commonjs" property in "rindo.config.ts`;
+  }
+
+  if (hasResolveNode) {
+    const warn = buildWarn(diagnostics);
+    warn.messageText = `Rindo already uses "@rollup/plugin-commonjs", please remove it from your "rindo.config.ts" plugins.
+    You can configure the commonjs settings using the "commonjs" property in "rindo.config.ts`;
+  }
+
+  config.rollupPlugins.before = [...(config.rollupPlugins.before || []), ...rollupPlugins.filter(({ name }) => name !== 'node-resolve' && name !== 'commonjs')];
+
+  config.plugins = userPlugins.filter(plugin => {
+    return !!(plugin && typeof plugin === 'object' && plugin.pluginType);
+  });
+};

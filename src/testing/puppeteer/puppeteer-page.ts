@@ -1,22 +1,20 @@
-import * as d from '../../declarations';
-import * as pd from './puppeteer-declarations';
-import { find, findAll } from './puppeteer-find';
+import { E2EProcessEnv, EmulateConfig, HostElement, JestEnvironmentGlobal } from '@rindo/core/internal';
+import { E2EPage, E2EPageInternal, FindSelector, NewE2EPageOptions, PageDiagnostic } from './puppeteer-declarations';
+import { find, findAll } from './puppeteer-element';
 import { initPageEvents, waitForEvent } from './puppeteer-events';
 import { initPageScreenshot } from './puppeteer-screenshot';
 import * as puppeteer from 'puppeteer';
 
+declare const global: JestEnvironmentGlobal;
 
-declare const global: d.JestEnvironmentGlobal;
-
-
-const env: d.E2EProcessEnv = process.env;
-export async function newE2EPage(opts: pd.NewE2EPageOptions = {}): Promise<pd.E2EPage> {
+const env: E2EProcessEnv = process.env;
+export async function newE2EPage(opts: NewE2EPageOptions = {}): Promise<E2EPage> {
   if (!global.__NEW_TEST_PAGE__) {
     throw new Error(`newE2EPage() is only available from E2E tests, and ran with the --e2e cmd line flag.`);
   }
 
-  const page: pd.E2EPageInternal = await global.__NEW_TEST_PAGE__();
-  const diagnostics: pd.PageDiagnostic[] = [];
+  const page: E2EPageInternal = await global.__NEW_TEST_PAGE__();
+  const diagnostics: PageDiagnostic[] = [];
   try {
     page._e2eElements = [];
 
@@ -43,7 +41,9 @@ export async function newE2EPage(opts: pd.NewE2EPageOptions = {}): Promise<pd.E2
         }
       } catch (e) {}
 
-      const noop: any = () => { throw new Error('The page was already closed'); };
+      const noop: any = () => {
+        throw new Error('The page was already closed');
+      };
       page._e2eElements = noop;
       page._e2eEvents = noop;
       page._e2eGoto = noop;
@@ -71,17 +71,17 @@ export async function newE2EPage(opts: pd.NewE2EPageOptions = {}): Promise<pd.E2
       return documentJsHandle.asElement();
     };
 
-    page.find = async (selector: pd.FindSelector) => {
+    page.find = async (selector: FindSelector) => {
       const docHandle = await getDocHandle();
       return find(page, docHandle, selector) as any;
     };
 
-    page.findAll = async (selector: pd.FindSelector) => {
+    page.findAll = async (selector: FindSelector) => {
       const docHandle = await getDocHandle();
       return findAll(page, docHandle, selector) as any;
     };
 
-    page.waitForEvent = async (eventName) => {
+    page.waitForEvent = async eventName => {
       const docHandle = await getDocHandle();
       return waitForEvent(page, eventName, docHandle);
     };
@@ -97,7 +97,7 @@ export async function newE2EPage(opts: pd.NewE2EPageOptions = {}): Promise<pd.E2
         throw new Error('Set the --devtools flag in order to use E2EPage.debugger()');
       }
       return page.evaluate(() => {
-        return new Promise((resolve) => {
+        return new Promise(resolve => {
           // tslint:disable-next-line: no-debugger
           debugger;
           resolve();
@@ -108,12 +108,12 @@ export async function newE2EPage(opts: pd.NewE2EPageOptions = {}): Promise<pd.E2
     const failOnConsoleError = opts.failOnConsoleError === true;
     const failOnNetworkError = opts.failOnNetworkError === true;
 
-    page.on('console', (ev) => {
+    page.on('console', ev => {
       if (ev.type() === 'error') {
         diagnostics.push({
           type: 'error',
           message: ev.text(),
-          location: ev.location().url
+          location: ev.location().url,
         });
         if (failOnConsoleError) {
           fail(new Error(serializeConsoleMessage(ev)));
@@ -125,15 +125,15 @@ export async function newE2EPage(opts: pd.NewE2EPageOptions = {}): Promise<pd.E2
       diagnostics.push({
         type: 'pageerror',
         message: err.message,
-        location: err.stack
+        location: err.stack,
       });
       fail(err);
     });
-    page.on('requestfailed', (req) => {
+    page.on('requestfailed', req => {
       diagnostics.push({
         type: 'requestfailed',
         message: req.failure().errorText,
-        location: req.url()
+        location: req.url(),
       });
       if (failOnNetworkError) {
         fail(new Error(req.failure().errorText));
@@ -144,26 +144,24 @@ export async function newE2EPage(opts: pd.NewE2EPageOptions = {}): Promise<pd.E2
 
     if (typeof opts.html === 'string') {
       await e2eSetContent(page, opts.html, { waitUntil: opts.waitUntil });
-
     } else if (typeof opts.url === 'string') {
       await e2eGoTo(page, opts.url, { waitUntil: opts.waitUntil });
-
     } else {
       page.goto = e2eGoTo.bind(null, page);
       page.setContent = e2eSetContent.bind(null, page);
     }
-
   } catch (e) {
     if (page) {
-      page.close();
+      if (!page.isClosed()) {
+        await page.close();
+      }
     }
     throw e;
   }
   return page;
 }
 
-async function e2eGoTo(page: pd.E2EPageInternal, url: string, options: puppeteer.NavigationOptions = {}) {
-
+async function e2eGoTo(page: E2EPageInternal, url: string, options: puppeteer.NavigationOptions = {}) {
   if (page.isClosed()) {
     throw new Error('e2eGoTo unavailable: page already closed');
   }
@@ -197,47 +195,59 @@ async function e2eGoTo(page: pd.E2EPageInternal, url: string, options: puppeteer
   return rsp;
 }
 
-
-async function e2eSetContent(page: pd.E2EPageInternal, html: string, options: puppeteer.NavigationOptions = {}) {
+async function e2eSetContent(page: E2EPageInternal, html: string, options: puppeteer.NavigationOptions = {}) {
   if (page.isClosed()) {
     throw new Error('e2eSetContent unavailable: page already closed');
   }
-
   if (typeof html !== 'string') {
     throw new Error('invalid e2eSetContent() html');
   }
 
-  const appUrl = env.__RINDO_APP_URL__;
-  if (typeof appUrl !== 'string') {
+  const output: string[] = [];
+
+  const appScriptUrl = env.__RINDO_APP_SCRIPT_URL__;
+  if (typeof appScriptUrl !== 'string') {
     throw new Error('invalid e2eSetContent() app script url');
   }
 
-  const url = env.__RINDO_BROWSER_URL__;
-  const body = [
-    `<script type="module" src="${appUrl}"></script>`,
-    html
-  ].join('\n');
+  output.push(`<!doctype html>`);
+  output.push(`<html>`);
+  output.push(`<head>`);
+
+  const appStyleUrl = env.__RINDO_APP_STYLE_URL__;
+  if (typeof appStyleUrl === 'string') {
+    output.push(`<link rel="stylesheet" href="${appStyleUrl}">`);
+  }
+  output.push(`<script type="module" src="${appScriptUrl}"></script>`);
+
+  output.push(`</head>`);
+  output.push(`<body>`);
+  output.push(html);
+  output.push(`</body>`);
+  output.push(`</html>`);
+
+  const pageUrl = env.__RINDO_BROWSER_URL__;
 
   await page.setRequestInterception(true);
-  page.on('request', interceptedRequest => {
-    if (url === interceptedRequest.url()) {
+
+  const interceptedReqCallback = (interceptedRequest: any) => {
+    if (pageUrl === interceptedRequest.url()) {
       interceptedRequest.respond({
         status: 200,
         contentType: 'text/html',
-        body: body
+        body: output.join('\n'),
       });
-      (page as any).removeAllListeners('request');
-      page.setRequestInterception(false);
-
     } else {
       interceptedRequest.continue();
     }
-  });
+  }
+
+  page.on('request', interceptedReqCallback);
 
   if (!options.waitUntil) {
     options.waitUntil = env.__RINDO_BROWSER_WAIT_UNTIL as any;
   }
-  const rsp = await page._e2eGoto(url, options);
+  const rsp = await page._e2eGoto(pageUrl, options);
 
   if (!rsp.ok()) {
     throw new Error(`Testing unable to load content`);
@@ -248,16 +258,13 @@ async function e2eSetContent(page: pd.E2EPageInternal, html: string, options: pu
   return rsp;
 }
 
-
-async function waitForRindo(page: pd.E2EPage) {
+async function waitForRindo(page: E2EPage) {
   try {
-    await page.waitForFunction('window.rindoAppLoaded', {timeout: 4500});
-
+    await page.waitForFunction('window.rindoAppLoaded', { timeout: 4750 });
   } catch (e) {
     throw new Error(`App did not load in allowed time. Please ensure the content loads a rindo application.`);
   }
 }
-
 
 async function setPageEmulate(page: puppeteer.Page) {
   if (page.isClosed()) {
@@ -269,18 +276,17 @@ async function setPageEmulate(page: puppeteer.Page) {
     return;
   }
 
-  const screenshotEmulate = JSON.parse(emulateJsonContent) as d.EmulateConfig;
+  const screenshotEmulate = JSON.parse(emulateJsonContent) as EmulateConfig;
 
   const emulateOptions: puppeteer.EmulateOptions = {
     viewport: screenshotEmulate.viewport,
-    userAgent: screenshotEmulate.userAgent
+    userAgent: screenshotEmulate.userAgent,
   };
 
   await (page as puppeteer.Page).emulate(emulateOptions);
 }
 
-
-async function waitForChanges(page: pd.E2EPageInternal) {
+async function waitForChanges(page: E2EPageInternal) {
   try {
     if (page.isClosed()) {
       return;
@@ -297,15 +303,18 @@ async function waitForChanges(page: pd.E2EPageInternal) {
         requestAnimationFrame(() => {
           const promises: Promise<any>[] = [];
 
-          const waitComponentOnReady = (elm: Element, promises: Promise<any>[]) => {
+          const waitComponentOnReady = (elm: Element | ShadowRoot, promises: Promise<any>[]) => {
             if (elm != null) {
+              if ('shadowRoot' in elm && elm.shadowRoot instanceof ShadowRoot) {
+                waitComponentOnReady(elm.shadowRoot, promises);
+              }
               const children = elm.children;
               const len = children.length;
               for (let i = 0; i < len; i++) {
                 const childElm = children[i];
                 if (childElm != null) {
-                  if (childElm.tagName.includes('-') && typeof (childElm as d.HostElement).componentOnReady === 'function') {
-                    promises.push((childElm as d.HostElement).componentOnReady());
+                  if (childElm.tagName.includes('-') && typeof (childElm as HostElement).componentOnReady === 'function') {
+                    promises.push((childElm as HostElement).componentOnReady());
                   }
                   waitComponentOnReady(childElm, promises);
                 }
@@ -333,22 +342,21 @@ async function waitForChanges(page: pd.E2EPageInternal) {
     await page.waitFor(100);
 
     await Promise.all(page._e2eElements.map(elm => elm.e2eSync()));
-
   } catch (e) {}
 }
 
-
 function consoleMessage(c: puppeteer.ConsoleMessage) {
-  const message = serializeConsoleMessage(c);
-  if (message.includes('RINDO-DEV-MODE')) {
-    return;
-  }
+  const msg = serializeConsoleMessage(c);
   const type = c.type();
   const normalizedType = type === 'warning' ? 'warn' : type;
+  if (normalizedType === 'debug') {
+    // Skip debug messages
+    return;
+  }
   if (typeof (console as any)[normalizedType] === 'function') {
-    (console as any)[normalizedType](message);
+    (console as any)[normalizedType](msg);
   } else {
-    console.log(type, message);
+    console.log(type, msg);
   }
 }
 
@@ -369,5 +377,3 @@ function serializeLocation(loc: puppeteer.ConsoleMessageLocation) {
   }
   return locStr;
 }
-
-

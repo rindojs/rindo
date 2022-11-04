@@ -1,8 +1,11 @@
-import * as d from '../../declarations';
+import * as d from '@rindo/core/internal';
+import { BUILD } from '@app-data';
 import { expectExtend } from '../matchers';
-import { setupGlobal, teardownGlobal } from '@mock-doc';
+import { setupGlobal, teardownGlobal } from '@rindo/core/mock-doc';
 import { setupMockFetch } from '../mock-fetch';
 import { HtmlSerializer } from './jest-serializer';
+import { resetBuildConditionals } from '../reset-build-conditionals';
+import { resetPlatform, stopAutoApplyChanges, modeResolutionChain } from '@rindo/core/internal/testing';
 
 declare const global: d.JestEnvironmentGlobal;
 
@@ -17,20 +20,17 @@ export function jestSetupTestFramework() {
   setupMockFetch(global);
 
   beforeEach(() => {
-    const bc = require('@rindo/core/build-conditionals');
-    const platform = require('@rindo/core/platform');
-
     // reset the platform for this new test
-    platform.resetPlatform();
-    bc.resetBuildConditionals(bc.BUILD);
+    resetPlatform();
+    resetBuildConditionals(BUILD);
+    modeResolutionChain.length = 0;
   });
 
   afterEach(async () => {
     if (global.__CLOSE_OPEN_PAGES__) {
       await global.__CLOSE_OPEN_PAGES__();
     }
-    const platform = require('@rindo/core/platform');
-    platform.stopAutoApplyChanges();
+    stopAutoApplyChanges();
 
     teardownGlobal(global);
     global.Context = {};
@@ -42,7 +42,7 @@ export function jestSetupTestFramework() {
     jasmineEnv.addReporter({
       specStarted: (spec: any) => {
         global.currentSpec = spec;
-      }
+      },
     });
   }
 
@@ -52,7 +52,7 @@ export function jestSetupTestFramework() {
 
   if (typeof env.__RINDO_DEFAULT_TIMEOUT__ === 'string') {
     const time = parseInt(env.__RINDO_DEFAULT_TIMEOUT__, 10);
-    jest.setTimeout(time);
+    jest.setTimeout(time * 1.5);
     jasmine.DEFAULT_TIMEOUT_INTERVAL = time;
   }
 }

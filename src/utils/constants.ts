@@ -1,4 +1,3 @@
-
 export const enum MEMBER_FLAGS {
   String = 1 << 0,
   Number = 1 << 1,
@@ -58,6 +57,7 @@ export const enum CMP_FLAGS {
   hasSlotRelocation = 1 << 2,
   needsShadowDomShim = 1 << 3,
   shadowDelegatesFocus = 1 << 4,
+  hasMode = 1 << 5,
   needsScopedEncapsulation = scopedCssEncapsulation | needsShadowDomShim,
 }
 

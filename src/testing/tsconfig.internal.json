@@ -38,11 +38,11 @@
       "@rindo/core/testing": [
         "../testing/index.ts"
       ],
-      "@rindo/core/utils": [
-        "../utils/index.ts"
-      ],
       "@rindo/core": [
         "../index.ts"
+      ],
+      "@utils": [
+        "../utils/index.ts"
       ]
     }
   }

@@ -1,22 +1,56 @@
 #!/usr/bin/env node
 'use strict';
 
-try {
-  var v = process.version.replace('v', '').split('.');
-  var major = parseInt(v[0], 10);
-  var minor = parseInt(v[1], 10);
-  if (major < 8 || (major === 8 && minor < 9)) {
-    console.error('\nYour current version of Node is ' + process.version + ' but Rindo needs v8.9 at least. It\'s recommended to install latest Node (https://github.com/nodejs/Release).\n');
-    exit(1);
-  }
-  if (major < 10 || (major === 10 && minor < 13)) {
-    console.log('\nYour current version of Node is ' + process.version + ', however the recommendation is a minimum of Node LTS (https://github.com/nodejs/Release). Note that future versions of Rindo will eventually remove support for non-LTS Node versions.\n');
-  }
-} catch (e) {}
+var minimumVersion = '10.13';
+var recommendedVersion = '12.17';
+var currentVersion = process.versions.node;
 
-var cli = require('../dist/cli');
-var node = require('../sys/node');
-var sys = new node.NodeSystem();
-var logger = new node.NodeLogger();
+function isNodeLT(v) {
+  var check = v.split('.').map(Number);
+  var node = currentVersion.split('.').map(Number);
+  return node[0] < check[0] || (node[0] === check[0] && node[1] < check[1]);
+}
 
-cli.run(process, sys, logger);
+if (isNodeLT(minimumVersion)) {
+  console.error(
+    '\nYour current version of Node is v' +
+      currentVersion +
+      ', however Rindo requires v' +
+      minimumVersion +
+      '.0 or greater. It is recommended to install latest version of Node (https://github.com/nodejs/Release).\n',
+  );
+  process.exit(1);
+}
+
+if (isNodeLT(recommendedVersion)) {
+  console.warn(
+    '\nYour current version of Node is v' +
+      currentVersion +
+      ", however Rindo's recommendation is v" +
+      recommendedVersion +
+      '.0 or greater. Note that future versions of Rindo will eventually remove support for non-LTS Node versions (https://github.com/nodejs/Release).\n',
+  );
+}
+
+if (process.argv.indexOf('--next') > -1) {
+  console.warn('\nThe next compiler is now the default and the --next flag is no longer needed.\n');
+}
+
+if (typeof globalThis === 'undefined') {
+  // globalThis not added until node 12
+  global.globalThis = global;
+}
+
+var cli = require('../cli/index.cjs.js');
+var nodeApi = require('../sys/node/index.js');
+var nodeLogger = nodeApi.createNodeLogger({ process: process });
+var nodeSys = nodeApi.createNodeSys({ process: process, logger: nodeLogger });
+
+nodeApi.setupNodeProcess({ process: process, logger: nodeLogger });
+
+cli.run({
+  args: process.argv.slice(2),
+  logger: nodeLogger,
+  sys: nodeSys,
+  checkVersion: nodeApi.checkVersion
+});

@@ -1,13 +1,13 @@
 import * as d from '../../declarations';
 import { escapeHtml } from '@utils';
-
+import { join } from 'path';
 
 export const generateEs5DisabledMessage = async (config: d.Config, compilerCtx: d.CompilerCtx, outputTarget: d.OutputTargetWww) => {
   // not doing an es5 right now
   // but it's possible during development the user
   // tests on a browser that doesn't support es2017
   const fileName = `${config.fsNamespace}.js`;
-  const filePath = config.sys.path.join(outputTarget.buildDir, fileName);
+  const filePath = join(outputTarget.buildDir, fileName);
   await compilerCtx.fs.writeFile(filePath, getDisabledMessageScript(config));
   return fileName;
 };
@@ -42,7 +42,7 @@ h2 {
     <li>Please see the example below or our <a href="https://rindojs.web.app/docs/rindo-config" target="_blank" rel="noopener noreferrer">config docs</a> if you would like to develop on a browser that does not fully support ES2017 and custom elements.</li>
     <li>Note that by default, ES5 builds and polyfills are enabled during production builds.</li>
     <li>When testing browsers it is recommended to always test in production mode, and ES5 builds should always be enabled during production builds.</li>
-    <li><em>This is only an experiement and if it slows down app development then we will revert this and enable ES5 builds during dev.</em></li>
+    <li><em>This is only an experiment and if it slows down app development then we will revert this and enable ES5 builds during dev.</em></li>
   </ul>
 
 
@@ -100,7 +100,9 @@ h2 {
   For more info, please see <a href="https://developers.google.com/web/fundamentals/primers/modules#browser" target="_blank" rel="noopener noreferrer">Using JavaScript modules on the web</a>.
   </p>
   <pre>
-  <code>${escapeHtml(`<script`)} <span style="background:yellow">type="module"</span> src="/build/${config.fsNamespace}<span style="background:yellow">.esm</span>.js"${escapeHtml(`></script>`)}
+  <code>${escapeHtml(`<script`)} <span style="background:yellow">type="module"</span> src="/build/${config.fsNamespace}<span style="background:yellow">.esm</span>.js"${escapeHtml(
+    `></script>`,
+  )}
   ${escapeHtml(`<script`)} <span style="background:yellow">nomodule</span> ${escapeHtml(`src="/build/${config.fsNamespace}.js"></script>`)}</code>
     </pre>
   `;
@@ -140,5 +142,8 @@ h2 {
 };
 
 const inlineHTML = (html: string) => {
-  return html.replace(/\n/g, '\\n').replace(/\'/g, `\\'`).trim();
+  return html
+    .replace(/\n/g, '\\n')
+    .replace(/\'/g, `\\'`)
+    .trim();
 };

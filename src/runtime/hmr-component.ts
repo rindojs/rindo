@@ -3,8 +3,7 @@ import { getHostRef } from '@platform';
 import { HOST_FLAGS } from '@utils';
 import { initializeComponent } from './initialize-component';
 
-
-export function hmrStart(elm: d.HostElement, cmpMeta: d.ComponentRuntimeMeta, hmrVersionId: string) {
+export const hmrStart = (elm: d.HostElement, cmpMeta: d.ComponentRuntimeMeta, hmrVersionId: string) => {
   // ¯\_(ツ)_/¯
   const hostRef = getHostRef(elm);
 
@@ -25,9 +24,8 @@ export function hmrStart(elm: d.HostElement, cmpMeta: d.ComponentRuntimeMeta, hm
 
   // re-initialize the component
   initializeComponent(elm, hostRef, cmpMeta, hmrVersionId);
-}
+};
 
-
-export function hmrFinish(_elm: d.HostElement, _cmpMeta: d.ComponentRuntimeMeta) {
+export const hmrFinish = (_elm: d.HostElement, _cmpMeta: d.ComponentRuntimeMeta) => {
   // TODO
-}
+};

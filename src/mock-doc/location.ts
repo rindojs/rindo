@@ -1,6 +1,3 @@
-import { URL } from 'url';
-
-
 export class MockLocation implements Location {
   ancestorOrigins: any = null;
   protocol = '';
@@ -10,7 +7,7 @@ export class MockLocation implements Location {
   pathname = '';
   search = '';
   hash = '';
-  username  = '';
+  username = '';
   password = '';
   origin = '';
 
@@ -47,5 +44,4 @@ export class MockLocation implements Location {
   toString() {
     return this.href;
   }
-
 }

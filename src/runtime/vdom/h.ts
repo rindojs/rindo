@@ -8,7 +8,7 @@
  */
 
 import * as d from '../../declarations';
-import { BUILD } from '@build-conditionals';
+import { BUILD } from '@app-data';
 import { consoleDevError, consoleDevWarn } from '@platform';
 import { isComplexType } from '@utils';
 
@@ -29,14 +29,12 @@ export const h = (nodeName: any, vnodeData: any, ...children: d.ChildType[]): d.
       if (Array.isArray(child)) {
         walk(child);
       } else if (child != null && typeof child !== 'boolean') {
-        if (simple = typeof nodeName !== 'function' && !isComplexType(child)) {
+        if ((simple = typeof nodeName !== 'function' && !isComplexType(child))) {
           child = String(child);
-
-        } else if (BUILD.isDev && child.$flags$ === undefined) {
+        } else if (BUILD.isDev && typeof nodeName !== 'function' && child.$flags$ === undefined) {
           consoleDevError(`vNode passed as children has unexpected type.
 Make sure it's using the correct h() function.
 Empty objects can also be the cause, look for JSX comments that became objects.`);
-
         }
 
         if (simple && lastSimple) {
@@ -65,11 +63,12 @@ Empty objects can also be the cause, look for JSX comments that became objects.`
     if (BUILD.vdomClass) {
       const classData = vnodeData.className || vnodeData.class;
       if (classData) {
-        vnodeData.class = typeof classData !== 'object'
-          ? classData
-          : Object.keys(classData)
-            .filter(k => classData[k])
-            .join(' ');
+        vnodeData.class =
+          typeof classData !== 'object'
+            ? classData
+            : Object.keys(classData)
+                .filter(k => classData[k])
+                .join(' ');
       }
     }
   }
@@ -82,7 +81,7 @@ Empty objects can also be the cause, look for JSX comments that became objects.`
 
   if (BUILD.vdomFunctional && typeof nodeName === 'function') {
     // nodeName is a functional component
-    return (nodeName as d.FunctionalComponent<any>)(vnodeData, vNodeChildren, vdomFnUtils) as any;
+    return (nodeName as d.FunctionalComponent<any>)(vnodeData === null ? {} : vnodeData, vNodeChildren, vdomFnUtils) as any;
   }
 
   const vnode = newVNode(nodeName, null);
@@ -105,12 +104,12 @@ export const newVNode = (tag: string, text: string) => {
     $tag$: tag,
     $text$: text,
     $elm$: null,
-    $children$: null
+    $children$: null,
   };
   if (BUILD.vdomAttribute) {
     vnode.$attrs$ = null;
   }
-  if (BUILD.vdomKey)  {
+  if (BUILD.vdomKey) {
     vnode.$key$ = null;
   }
   if (BUILD.slotRelocation) {
@@ -124,22 +123,42 @@ export const Host = {};
 export const isHost = (node: any): node is d.VNode => node && node.$tag$ === Host;
 
 const vdomFnUtils: d.FunctionalUtilities = {
-  'forEach': (children, cb) => children.map(convertToPublic).forEach(cb),
-  'map': (children, cb) => children.map(convertToPublic).map(cb).map(convertToPrivate)
+  forEach: (children, cb) => children.map(convertToPublic).forEach(cb),
+  map: (children, cb) =>
+    children
+      .map(convertToPublic)
+      .map(cb)
+      .map(convertToPrivate),
 };
 
-const convertToPublic = (node: d.VNode): d.ChildNode => {
-  return {
-    vattrs: node.$attrs$,
-    vchildren: node.$children$,
-    vkey: node.$key$,
-    vname: node.$name$,
-    vtag: node.$tag$,
-    vtext: node.$text$
-  };
-};
+const convertToPublic = (node: d.VNode): d.ChildNode => ({
+  vattrs: node.$attrs$,
+  vchildren: node.$children$,
+  vkey: node.$key$,
+  vname: node.$name$,
+  vtag: node.$tag$,
+  vtext: node.$text$,
+});
 
 const convertToPrivate = (node: d.ChildNode): d.VNode => {
+  if (typeof node.vtag === 'function') {
+    const vnodeData = { ...node.vattrs };
+
+    if (node.vkey) {
+      vnodeData.key = node.vkey;
+    }
+
+    if (node.vname) {
+      vnodeData.name = node.vname;
+    }
+
+    return h(
+      node.vtag,
+      vnodeData,
+      ...node.vchildren || [],
+    );
+  }
+
   const vnode = newVNode(node.vtag as any, node.vtext);
   vnode.$attrs$ = node.vattrs;
   vnode.$children$ = node.vchildren;
@@ -155,6 +174,9 @@ const validateInputProperties = (vnodeData: any) => {
   const maxIndex = props.indexOf('max');
   const stepIndex = props.indexOf('min');
   const value = props.indexOf('value');
+  if (value === -1) {
+    return;
+  }
   if (value < typeIndex || value < minIndex || value < maxIndex || value < stepIndex) {
     consoleDevWarn(`The "value" prop of <input> should be set after "min", "max", "type" and "step"`);
   }

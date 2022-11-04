@@ -1,5 +1,0 @@
-{
-  "name": "@rindo/core/cli",
-  "private": true,
-  "main": "./index.js"
-}

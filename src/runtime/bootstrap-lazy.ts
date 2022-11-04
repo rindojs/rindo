@@ -1,20 +1,19 @@
 import * as d from '../declarations';
 import { appDidLoad, forceUpdate } from './update-component';
-import { appendChildSlotFix, cloneNodeFix } from './dom-extras';
-import { BUILD } from '@build-conditionals';
+import { BUILD } from '@app-data';
 import { CMP_FLAGS } from '@utils';
 import { connectedCallback } from './connected-callback';
 import { convertScopedToShadow, registerStyle } from './styles';
 import { createTime, installDevTools } from './profile';
 import { disconnectedCallback } from './disconnected-callback';
-import { doc, getHostRef, plt, registerHost, supportsShadowDom, win } from '@platform';
+import { doc, getHostRef, plt, registerHost, win, supportsShadow, consoleDevWarn } from '@platform';
 import { hmrStart } from './hmr-component';
 import { HYDRATED_CSS, HYDRATED_STYLE_ID, PLATFORM_FLAGS, PROXY_FLAGS } from './runtime-constants';
+import { patchCloneNode, patchSlotAppendChild, patchChildSlotNodes } from './dom-extras';
 import { proxyComponent } from './proxy-component';
 
-
 export const bootstrapLazy = (lazyBundles: d.LazyBundlesRuntimeData, options: d.CustomElementsDefineOptions = {}) => {
-  if (BUILD.profile) {
+  if (BUILD.profile && performance.mark) {
     performance.mark('st:app:start');
   }
   installDevTools();
@@ -34,8 +33,10 @@ export const bootstrapLazy = (lazyBundles: d.LazyBundlesRuntimeData, options: d.
 
   Object.assign(plt, options);
   plt.$resourcesUrl$ = new URL(options.resourcesUrl || './', doc.baseURI).href;
-  if (options.syncQueue) {
-    plt.$flags$ |= PLATFORM_FLAGS.queueSync;
+  if (BUILD.asyncQueue) {
+    if (options.syncQueue) {
+      plt.$flags$ |= PLATFORM_FLAGS.queueSync;
+    }
   }
   if (BUILD.hydrateClientSide) {
     // If the app is already hydrated there is not point to disable the
@@ -44,16 +45,12 @@ export const bootstrapLazy = (lazyBundles: d.LazyBundlesRuntimeData, options: d.
   }
   if (BUILD.hydrateClientSide && BUILD.shadowDom) {
     for (; i < styles.length; i++) {
-      registerStyle(
-        styles[i].getAttribute(HYDRATED_STYLE_ID),
-        convertScopedToShadow(styles[i].innerHTML),
-        true,
-      );
+      registerStyle(styles[i].getAttribute(HYDRATED_STYLE_ID), convertScopedToShadow(styles[i].innerHTML), true);
     }
   }
 
-  lazyBundles.forEach(lazyBundle =>
-    lazyBundle[1].forEach(compactMeta => {
+  lazyBundles.map(lazyBundle =>
+    lazyBundle[1].map(compactMeta => {
       const cmpMeta: d.ComponentRuntimeMeta = {
         $flags$: compactMeta[0],
         $tagName$: compactMeta[1],
@@ -72,12 +69,11 @@ export const bootstrapLazy = (lazyBundles: d.LazyBundlesRuntimeData, options: d.
       if (BUILD.watchCallback) {
         cmpMeta.$watchers$ = {};
       }
-      if (BUILD.shadowDom && !supportsShadowDom && cmpMeta.$flags$ & CMP_FLAGS.shadowDomEncapsulation) {
+      if (BUILD.shadowDom && !supportsShadow && cmpMeta.$flags$ & CMP_FLAGS.shadowDomEncapsulation) {
         cmpMeta.$flags$ |= CMP_FLAGS.needsShadowDomShim;
       }
-      const tagName = cmpMeta.$tagName$;
+      const tagName = BUILD.transformTagName && options.transformTagName ? options.transformTagName(cmpMeta.$tagName$) : cmpMeta.$tagName$;
       const HostElement = class extends HTMLElement {
-
         ['s-p']: Promise<void>[];
         ['s-rc']: (() => void)[];
 
@@ -87,27 +83,27 @@ export const bootstrapLazy = (lazyBundles: d.LazyBundlesRuntimeData, options: d.
           super(self);
           self = this;
 
-          registerHost(self);
+          registerHost(self, cmpMeta);
           if (BUILD.shadowDom && cmpMeta.$flags$ & CMP_FLAGS.shadowDomEncapsulation) {
             // this component is using shadow dom
             // and this browser supports shadow dom
             // add the read-only property "shadowRoot" to the host element
             // adding the shadow root build conditionals to minimize runtime
-            if (supportsShadowDom) {
-
+            if (supportsShadow) {
               if (BUILD.shadowDelegatesFocus) {
                 self.attachShadow({
                   mode: 'open',
                   delegatesFocus: !!(cmpMeta.$flags$ & CMP_FLAGS.shadowDelegatesFocus),
                 });
-
               } else {
                 self.attachShadow({ mode: 'open' });
               }
-
             } else if (!BUILD.hydrateServerSide && !('shadowRoot' in self)) {
               (self as any).shadowRoot = self;
             }
+          }
+          if (BUILD.slotChildNodesFix) {
+            patchChildSlotNodes(self, cmpMeta);
           }
         }
 
@@ -120,7 +116,7 @@ export const bootstrapLazy = (lazyBundles: d.LazyBundlesRuntimeData, options: d.
             // connectedCallback will be processed once all components have been registered
             deferredConnectedCallbacks.push(this);
           } else {
-            plt.jmp(() => connectedCallback(this, cmpMeta));
+            plt.jmp(() => connectedCallback(this));
           }
         }
 
@@ -129,7 +125,15 @@ export const bootstrapLazy = (lazyBundles: d.LazyBundlesRuntimeData, options: d.
         }
 
         forceUpdate() {
-          forceUpdate(this, cmpMeta);
+          if (BUILD.isDev) {
+            consoleDevWarn(`element.forceUpdate() is deprecated, use the "forceUpdate" function from "@rindo/core" instead:
+
+  import { forceUpdate } from ‘@rindo/core’;
+
+  forceUpdate(this);
+  forceUpdate(element);`);
+          }
+          forceUpdate(this);
         }
 
         componentOnReady() {
@@ -138,11 +142,11 @@ export const bootstrapLazy = (lazyBundles: d.LazyBundlesRuntimeData, options: d.
       };
 
       if (BUILD.cloneNodeFix) {
-        cloneNodeFix(HostElement.prototype);
+        patchCloneNode(HostElement.prototype);
       }
 
       if (BUILD.appendChildSlotFix) {
-        appendChildSlotFix(HostElement.prototype);
+        patchSlotAppendChild(HostElement.prototype);
       }
 
       if (BUILD.hotModuleReplacement) {
@@ -151,16 +155,14 @@ export const bootstrapLazy = (lazyBundles: d.LazyBundlesRuntimeData, options: d.
         };
       }
 
-      cmpMeta.$lazyBundleIds$ = lazyBundle[0];
+      cmpMeta.$lazyBundleId$ = lazyBundle[0];
 
       if (!exclude.includes(tagName) && !customElements.get(tagName)) {
         cmpTags.push(tagName);
-        customElements.define(
-          tagName,
-          proxyComponent(HostElement as any, cmpMeta, PROXY_FLAGS.isElementConstructor) as any
-        );
+        customElements.define(tagName, proxyComponent(HostElement as any, cmpMeta, PROXY_FLAGS.isElementConstructor) as any);
       }
-    }));
+    }),
+  );
 
   if (BUILD.hydratedClass || BUILD.hydratedAttribute) {
     visibilityStyle.innerHTML = cmpTags + HYDRATED_CSS;
@@ -170,13 +172,13 @@ export const bootstrapLazy = (lazyBundles: d.LazyBundlesRuntimeData, options: d.
 
   // Process deferred connectedCallbacks now all components have been registered
   isBootstrapping = false;
-  if (deferredConnectedCallbacks.length > 0) {
-    deferredConnectedCallbacks.forEach(host => host.connectedCallback());
+  if (deferredConnectedCallbacks.length) {
+    deferredConnectedCallbacks.map(host => host.connectedCallback());
   } else {
     if (BUILD.profile) {
-      plt.jmp(() => appLoadFallback = setTimeout(appDidLoad, 30, 'timeout'));
+      plt.jmp(() => (appLoadFallback = setTimeout(appDidLoad, 30, 'timeout')));
     } else {
-      plt.jmp(() => appLoadFallback = setTimeout(appDidLoad, 30));
+      plt.jmp(() => (appLoadFallback = setTimeout(appDidLoad, 30)));
     }
   }
   // Fallback appLoad event

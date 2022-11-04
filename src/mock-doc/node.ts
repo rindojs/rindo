@@ -1,14 +1,13 @@
 import { attributeChanged, checkAttributeChanged, connectNode, disconnectNode } from './custom-element-registry';
-import { closest, matches, selectAll, selectOne } from './selector';
-import { CSSStyleDeclaration, createCSSStyleDeclaration } from './css-style-declaration';
 import { dataset } from './dataset';
-import { MockAttr, MockAttributeMap } from './attribute';
+import { matches, selectAll, selectOne } from './selector';
+import { MockAttr, MockAttributeMap, createAttributeProxy } from './attribute';
 import { MockClassList } from './class-list';
+import { MockCSSStyleDeclaration, createCSSStyleDeclaration } from './css-style-declaration';
 import { MockEvent, addEventListener, dispatchEvent, removeEventListener, resetEventListeners } from './event';
 import { NODE_NAMES, NODE_TYPES } from './constants';
 import { NON_ESCAPABLE_CONTENT, SerializeNodeToHtmlOptions, serializeNodeToHtml } from './serialize-node';
 import { parseFragmentUtil } from './parse-util';
-
 
 export class MockNode {
   nodeName: string;
@@ -148,11 +147,9 @@ export class MockNode {
         if (wasConnected === true) {
           disconnectNode(childNode);
         }
-
       } else {
         childNode.parentNode = null;
       }
-
     } else {
       throw new Error(`node not found within childNodes during removeChild`);
     }
@@ -190,7 +187,6 @@ export class MockNode {
   static DOCUMENT_FRAGMENT_NODE = 11;
 }
 
-
 export class MockNodeList {
   childNodes: MockNode[];
   length: number;
@@ -207,15 +203,10 @@ export class MockElement extends MockNode {
   namespaceURI: string;
   __attributeMap: MockAttributeMap;
   __shadowRoot: ShadowRoot;
-  __style: CSSStyleDeclaration;
+  __style: MockCSSStyleDeclaration;
 
   constructor(ownerDocument: any, nodeName: string) {
-    super(
-      ownerDocument,
-      NODE_TYPES.ELEMENT_NODE,
-      typeof nodeName === 'string' ? nodeName : null,
-      null
-    );
+    super(ownerDocument, NODE_TYPES.ELEMENT_NODE, typeof nodeName === 'string' ? nodeName : null, null);
     this.namespaceURI = null;
   }
 
@@ -243,7 +234,7 @@ export class MockElement extends MockNode {
 
   get attributes() {
     if (this.__attributeMap == null) {
-      this.__attributeMap = new MockAttributeMap();
+      this.__attributeMap = createAttributeProxy(false);
     }
     return this.__attributeMap;
   }
@@ -260,8 +251,12 @@ export class MockElement extends MockNode {
     return this.childNodes.filter(n => n.nodeType === NODE_TYPES.ELEMENT_NODE).length;
   }
 
-  get className() { return this.getAttributeNS(null, 'class') || ''; }
-  set className(value: string) { this.setAttributeNS(null, 'class', value); }
+  get className() {
+    return this.getAttributeNS(null, 'class') || '';
+  }
+  set className(value: string) {
+    this.setAttributeNS(null, 'class', value);
+  }
 
   get classList() {
     return new MockClassList(this as any);
@@ -277,15 +272,26 @@ export class MockElement extends MockNode {
   }
 
   closest(selector: string) {
-    return closest(selector, this);
+    let elm = this;
+    while (elm != null) {
+      if (elm.matches(selector)) {
+        return elm;
+      }
+      elm = elm.parentNode as any;
+    }
+    return null;
   }
 
   get dataset() {
     return dataset(this);
   }
 
-  get dir() { return this.getAttributeNS(null, 'dir') || ''; }
-  set dir(value: string) { this.setAttributeNS(null, 'dir', value); }
+  get dir() {
+    return this.getAttributeNS(null, 'dir') || '';
+  }
+  set dir(value: string) {
+    this.setAttributeNS(null, 'dir', value);
+  }
 
   dispatchEvent(ev: MockEvent) {
     return dispatchEvent(this, ev);
@@ -321,8 +327,8 @@ export class MockElement extends MockNode {
     return { bottom: 0, height: 0, left: 0, right: 0, top: 0, width: 0, x: 0, y: 0 };
   }
 
-  getRootNode(opts?: { composed?: boolean; [key: string]: any; }) {
-    const isComposed = (opts != null && opts.composed === true);
+  getRootNode(opts?: { composed?: boolean;[key: string]: any }) {
+    const isComposed = opts != null && opts.composed === true;
 
     let node: Node = this as any;
 
@@ -337,12 +343,23 @@ export class MockElement extends MockNode {
     return node;
   }
 
-  hasChildNodes() {
-    return (this.childNodes.length > 0);
+  get draggable() {
+    return this.getAttributeNS(null, 'draggable') === 'true';
+  }
+  set draggable(value: boolean) {
+    this.setAttributeNS(null, 'draggable', value);
   }
 
-  get id() { return this.getAttributeNS(null, 'id') || ''; }
-  set id(value: string) { this.setAttributeNS(null, 'id', value); }
+  hasChildNodes() {
+    return this.childNodes.length > 0;
+  }
+
+  get id() {
+    return this.getAttributeNS(null, 'id') || '';
+  }
+  set id(value: string) {
+    this.setAttributeNS(null, 'id', value);
+  }
 
   get innerHTML() {
     if (this.childNodes.length === 0) {
@@ -350,14 +367,13 @@ export class MockElement extends MockNode {
     }
     return serializeNodeToHtml(this as any, {
       newLines: false,
-      indentSpaces: 0
+      indentSpaces: 0,
     });
   }
 
   set innerHTML(html: string) {
     if (NON_ESCAPABLE_CONTENT.has(this.nodeName) === true) {
       setTextContent(this, html);
-
     } else {
       for (let i = this.childNodes.length - 1; i >= 0; i--) {
         this.removeChild(this.childNodes[i]);
@@ -382,9 +398,56 @@ export class MockElement extends MockNode {
     setTextContent(this, value);
   }
 
+  insertAdjacentElement(position: 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend', elm: MockHTMLElement) {
+    if (position === 'beforebegin') {
+      insertBefore(this.parentNode, elm, this);
+    } else if (position === 'afterbegin') {
+      this.prepend(elm);
+    } else if (position === 'beforeend') {
+      this.appendChild(elm);
+    } else if (position === 'afterend') {
+      insertBefore(this.parentNode, elm, this.nextSibling);
+    }
+    return elm;
+  }
+
+  insertAdjacentHTML(position: 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend', html: string) {
+    const frag = parseFragmentUtil(this.ownerDocument, html);
+    if (position === 'beforebegin') {
+      while (frag.childNodes.length > 0) {
+        insertBefore(this.parentNode, frag.childNodes[0], this);
+      }
+    } else if (position === 'afterbegin') {
+      while (frag.childNodes.length > 0) {
+        this.prepend(frag.childNodes[frag.childNodes.length - 1]);
+      }
+    } else if (position === 'beforeend') {
+      while (frag.childNodes.length > 0) {
+        this.appendChild(frag.childNodes[0]);
+      }
+    } else if (position === 'afterend') {
+      while (frag.childNodes.length > 0) {
+        insertBefore(this.parentNode, frag.childNodes[frag.childNodes.length - 1], this.nextSibling);
+      }
+    }
+  }
+
+  insertAdjacentText(position: 'beforebegin' | 'afterbegin' | 'beforeend' | 'afterend', text: string) {
+    const elm = this.ownerDocument.createTextNode(text);
+    if (position === 'beforebegin') {
+      insertBefore(this.parentNode, elm, this);
+    } else if (position === 'afterbegin') {
+      this.prepend(elm);
+    } else if (position === 'beforeend') {
+      this.appendChild(elm);
+    } else if (position === 'afterend') {
+      insertBefore(this.parentNode, elm, this.nextSibling);
+    }
+  }
+
   hasAttribute(attrName: string) {
     if (attrName === 'style') {
-      return (this.__style != null && this.__style.length > 0);
+      return this.__style != null && this.__style.length > 0;
     }
     return this.getAttribute(attrName) !== null;
   }
@@ -393,7 +456,9 @@ export class MockElement extends MockNode {
     return this.getAttributeNS(namespaceURI, name) !== null;
   }
 
-  get hidden() { return this.hasAttributeNS(null, 'hidden'); }
+  get hidden() {
+    return this.hasAttributeNS(null, 'hidden');
+  }
   set hidden(isHidden: boolean) {
     if (isHidden === true) {
       this.setAttributeNS(null, 'hidden', '');
@@ -402,8 +467,12 @@ export class MockElement extends MockNode {
     }
   }
 
-  get lang() { return this.getAttributeNS(null, 'lang') || ''; }
-  set lang(value: string) { this.setAttributeNS(null, 'lang', value); }
+  get lang() {
+    return this.getAttributeNS(null, 'lang') || '';
+  }
+  set lang(value: string) {
+    this.setAttributeNS(null, 'lang', value);
+  }
 
   get lastElementChild() {
     const children = this.children;
@@ -416,7 +485,10 @@ export class MockElement extends MockNode {
 
   get nextElementSibling() {
     const parentElement = this.parentElement;
-    if (parentElement != null && (parentElement.nodeType === NODE_TYPES.ELEMENT_NODE || parentElement.nodeType === NODE_TYPES.DOCUMENT_FRAGMENT_NODE || parentElement.nodeType === NODE_TYPES.DOCUMENT_NODE)) {
+    if (
+      parentElement != null &&
+      (parentElement.nodeType === NODE_TYPES.ELEMENT_NODE || parentElement.nodeType === NODE_TYPES.DOCUMENT_FRAGMENT_NODE || parentElement.nodeType === NODE_TYPES.DOCUMENT_NODE)
+    ) {
       const children = parentElement.children;
       const index = children.indexOf(this) + 1;
       return parentElement.children[index] || null;
@@ -428,13 +500,16 @@ export class MockElement extends MockNode {
     return serializeNodeToHtml(this as any, {
       newLines: false,
       outerHtml: true,
-      indentSpaces: 0
+      indentSpaces: 0,
     });
   }
 
   get previousElementSibling() {
     const parentElement = this.parentElement;
-    if (parentElement != null && (parentElement.nodeType === NODE_TYPES.ELEMENT_NODE || parentElement.nodeType === NODE_TYPES.DOCUMENT_FRAGMENT_NODE || parentElement.nodeType === NODE_TYPES.DOCUMENT_NODE)) {
+    if (
+      parentElement != null &&
+      (parentElement.nodeType === NODE_TYPES.ELEMENT_NODE || parentElement.nodeType === NODE_TYPES.DOCUMENT_FRAGMENT_NODE || parentElement.nodeType === NODE_TYPES.DOCUMENT_NODE)
+    ) {
       const children = parentElement.children;
       const index = children.indexOf(this) - 1;
       return parentElement.children[index] || null;
@@ -443,12 +518,19 @@ export class MockElement extends MockNode {
   }
 
   getElementsByClassName(classNames: string) {
-    const classes = classNames.trim().split(' ').filter(c => c.length > 0);
-    return getElementsByClassName(this, classes);
+    const classes = classNames
+      .trim()
+      .split(' ')
+      .filter(c => c.length > 0);
+    const results: MockElement[] = [];
+    getElementsByClassName(this, classes, results);
+    return results;
   }
 
   getElementsByTagName(tagName: string) {
-    return getElementsByTagName(this, tagName.toLowerCase());
+    const results: MockElement[] = [];
+    getElementsByTagName(this, tagName.toLowerCase(), results);
+    return results;
   }
 
   querySelector(selector: string) {
@@ -506,13 +588,12 @@ export class MockElement extends MockNode {
         } else {
           attr.value = value;
         }
-
       } else {
         if (attributes.caseInsensitive) {
           attrName = attrName.toLowerCase();
         }
         attr = new MockAttr(attrName, value);
-        attributes.items.push(attr);
+        attributes.__items.push(attr);
 
         if (checkAttrChanged === true) {
           attributeChanged(this, attrName, null, attr.value);
@@ -537,10 +618,9 @@ export class MockElement extends MockNode {
       } else {
         attr.value = value;
       }
-
     } else {
       attr = new MockAttr(attrName, value, namespaceURI);
-      attributes.items.push(attr);
+      attributes.__items.push(attr);
 
       if (checkAttrChanged === true) {
         attributeChanged(this, attrName, null, attr.value);
@@ -560,17 +640,24 @@ export class MockElement extends MockNode {
         this.__style = createCSSStyleDeclaration();
       }
       this.__style.cssText = val;
-
     } else {
       this.__style = val;
     }
   }
 
-  get tabIndex() { return parseInt(this.getAttributeNS(null, 'tabindex') || '-1', 10); }
-  set tabIndex(value: number) { this.setAttributeNS(null, 'tabindex', value); }
+  get tabIndex() {
+    return parseInt(this.getAttributeNS(null, 'tabindex') || '-1', 10);
+  }
+  set tabIndex(value: number) {
+    this.setAttributeNS(null, 'tabindex', value);
+  }
 
-  get tagName() { return this.nodeName; }
-  set tagName(value: string) { this.nodeName = value; }
+  get tagName() {
+    return this.nodeName;
+  }
+  set tagName(value: string) {
+    this.nodeName = value;
+  }
 
   get textContent() {
     const text: string[] = [];
@@ -581,104 +668,284 @@ export class MockElement extends MockNode {
     setTextContent(this, value);
   }
 
-  get title() { return this.getAttributeNS(null, 'title') || ''; }
-  set title(value: string) { this.setAttributeNS(null, 'title', value); }
+  get title() {
+    return this.getAttributeNS(null, 'title') || '';
+  }
+  set title(value: string) {
+    this.setAttributeNS(null, 'title', value);
+  }
 
-  onanimationstart() { /**/ }
-  onanimationend() { /**/ }
-  onanimationiteration() { /**/ }
-  onabort() {/**/}
-  onauxclick() {/**/}
-  onbeforecopy() {/**/}
-  onbeforecut() {/**/}
-  onbeforepaste() {/**/}
-  onblur() {/**/}
-  oncancel() {/**/}
-  oncanplay() {/**/}
-  oncanplaythrough() {/**/}
-  onchange() {/**/}
-  onclick() {/**/}
-  onclose() {/**/}
-  oncontextmenu() {/**/}
-  oncopy() {/**/}
-  oncuechange() {/**/}
-  oncut() {/**/}
-  ondblclick() {/**/}
-  ondrag() {/**/}
-  ondragend() {/**/}
-  ondragenter() {/**/}
-  ondragleave() {/**/}
-  ondragover() {/**/}
-  ondragstart() {/**/}
-  ondrop() {/**/}
-  ondurationchange() {/**/}
-  onemptied() {/**/}
-  onended() {/**/}
-  onerror() {/**/}
-  onfocus() {/**/}
-  onformdata() {/**/}
-  onfullscreenchange() {/**/}
-  onfullscreenerror() {/**/}
-  ongotpointercapture() {/**/}
-  oninput() {/**/}
-  oninvalid() {/**/}
-  onkeydown() {/**/}
-  onkeypress() {/**/}
-  onkeyup() {/**/}
-  onload() {/**/}
-  onloadeddata() {/**/}
-  onloadedmetadata() {/**/}
-  onloadstart() {/**/}
-  onlostpointercapture() {/**/}
-  onmousedown() {/**/}
-  onmouseenter() {/**/}
-  onmouseleave() {/**/}
-  onmousemove() {/**/}
-  onmouseout() {/**/}
-  onmouseover() {/**/}
-  onmouseup() {/**/}
-  onmousewheel() {/**/}
-  onpaste() {/**/}
-  onpause() {/**/}
-  onplay() {/**/}
-  onplaying() {/**/}
-  onpointercancel() {/**/}
-  onpointerdown() {/**/}
-  onpointerenter() {/**/}
-  onpointerleave() {/**/}
-  onpointermove() {/**/}
-  onpointerout() {/**/}
-  onpointerover() {/**/}
-  onpointerup() {/**/}
-  onprogress() {/**/}
-  onratechange() {/**/}
-  onreset() {/**/}
-  onresize() {/**/}
-  onscroll() {/**/}
-  onsearch() {/**/}
-  onseeked() {/**/}
-  onseeking() {/**/}
-  onselect() {/**/}
-  onselectstart() {/**/}
-  onstalled() {/**/}
-  onsubmit() {/**/}
-  onsuspend() {/**/}
-  ontimeupdate() {/**/}
-  ontoggle() {/**/}
-  onvolumechange() {/**/}
-  onwaiting() {/**/}
-  onwebkitfullscreenchange() {/**/}
-  onwebkitfullscreenerror() {/**/}
-  onwheel() {/**/}
+  onanimationstart() {
+    /**/
+  }
+  onanimationend() {
+    /**/
+  }
+  onanimationiteration() {
+    /**/
+  }
+  onabort() {
+    /**/
+  }
+  onauxclick() {
+    /**/
+  }
+  onbeforecopy() {
+    /**/
+  }
+  onbeforecut() {
+    /**/
+  }
+  onbeforepaste() {
+    /**/
+  }
+  onblur() {
+    /**/
+  }
+  oncancel() {
+    /**/
+  }
+  oncanplay() {
+    /**/
+  }
+  oncanplaythrough() {
+    /**/
+  }
+  onchange() {
+    /**/
+  }
+  onclick() {
+    /**/
+  }
+  onclose() {
+    /**/
+  }
+  oncontextmenu() {
+    /**/
+  }
+  oncopy() {
+    /**/
+  }
+  oncuechange() {
+    /**/
+  }
+  oncut() {
+    /**/
+  }
+  ondblclick() {
+    /**/
+  }
+  ondrag() {
+    /**/
+  }
+  ondragend() {
+    /**/
+  }
+  ondragenter() {
+    /**/
+  }
+  ondragleave() {
+    /**/
+  }
+  ondragover() {
+    /**/
+  }
+  ondragstart() {
+    /**/
+  }
+  ondrop() {
+    /**/
+  }
+  ondurationchange() {
+    /**/
+  }
+  onemptied() {
+    /**/
+  }
+  onended() {
+    /**/
+  }
+  onerror() {
+    /**/
+  }
+  onfocus() {
+    /**/
+  }
+  onfocusin() {
+    /**/
+  }
+  onfocusout() {
+    /**/
+  }
+  onformdata() {
+    /**/
+  }
+  onfullscreenchange() {
+    /**/
+  }
+  onfullscreenerror() {
+    /**/
+  }
+  ongotpointercapture() {
+    /**/
+  }
+  oninput() {
+    /**/
+  }
+  oninvalid() {
+    /**/
+  }
+  onkeydown() {
+    /**/
+  }
+  onkeypress() {
+    /**/
+  }
+  onkeyup() {
+    /**/
+  }
+  onload() {
+    /**/
+  }
+  onloadeddata() {
+    /**/
+  }
+  onloadedmetadata() {
+    /**/
+  }
+  onloadstart() {
+    /**/
+  }
+  onlostpointercapture() {
+    /**/
+  }
+  onmousedown() {
+    /**/
+  }
+  onmouseenter() {
+    /**/
+  }
+  onmouseleave() {
+    /**/
+  }
+  onmousemove() {
+    /**/
+  }
+  onmouseout() {
+    /**/
+  }
+  onmouseover() {
+    /**/
+  }
+  onmouseup() {
+    /**/
+  }
+  onmousewheel() {
+    /**/
+  }
+  onpaste() {
+    /**/
+  }
+  onpause() {
+    /**/
+  }
+  onplay() {
+    /**/
+  }
+  onplaying() {
+    /**/
+  }
+  onpointercancel() {
+    /**/
+  }
+  onpointerdown() {
+    /**/
+  }
+  onpointerenter() {
+    /**/
+  }
+  onpointerleave() {
+    /**/
+  }
+  onpointermove() {
+    /**/
+  }
+  onpointerout() {
+    /**/
+  }
+  onpointerover() {
+    /**/
+  }
+  onpointerup() {
+    /**/
+  }
+  onprogress() {
+    /**/
+  }
+  onratechange() {
+    /**/
+  }
+  onreset() {
+    /**/
+  }
+  onresize() {
+    /**/
+  }
+  onscroll() {
+    /**/
+  }
+  onsearch() {
+    /**/
+  }
+  onseeked() {
+    /**/
+  }
+  onseeking() {
+    /**/
+  }
+  onselect() {
+    /**/
+  }
+  onselectstart() {
+    /**/
+  }
+  onstalled() {
+    /**/
+  }
+  onsubmit() {
+    /**/
+  }
+  onsuspend() {
+    /**/
+  }
+  ontimeupdate() {
+    /**/
+  }
+  ontoggle() {
+    /**/
+  }
+  onvolumechange() {
+    /**/
+  }
+  onwaiting() {
+    /**/
+  }
+  onwebkitfullscreenchange() {
+    /**/
+  }
+  onwebkitfullscreenerror() {
+    /**/
+  }
+  onwheel() {
+    /**/
+  }
 
   toString(opts?: SerializeNodeToHtmlOptions) {
     return serializeNodeToHtml(this as any, opts);
   }
-
 }
 
-
-function getElementsByClassName(elm: MockElement, classNames: string[], foundElms: MockElement[] = []) {
+function getElementsByClassName(elm: MockElement, classNames: string[], foundElms: MockElement[]) {
   const children = elm.children;
   for (let i = 0, ii = children.length; i < ii; i++) {
     const childElm = children[i];
@@ -689,20 +956,17 @@ function getElementsByClassName(elm: MockElement, classNames: string[], foundElm
     }
     getElementsByClassName(childElm, classNames, foundElms);
   }
-  return foundElms;
 }
 
-
-function getElementsByTagName(elm: MockElement, tagName: string, foundElms: MockElement[] = []) {
+function getElementsByTagName(elm: MockElement, tagName: string, foundElms: MockElement[]) {
   const children = elm.children;
   for (let i = 0, ii = children.length; i < ii; i++) {
     const childElm = children[i];
-    if (childElm.nodeName.toLowerCase() === tagName) {
+    if (tagName === '*' || childElm.nodeName.toLowerCase() === tagName) {
       foundElms.push(childElm);
     }
     getElementsByTagName(childElm, tagName, foundElms);
   }
-  return foundElms;
 }
 
 export function resetElement(elm: MockElement) {
@@ -722,11 +986,9 @@ function insertBefore(parentNode: MockNode, newNode: MockNode, referenceNode: Mo
       const index = parentNode.childNodes.indexOf(referenceNode);
       if (index > -1) {
         parentNode.childNodes.splice(index, 0, newNode);
-
       } else {
         throw new Error(`referenceNode not found in parentNode.childNodes`);
       }
-
     } else {
       parentNode.childNodes.push(newNode);
     }
@@ -738,22 +1000,22 @@ function insertBefore(parentNode: MockNode, newNode: MockNode, referenceNode: Mo
 }
 
 export class MockHTMLElement extends MockElement {
-
   namespaceURI = 'http://www.w3.org/1999/xhtml';
 
   constructor(ownerDocument: any, nodeName: string) {
-    super(
-      ownerDocument,
-      typeof nodeName === 'string' ? nodeName.toUpperCase() : null,
-    );
+    super(ownerDocument, typeof nodeName === 'string' ? nodeName.toUpperCase() : null);
   }
 
-  get tagName() { return this.nodeName; }
-  set tagName(value: string) { this.nodeName = value; }
+  get tagName() {
+    return this.nodeName;
+  }
+  set tagName(value: string) {
+    this.nodeName = value;
+  }
 
   get attributes() {
     if (this.__attributeMap == null) {
-      this.__attributeMap = new MockAttributeMap(true);
+      this.__attributeMap = createAttributeProxy(true);
     }
     return this.__attributeMap;
   }
@@ -763,14 +1025,8 @@ export class MockHTMLElement extends MockElement {
 }
 
 export class MockTextNode extends MockNode {
-
   constructor(ownerDocument: any, text: string) {
-    super(
-      ownerDocument,
-      NODE_TYPES.TEXT_NODE,
-      NODE_NAMES.TEXT_NODE,
-      text
-    );
+    super(ownerDocument, NODE_TYPES.TEXT_NODE, NODE_NAMES.TEXT_NODE, text);
   }
 
   cloneNode(_deep?: boolean) {
@@ -805,22 +1061,18 @@ export class MockTextNode extends MockNode {
 
     return this.nodeValue;
   }
-
 }
-
 
 function getTextContent(childNodes: MockNode[], text: string[]) {
   for (let i = 0, ii = childNodes.length; i < ii; i++) {
     const childNode = childNodes[i];
     if (childNode.nodeType === NODE_TYPES.TEXT_NODE) {
       text.push(childNode.nodeValue);
-
     } else if (childNode.nodeType === NODE_TYPES.ELEMENT_NODE) {
       getTextContent(childNode.childNodes, text);
     }
   }
 }
-
 
 function setTextContent(elm: MockElement, text: string) {
   for (let i = elm.childNodes.length - 1; i >= 0; i--) {

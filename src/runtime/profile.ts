@@ -1,12 +1,12 @@
-import { BUILD } from '@build-conditionals';
-import { getHostRef, win } from '@platform';
 import * as d from '../declarations';
+import { BUILD } from '@app-data';
+import { getHostRef, win } from '@platform';
 import { HOST_FLAGS } from '@utils';
 
 let i = 0;
 
 export const createTime = (fnName: string, tagName = '') => {
-  if (BUILD.profile) {
+  if (BUILD.profile && performance.mark) {
     const key = `st:${fnName}:${tagName}:${i++}`;
     // Start
     performance.mark(key);
@@ -14,12 +14,14 @@ export const createTime = (fnName: string, tagName = '') => {
     // End
     return () => performance.measure(`[Rindo] ${fnName}() <${tagName}>`, key);
   } else {
-    return () => { return; };
+    return () => {
+      return;
+    };
   }
 };
 
 export const uniqueTime = (key: string, measureText: string) => {
-  if (BUILD.profile) {
+  if (BUILD.profile && performance.mark) {
     if (performance.getEntriesByName(key).length === 0) {
       performance.mark(key);
     }
@@ -29,7 +31,9 @@ export const uniqueTime = (key: string, measureText: string) => {
       }
     };
   } else {
-    return () => { return; };
+    return () => {
+      return;
+    };
   }
 };
 
@@ -78,7 +82,7 @@ const inspect = (ref: any) => {
 
 export const installDevTools = () => {
   if (BUILD.devTools) {
-    const rindo = (win as any).rindo = (win as any).rindo || {};
+    const rindo = ((win as any).rindo = (win as any).rindo || {});
     const originalInspect = rindo.inspect;
 
     rindo.inspect = (ref: any) => {

@@ -1,13 +1,21 @@
 import * as d from '../../declarations';
+import { addHostEventListeners } from '@runtime';
 
-const cstrs = new Map<string, d.ComponentNativeConstructor>();
+export const cmpModules = new Map<string, { [exportName: string]: d.ComponentConstructor }>();
 
-export const loadModule = (cmpMeta: d.ComponentRuntimeMeta, _hostRef: d.HostRef, _hmrVersionId?: string): any => {
-  return cstrs.get(cmpMeta.$tagName$);
+const getModule = (tagName: string): d.ComponentConstructor => {
+  if (typeof tagName === 'string') {
+    tagName = tagName.toLowerCase();
+    const cmpModule = cmpModules.get(tagName);
+    if (cmpModule != null) {
+      return cmpModule[tagName];
+    }
+  }
+  return null;
 };
 
-export const getComponent = (tagName: string) => {
-  return cstrs.get(tagName);
+export const loadModule = (cmpMeta: d.ComponentRuntimeMeta, _hostRef: d.HostRef, _hmrVersionId?: string): any => {
+  return getModule(cmpMeta.$tagName$);
 };
 
 export const isMemberInElement = (elm: any, memberName: string) => {
@@ -15,9 +23,9 @@ export const isMemberInElement = (elm: any, memberName: string) => {
     if (memberName in elm) {
       return true;
     }
-    const nodeName = elm.nodeName;
-    if (nodeName) {
-      const hostRef: d.ComponentNativeConstructor = getComponent(nodeName.toLowerCase());
+    const cstr = getModule(elm.nodeName);
+    if (cstr != null) {
+      const hostRef: d.ComponentNativeConstructor = cstr as any;
       if (hostRef != null && hostRef.cmpMeta != null && hostRef.cmpMeta.$members$ != null) {
         return memberName in hostRef.cmpMeta.$members$;
       }
@@ -27,9 +35,13 @@ export const isMemberInElement = (elm: any, memberName: string) => {
 };
 
 export const registerComponents = (Cstrs: d.ComponentNativeConstructor[]) => {
-  Cstrs.forEach(Cstr => {
-    cstrs.set(Cstr.cmpMeta.$tagName$, Cstr);
-  });
+  for (const Cstr of Cstrs) {
+    // using this format so it follows exactly how client-side modules work
+    const exportName = Cstr.cmpMeta.$tagName$;
+    cmpModules.set(exportName, {
+      [exportName]: Cstr,
+    });
+  }
 };
 
 export const win = window;
@@ -56,7 +68,8 @@ export const writeTask = (cb: Function) => {
   });
 };
 
-export const nextTick = /*@__PURE__*/(cb: () => void) => Promise.resolve().then(cb);
+const resolved = /*@__PURE__*/ Promise.resolve();
+export const nextTick = /*@__PURE__*/ (cb: () => void) => resolved.then(cb);
 
 export const consoleError = (e: any) => {
   if (e != null) {
@@ -64,25 +77,31 @@ export const consoleError = (e: any) => {
   }
 };
 
-export const consoleDevError = (..._: any[]) => {/* noop for hydrate */};
+export const consoleDevError = (..._: any[]) => {
+  /* noop for hydrate */
+};
 
-export const consoleDevWarn = (..._: any[]) => {/* noop for hydrate */};
+export const consoleDevWarn = (..._: any[]) => {
+  /* noop for hydrate */
+};
 
-export const consoleDevInfo = (..._: any[]) => {/* noop for hydrate */};
+export const consoleDevInfo = (..._: any[]) => {
+  /* noop for hydrate */
+};
 
-export const Context: any = {};
-
+/*hydrate context start*/ export const Context = {}; /*hydrate context end*/
 
 export const plt: d.PlatformRuntime = {
   $flags$: 0,
   $resourcesUrl$: '',
-  jmp: (h) => h(),
-  raf: (h) => requestAnimationFrame(h),
+  jmp: h => h(),
+  raf: h => requestAnimationFrame(h),
   ael: (el, eventName, listener, opts) => el.addEventListener(eventName, listener, opts),
   rel: (el, eventName, listener, opts) => el.removeEventListener(eventName, listener, opts),
+  ce: (eventName, opts) => new win.CustomEvent(eventName, opts),
 };
 
-export const supportsShadowDom = false;
+export const supportsShadow = false;
 
 export const supportsListenerOptions = false;
 
@@ -90,33 +109,37 @@ export const supportsConstructibleStylesheets = false;
 
 const hostRefs: WeakMap<d.RuntimeRef, d.HostRef> = new WeakMap();
 
-export const getHostRef = (ref: d.RuntimeRef) =>
-  hostRefs.get(ref);
+export const getHostRef = (ref: d.RuntimeRef) => hostRefs.get(ref);
 
-export const registerInstance = (lazyInstance: any, hostRef: d.HostRef) =>
-  hostRefs.set(hostRef.$lazyInstance$ = lazyInstance, hostRef);
+export const registerInstance = (lazyInstance: any, hostRef: d.HostRef) => hostRefs.set((hostRef.$lazyInstance$ = lazyInstance), hostRef);
 
-export const registerHost = (elm: d.HostElement) => {
+export const registerHost = (elm: d.HostElement, cmpMeta: d.ComponentRuntimeMeta) => {
   const hostRef: d.HostRef = {
     $flags$: 0,
+    $cmpMeta$: cmpMeta,
     $hostElement$: elm,
     $instanceValues$: new Map(),
-    $renderCount$: 0
+    $renderCount$: 0,
   };
-  hostRef.$onInstancePromise$ = new Promise(r => hostRef.$onInstanceResolve$ = r);
-  hostRef.$onReadyPromise$ = new Promise(r => hostRef.$onReadyResolve$ = r);
+  hostRef.$onInstancePromise$ = new Promise(r => (hostRef.$onInstanceResolve$ = r));
+  hostRef.$onReadyPromise$ = new Promise(r => (hostRef.$onReadyResolve$ = r));
   elm['s-p'] = [];
   elm['s-rc'] = [];
+  addHostEventListeners(elm, hostRef, cmpMeta.$listeners$, false);
   return hostRefs.set(elm, hostRef);
 };
 
 export const Build: d.UserBuildConditionals = {
   isDev: false,
-  isBrowser: false
+  isBrowser: false,
+  isServer: true,
+  isTesting: false,
 };
 
 export const styles: d.StyleMap = new Map();
+export const modeResolutionChain: d.ResolutionHandler[] = [];
 
+export { BUILD, NAMESPACE } from '@app-data';
 export { hydrateApp } from './hydrate-app';
 
 export * from '@runtime';

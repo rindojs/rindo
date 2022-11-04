@@ -1,13 +1,12 @@
-import * as d from '../../declarations';
+import { Config, E2EProcessEnv } from '@rindo/core/internal';
 import * as puppeteer from 'puppeteer';
 
-
-export async function startPuppeteerBrowser(config: d.Config) {
+export async function startPuppeteerBrowser(config: Config) {
   if (!config.flags.e2e) {
     return null;
   }
 
-  const env: d.E2EProcessEnv = process.env;
+  const env: E2EProcessEnv = process.env;
   const puppeteerDep = config.testing.browserExecutablePath ? 'puppeteer-core' : 'puppeteer';
 
   const puppeteerModulePath = config.sys.lazyRequire.getModulePath(puppeteerDep);
@@ -41,17 +40,17 @@ export async function startPuppeteerBrowser(config: d.Config) {
     args: config.testing.browserArgs,
     headless: config.testing.browserHeadless,
     devtools: config.testing.browserDevtools,
-    slowMo: config.testing.browserSlowMo
+    slowMo: config.testing.browserSlowMo,
   };
 
   if (config.testing.browserExecutablePath) {
     launchOpts.executablePath = config.testing.browserExecutablePath;
   }
 
-  const browser = await ((config.testing.browserWSEndpoint)
+  const browser = await (config.testing.browserWSEndpoint
     ? puppeteer.connect({
         ...launchOpts,
-        browserWSEndpoint: config.testing.browserWSEndpoint
+        browserWSEndpoint: config.testing.browserWSEndpoint,
       })
     : puppeteer.launch({
         ...launchOpts,
@@ -64,13 +63,12 @@ export async function startPuppeteerBrowser(config: d.Config) {
   return browser;
 }
 
-
 export async function connectBrowser() {
   // the reason we're connecting to the browser from
   // a web socket is because jest probably has us
   // in a different thread, this is also why this
   // uses process.env for data
-  const env: d.E2EProcessEnv = process.env;
+  const env: E2EProcessEnv = process.env;
 
   const wsEndpoint = env.__RINDO_BROWSER_WS_ENDPOINT__;
   if (!wsEndpoint) {
@@ -79,14 +77,13 @@ export async function connectBrowser() {
 
   const connectOpts: puppeteer.ConnectOptions = {
     browserWSEndpoint: wsEndpoint,
-    ignoreHTTPSErrors: true
+    ignoreHTTPSErrors: true,
   };
 
   const puppeteer = require(env.__RINDO_PUPPETEER_MODULE__);
 
   return await puppeteer.connect(connectOpts);
 }
-
 
 export async function disconnectBrowser(browser: puppeteer.Browser) {
   if (browser) {

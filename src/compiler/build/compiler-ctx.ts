@@ -1,8 +1,7 @@
 import * as d from '../../declarations';
-import { BuildEvents } from '../events';
-import { Cache } from '../cache';
-import { InMemoryFileSystem, normalizePath } from '@utils';
-
+import { basename, dirname, extname, join } from 'path';
+import { buildEvents } from '../events';
+import { normalizePath } from '@utils';
 
 /**
  * The CompilerCtx is a persistent object that's reused throughout
@@ -11,6 +10,7 @@ import { InMemoryFileSystem, normalizePath } from '@utils';
  * is always the same.
  */
 export class CompilerContext implements d.CompilerCtx {
+  version = 2;
   activeBuildId = -1;
   activeFilesAdded: string[] = [];
   activeFilesDeleted: string[] = [];
@@ -21,14 +21,14 @@ export class CompilerContext implements d.CompilerCtx {
   cachedStyleMeta = new Map<string, d.StyleCompiler>();
   collections: d.CollectionCompilerMeta[] = [];
   compilerOptions: any = null;
-  events = new BuildEvents();
+  events = buildEvents();
   fs: d.InMemoryFileSystem;
   fsWatcher: d.FsWatcher = null;
   hasFsWatcherEvents = false;
   hasLoggedServerUrl = false;
   hasSuccessfulBuild = false;
   isActivelyBuilding = false;
-  lastBuildResults: d.BuildResults = null;
+  lastBuildResults: d.CompilerBuildResults = null;
   lastBuildStyles = new Map<string, string>();
   lastComponentStyleInput = new Map<string, string>();
   moduleMap: d.ModuleMap = new Map();
@@ -41,15 +41,10 @@ export class CompilerContext implements d.CompilerCtx {
   tsService: d.TsService = null;
   cachedGlobalStyle: string;
   styleModeNames = new Set<string>();
-
-  constructor(config: d.Config) {
-    const cacheFs = (config.enableCache && config.sys.fs != null) ? new InMemoryFileSystem(config.sys.fs, config.sys.path) : null;
-    this.cache = new Cache(config, cacheFs);
-
-    this.cache.initCacheDir();
-
-    this.fs = (config.sys.fs != null ? new InMemoryFileSystem(config.sys.fs, config.sys.path) : null);
-  }
+  rollupCache = new Map();
+  changedModules = new Set<string>();
+  changedFiles = new Set<string>();
+  worker: d.CompilerWorkerContext = null;
 
   reset() {
     this.cache.clear();
@@ -72,19 +67,17 @@ export class CompilerContext implements d.CompilerCtx {
   }
 }
 
-
-export const getModule = (config: d.Config, compilerCtx: d.CompilerCtx, sourceFilePath: string) => {
+export const getModuleLegacy = (_config: d.Config, compilerCtx: d.CompilerCtx, sourceFilePath: string) => {
   sourceFilePath = normalizePath(sourceFilePath);
 
   const moduleFile = compilerCtx.moduleMap.get(sourceFilePath);
   if (moduleFile != null) {
     return moduleFile;
-
   } else {
-    const sourceFileDir = config.sys.path.dirname(sourceFilePath);
-    const sourceFileExt = config.sys.path.extname(sourceFilePath);
-    const sourceFileName = config.sys.path.basename(sourceFilePath, sourceFileExt);
-    const jsFilePath = config.sys.path.join(sourceFileDir, sourceFileName + '.js');
+    const sourceFileDir = dirname(sourceFilePath);
+    const sourceFileExt = extname(sourceFilePath);
+    const sourceFileName = basename(sourceFilePath, sourceFileExt);
+    const jsFilePath = join(sourceFileDir, sourceFileName + '.js');
 
     const moduleFile: d.Module = {
       sourceFilePath: sourceFilePath,
@@ -108,20 +101,22 @@ export const getModule = (config: d.Config, compilerCtx: d.CompilerCtx, sourceFi
       hasVdomText: false,
       htmlAttrNames: [],
       htmlTagNames: [],
+      htmlParts: [],
       isCollectionDependency: false,
       isLegacy: false,
       localImports: [],
       originalCollectionComponentPath: null,
       originalImports: [],
-      potentialCmpRefs: []
+      potentialCmpRefs: [],
+      staticSourceFile: null,
+      staticSourceFileText: '',
     };
     compilerCtx.moduleMap.set(sourceFilePath, moduleFile);
     return moduleFile;
   }
 };
 
-
-export const resetModule = (moduleFile: d.Module) => {
+export const resetModuleLegacy = (moduleFile: d.Module) => {
   moduleFile.cmps.length = 0;
   moduleFile.coreRuntimeApis.length = 0;
   moduleFile.collectionName = null;

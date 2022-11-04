@@ -1,20 +1,26 @@
-import * as d from '../declarations';
-import { BuildContext, Cache } from '../compiler';
-import { InMemoryFileSystem } from '@utils';
-import { MockWindow } from '@mock-doc';
-import { TestingFs } from './testing-fs';
+import { BuildCtx, Cache, CompilerCtx, CompilerSystem, Config } from '@rindo/core/internal';
+import { BuildContext } from '../compiler/build/build-ctx';
+import { Cache as CompilerCache } from '../compiler/cache';
+import { createInMemoryFs } from '../compiler/sys/in-memory-fs';
+import { createTestingSystem } from './testing-sys';
+import { createWorkerContext } from '@rindo/core/compiler';
+import { MockWindow } from '@rindo/core/mock-doc';
 import { TestingLogger } from './testing-logger';
-import { TestingSystem } from './testing-sys';
 import path from 'path';
 
+export function mockConfig(sys?: CompilerSystem) {
+  const rootDir = path.resolve('/');
 
-export function mockConfig() {
-  const config: d.Config = {
+  if (!sys) {
+    sys = createTestingSystem();
+  }
+  sys.getCurrentDirectory = () => rootDir;
+
+  const config: Config = {
     _isTesting: true,
 
     namespace: 'Testing',
-    rootDir: path.resolve('/'),
-    cwd: path.resolve('/'),
+    rootDir: rootDir,
     globalScript: null,
     devMode: true,
     enableCache: false,
@@ -26,22 +32,27 @@ export function mockConfig() {
     buildEs5: false,
     hashFileNames: false,
     logger: new TestingLogger(),
-    maxConcurrentWorkers: 1,
+    maxConcurrentWorkers: 0,
     minifyCss: false,
     minifyJs: false,
-    sys: new TestingSystem(),
+    sys,
     testing: null,
     validateTypes: false,
+    extras: {},
     nodeResolve: {
       customResolveOptions: {},
-    }
+    },
   };
+
   return config;
 }
 
-
-export function mockCompilerCtx() {
-  const compilerCtx: d.CompilerCtx = {
+export function mockCompilerCtx(config?: Config) {
+  if (!config) {
+    config = mockConfig();
+  }
+  const compilerCtx: CompilerCtx = {
+    version: 1,
     activeBuildId: 0,
     activeDirsAdded: [],
     activeDirsDeleted: [],
@@ -56,7 +67,6 @@ export function mockCompilerCtx() {
     cachedStyleMeta: new Map(),
     events: null,
     fsWatcher: null,
-    hasLoggedServerUrl: false,
     hasSuccessfulBuild: false,
     isActivelyBuilding: false,
     lastComponentStyleInput: new Map(),
@@ -68,78 +78,81 @@ export function mockCompilerCtx() {
     rollupCacheHydrate: null,
     rollupCacheLazy: null,
     rollupCacheNative: null,
+    rollupCache: new Map(),
     rootTsFiles: [],
     styleModeNames: new Set(),
     tsService: null,
-    reset: () => {/**/}
+    changedModules: new Set(),
+    changedFiles: new Set(),
+    reset: () => {
+      /**/
+    },
+    worker: createWorkerContext(config.sys),
   };
 
   Object.defineProperty(compilerCtx, 'fs', {
     get() {
       if (this._fs == null) {
-        this._fs = new InMemoryFileSystem(mockFs(), path);
+        this._fs = createInMemoryFs(config.sys);
       }
       return this._fs;
-    }
+    },
   });
 
   Object.defineProperty(compilerCtx, 'cache', {
     get() {
       if (this._cache == null) {
-        this._cache = mockCache();
+        this._cache = mockCache(config, compilerCtx);
       }
       return this._cache;
-    }
+    },
   });
 
   return compilerCtx;
 }
 
-
-export function mockBuildCtx(config?: d.Config, compilerCtx?: d.CompilerCtx) {
+export function mockBuildCtx(config?: Config, compilerCtx?: CompilerCtx) {
   if (!config) {
     config = mockConfig();
   }
   if (!compilerCtx) {
-    compilerCtx = mockCompilerCtx();
+    compilerCtx = mockCompilerCtx(config);
   }
   const buildCtx = new BuildContext(config, compilerCtx);
 
-  return buildCtx as d.BuildCtx;
+  return buildCtx as BuildCtx;
 }
 
-
-export function mockFs() {
-  return new TestingFs();
-}
-
-
-export function mockCache() {
-  const fs = new InMemoryFileSystem(mockFs(), path);
-  const config = mockConfig();
+export function mockCache(config?: Config, compilerCtx?: CompilerCtx) {
+  if (!config) {
+    config = mockConfig();
+  }
+  if (!compilerCtx) {
+    compilerCtx = mockCompilerCtx(config);
+  }
   config.enableCache = true;
-
-  const cache = new Cache(config, fs);
+  const cache = new CompilerCache(config, compilerCtx.fs);
   cache.initCacheDir();
-  return cache as d.Cache;
+  return cache as Cache;
 }
-
 
 export function mockLogger() {
   return new TestingLogger();
 }
 
-
-export function mockRindoSystem(): d.RindoSystem {
-  return new TestingSystem();
+export interface TestingSystem extends CompilerSystem {
+  diskReads: number;
+  diskWrites: number;
 }
 
+export function mockRindoSystem(): TestingSystem {
+  return createTestingSystem();
+}
 
 export function mockDocument(html: string = null) {
   const win = new MockWindow(html);
   return win.document as Document;
 }
-
 
 export function mockWindow(html: string = null) {
   const win = new MockWindow(html);

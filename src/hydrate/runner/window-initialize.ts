@@ -1,9 +1,9 @@
 import * as d from '../../declarations';
+import { constrainTimeouts } from '@rindo/core/mock-doc';
 import { renderCatchError } from './render-utils';
-import { constrainTimeouts } from '@mock-doc';
+import { runtimeLogging } from './runtime-log';
 
-
-export function initializeWindow(win: Window, opts: d.HydrateDocumentOptions, results: d.HydrateResults) {
+export function initializeWindow(win: Window & typeof globalThis, opts: d.HydrateDocumentOptions, results: d.HydrateResults) {
   try {
     win.location.href = opts.url;
   } catch (e) {
@@ -44,20 +44,7 @@ export function initializeWindow(win: Window, opts: d.HydrateDocumentOptions, re
     constrainTimeouts(win);
   }
 
-  try {
-    win.console.error = function() {
-      renderCatchError(results, [...arguments].join(', '));
-    };
-
-    win.console.debug = function() {
-      const diagnostic = renderCatchError(results, [...arguments].join(', '));
-      diagnostic.level = 'debug';
-      diagnostic.messageText = 'Hydrate Debug';
-    };
-
-  } catch (e) {
-    renderCatchError(results, e);
-  }
+  runtimeLogging(win, opts, results);
 
   return win;
 }

@@ -1,6 +1,5 @@
-import * as d from '../../declarations';
+import { EventInitDict, EventSpy, ScreenshotDiff, ScreenshotOptions } from '@rindo/core/internal';
 import * as puppeteer from 'puppeteer';
-
 
 export interface NewE2EPageOptions extends puppeteer.NavigationOptions {
   url?: string;
@@ -9,10 +8,40 @@ export interface NewE2EPageOptions extends puppeteer.NavigationOptions {
   failOnNetworkError?: boolean;
 }
 
-
 type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
-type PuppeteerPage = Omit<puppeteer.Page,
-'bringToFront' | 'browser' | 'screenshot' | 'emulate' | 'emulateMedia' | 'frames' | 'goBack' | 'goForward' | 'isClosed' | 'mainFrame' | 'pdf' | 'reload' | 'target' | 'title' | 'viewport' | 'waitForNavigation' | 'screenshot' | 'workers' | 'addListener' | 'prependListener' | 'prependOnceListener' | 'removeListener' | 'removeAllListeners' | 'setMaxListeners' | 'getMaxListeners' | 'listeners' | 'rawListeners' | 'emit' | 'eventNames' | 'listenerCount' | '$x' | 'waitForXPath'
+type PuppeteerPage = Omit<
+  puppeteer.Page,
+  | 'bringToFront'
+  | 'browser'
+  | 'screenshot'
+  | 'emulate'
+  | 'emulateMedia'
+  | 'frames'
+  | 'goBack'
+  | 'goForward'
+  | 'isClosed'
+  | 'mainFrame'
+  | 'pdf'
+  | 'reload'
+  | 'target'
+  | 'title'
+  | 'viewport'
+  | 'waitForNavigation'
+  | 'screenshot'
+  | 'workers'
+  | 'addListener'
+  | 'prependListener'
+  | 'prependOnceListener'
+  | 'removeAllListeners'
+  | 'setMaxListeners'
+  | 'getMaxListeners'
+  | 'listeners'
+  | 'rawListeners'
+  | 'emit'
+  | 'eventNames'
+  | 'listenerCount'
+  | '$x'
+  | 'waitForXPath'
 >;
 
 export interface PageDiagnostic {
@@ -26,7 +55,6 @@ export interface PageDiagnostic {
  * to create easier to write and read end-to-end tests.
  */
 export interface E2EPage extends PuppeteerPage {
-
   /**
    * `Experimental`
    * Takes a screenshot of the page, then compares the current screenshot
@@ -34,7 +62,7 @@ export interface E2EPage extends PuppeteerPage {
    * results can then be used to test pixel mismatches, such as
    * `expect(results).toMatchScreenshot()`.
    */
-  compareScreenshot(): Promise<d.ScreenshotDiff>;
+  compareScreenshot(): Promise<ScreenshotDiff>;
 
   /**
    * `Experimental`
@@ -42,7 +70,7 @@ export interface E2EPage extends PuppeteerPage {
    * against the master screenshot. The provided `description` will be
    * added onto its current description, which comes from the test description.
    */
-  compareScreenshot(description: string): Promise<d.ScreenshotDiff>;
+  compareScreenshot(description: string): Promise<ScreenshotDiff>;
 
   /**
    * `Experimental`
@@ -50,7 +78,7 @@ export interface E2EPage extends PuppeteerPage {
    * against the master screenshot. The `opts` argument can be used to
    * customize screenshot options.
    */
-  compareScreenshot(opts: d.ScreenshotOptions): Promise<d.ScreenshotDiff>;
+  compareScreenshot(opts: ScreenshotOptions): Promise<ScreenshotDiff>;
 
   /**
    * `Experimental`
@@ -59,7 +87,7 @@ export interface E2EPage extends PuppeteerPage {
    * added onto its current description, which comes from the test description.
    * The `opts` argument can be used to customize screenshot options.
    */
-  compareScreenshot(description: string, opts: d.ScreenshotOptions): Promise<d.ScreenshotDiff>;
+  compareScreenshot(description: string, opts: ScreenshotOptions): Promise<ScreenshotDiff>;
 
   /**
    * Sets a debugger;
@@ -109,7 +137,7 @@ export interface E2EPage extends PuppeteerPage {
    * `expect(spy).toHaveReceivedEventTimes(x)` and
    * `expect(spy).toHaveReceivedEventDetail({...})`.
    */
-  spyOnEvent(eventName: string, selector?: 'window' | 'document'): Promise<d.EventSpy>;
+  spyOnEvent(eventName: string, selector?: 'window' | 'document'): Promise<EventSpy>;
 
   /**
    * Both Rindo and Puppeteer have an asynchronous architecture, which is a good thing
@@ -129,7 +157,6 @@ export interface E2EPage extends PuppeteerPage {
   getDiagnostics(): PageDiagnostic[];
 }
 
-
 export interface E2EPageInternal extends E2EPage {
   isClosed(): boolean;
   _e2eElements: E2EElementInternal[];
@@ -139,7 +166,6 @@ export interface E2EPageInternal extends E2EPage {
   _e2eClose(options?: puppeteer.PageCloseOptions): Promise<void>;
   screenshot(options?: puppeteer.ScreenshotOptions): Promise<Buffer>;
 }
-
 
 export interface E2EElement {
   /**
@@ -305,7 +331,7 @@ export interface E2EElement {
    * will type the text in upper case.
    * Key names: https://github.com/GoogleChrome/puppeteer/blob/master/lib/USKeyboardLayout.js
    */
-  press(key: string, options?: { text?: string, delay?: number }): Promise<void>;
+  press(key: string, options?: { text?: string; delay?: number }): Promise<void>;
 
   /**
    * Removes the attribute on the specified element. Note that
@@ -346,7 +372,7 @@ export interface E2EElement {
    * `expect(spy).toHaveReceivedEventTimes(x)` and
    * `expect(spy).toHaveReceivedEventDetail({...})`.
    */
-  spyOnEvent(eventName: string): Promise<d.EventSpy>;
+  spyOnEvent(eventName: string): Promise<EventSpy>;
 
   /**
    * Represents the tab order of the current element. Setting the
@@ -393,7 +419,7 @@ export interface E2EElement {
    * and dispatch it from the element, to include any custom event
    * `detail` data as the second argument.
    */
-  triggerEvent(eventName: string, eventInitDict?: d.EventInitDict): void;
+  triggerEvent(eventName: string, eventInitDict?: EventInitDict): void;
 
   /**
    * Sends a keydown, keypress/input, and keyup event for each character in the text.
@@ -421,13 +447,11 @@ export interface E2EElement {
   waitForEvent(eventName: string): Promise<any>;
 }
 
-
 export interface E2EElementInternal extends E2EElement {
   e2eDispose(): Promise<void>;
   e2eRunActions(): Promise<void>;
   e2eSync(): Promise<void>;
 }
-
 
 export type FindSelector = string | FindSelectorOptions;
 
@@ -444,11 +468,9 @@ export interface FindSelectorOptions {
   contains?: string;
 }
 
-
 export interface WaitForEventOptions {
   timeout?: number;
 }
-
 
 export interface WaitForEvent {
   eventName: string;

@@ -1,81 +1,78 @@
-import * as d from '../../declarations';
-import { DEFAULT_STYLE_MODE, getFileExt, normalizePath } from '@utils';
-import path from 'path';
+import type { ImportData, ParsedImport, SerializeImportData } from '../../declarations';
+import { basename, dirname, isAbsolute, relative } from 'path';
+import { DEFAULT_STYLE_MODE, isString, normalizePath } from '@utils';
 
+export const serializeImportPath = (data: SerializeImportData, styleImportData: string) => {
+  let p = data.importeePath;
 
-export const createRindoImportPath = (type: d.RindoDataType, tagName: string, encapsulation: string, modeName: string, importPath: string) => {
-  const pathData = serializeRindoImportPath(type, tagName, encapsulation, modeName);
-  return `${pathData}!${importPath}`;
-};
+  if (isString(p)) {
+    if (isString(data.importerPath) && isAbsolute(data.importeePath)) {
+      p = relative(dirname(data.importerPath), data.importeePath);
+    }
+    p = normalizePath(p);
+    if (!p.startsWith('.')) {
+      p = './' + p;
+    }
 
-
-const serializeRindoImportPath = (type: d.RindoDataType, tagName: string, encapsulation: string, modeName: string) => {
-  const data: d.RindoComponentData = {
-    tag: tagName,
-  };
-  if (modeName && modeName !== DEFAULT_STYLE_MODE) {
-    data.mode = modeName;
-  }
-  if (encapsulation !== 'none') {
-    data.encapsulation = encapsulation;
-  }
-
-  const params = new URLSearchParams(Object.entries(data));
-  params.set('type', type);
-  return RINDO_IMPORT_PREFIX + params.toString();
-};
-
-
-export const parseRindoImportPath = (importee: string, importer: string) => {
-  if (typeof importee === 'string' && typeof importee === 'string') {
-
-    if (importee.startsWith(RINDO_IMPORT_PREFIX) && importee.includes('!')) {
-      const importeeParts = importee.split('!');
-      const importData = importeeParts[0];
-      const importPath = importeeParts[importeeParts.length - 1];
-
-      const dataParts = importData.split('?');
-      if (dataParts.length === 2) {
-        const params = dataParts[1];
-        const urlParams = new URLSearchParams(params);
-        const type = urlParams.get('type') as any;
-        const data: d.RindoComponentData = {
-          tag: urlParams.get('tag'),
-          encapsulation: urlParams.get('encapsulation') || 'none',
-          mode: urlParams.get('mode') || DEFAULT_STYLE_MODE,
-        };
-
-        importer = normalizePath(importer);
-        const importerDir = path.dirname(importer);
-        const importerExt = getFileExt(importer.split('?')[0]);
-
-        const resolvedFilePath = normalizePath(path.resolve(importerDir, importPath));
-        const resolvedFileName = path.basename(resolvedFilePath);
-        const resolvedFileExt = getFileExt(resolvedFileName);
-
-        let resolvedId = resolvedFilePath;
-        if (data.encapsulation === 'scoped' && data.mode && data.mode !== DEFAULT_STYLE_MODE) {
-          resolvedId += `?${params}`;
-        }
-
-        const r: d.ResolvedRindoData = {
-          type,
-          resolvedId,
-          resolvedFilePath,
-          resolvedFileName,
-          resolvedFileExt,
-          params,
-          data,
-          importee,
-          importer,
-          importerExt,
-        };
-
-        return r;
+    if (styleImportData === 'queryparams' || styleImportData === undefined) {
+      const paramData: ImportData = {};
+      if (isString(data.tag)) {
+        paramData.tag = data.tag;
+      }
+      if (isString(data.mode) && data.mode !== DEFAULT_STYLE_MODE) {
+        paramData.mode = data.mode;
+      }
+      if (isString(data.encapsulation) && data.encapsulation !== 'none') {
+        paramData.encapsulation = data.encapsulation;
+      }
+      const paramEntries = Object.entries(paramData);
+      if (paramEntries.length > 0) {
+        const params = new URLSearchParams(paramEntries);
+        p += '?' + params.toString();
       }
     }
   }
-  return null;
+
+  return p;
 };
 
-const RINDO_IMPORT_PREFIX = `\0rindo?`;
+export const parseImportPath = (importPath: string) => {
+  const parsedPath: ParsedImport = {
+    importPath,
+    basename: null,
+    ext: null,
+    data: null,
+  };
+
+  if (isString(importPath)) {
+    const pathParts = importPath.split('?');
+
+    parsedPath.basename = basename(pathParts[0].trim());
+    const extParts = parsedPath.basename.toLowerCase().split('.');
+    if (extParts.length > 1) {
+      parsedPath.ext = extParts[extParts.length - 1];
+      if (parsedPath.ext === 'ts' && extParts[extParts.length - 2] === 'd') {
+        parsedPath.ext = 'd.ts';
+      }
+    }
+
+    if (pathParts.length > 1) {
+      const params = pathParts[1];
+      const urlParams = new URLSearchParams(params);
+      const tag = urlParams.get('tag');
+      if (tag != null) {
+        parsedPath.data = {
+          tag,
+          encapsulation: urlParams.get('encapsulation') || 'none',
+          mode: urlParams.get('mode') || DEFAULT_STYLE_MODE,
+        };
+      }
+    } else if (parsedPath.basename.endsWith('.css')) {
+      parsedPath.data = {
+        encapsulation: 'none',
+      };
+    }
+  }
+
+  return parsedPath;
+};

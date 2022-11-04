@@ -5,46 +5,45 @@ import { addModuleMetadataProxies } from '../add-component-meta-proxy';
 import { getComponentMeta, getModuleFromSourceFile, getScriptTarget } from '../transform-utils';
 import { catchError, loadTypeScriptDiagnostics } from '@utils';
 import { defineCustomElement } from '../define-custom-element';
+import { RINDO_CORE_ID } from '../../bundle/entry-alias-ids';
 import { updateNativeComponentClass } from './native-component';
 import { updateStyleImports } from '../style-imports';
 import ts from 'typescript';
 
-
-export const transformToNativeComponentText = (compilerCtx: d.CompilerCtx, buildCtx: d.BuildCtx, cmp: d.ComponentCompilerMeta, inputJsText: string) => {
+export const transformToNativeComponentText = (config: d.Config, compilerCtx: d.CompilerCtx, buildCtx: d.BuildCtx, cmp: d.ComponentCompilerMeta, inputJsText: string) => {
   let outputText: string = null;
 
-  const transformOpts: d.TransformOptions = {
-    coreImportPath: '@rindo/core',
-    componentExport: null,
-    componentMetadata: null,
-    proxy: null,
-    style: 'static'
-  };
-
   try {
+    const tsCompilerOptions: ts.CompilerOptions = {
+      module: ts.ModuleKind.ESNext,
+      target: getScriptTarget(),
+    };
+
+    const transformOpts: d.TransformOptions = {
+      coreImportPath: RINDO_CORE_ID,
+      componentExport: null,
+      componentMetadata: null,
+      currentDirectory: config.sys.getCurrentDirectory(),
+      proxy: null,
+      style: 'static',
+      styleImportData: 'queryparams',
+    };
+
     const transpileOpts: ts.TranspileOptions = {
-      compilerOptions: {
-        module: ts.ModuleKind.ESNext,
-        target: getScriptTarget(),
-      },
+      compilerOptions: tsCompilerOptions,
       fileName: cmp.jsFilePath,
       transformers: {
-        after: [
-          nativeComponentTransform(compilerCtx, transformOpts)
-        ]
-      }
+        after: [nativeComponentTransform(compilerCtx, transformOpts)],
+      },
     };
 
     const transpileOutput = ts.transpileModule(inputJsText, transpileOpts);
 
-    buildCtx.diagnostics.push(
-      ...loadTypeScriptDiagnostics(transpileOutput.diagnostics)
-    );
+    buildCtx.diagnostics.push(...loadTypeScriptDiagnostics(transpileOutput.diagnostics));
 
     if (!buildCtx.hasError && typeof transpileOutput.outputText === 'string') {
       outputText = transpileOutput.outputText;
     }
-
   } catch (e) {
     catchError(buildCtx.diagnostics, e);
   }
@@ -52,10 +51,8 @@ export const transformToNativeComponentText = (compilerCtx: d.CompilerCtx, build
   return outputText;
 };
 
-
 export const nativeComponentTransform = (compilerCtx: d.CompilerCtx, transformOpts: d.TransformOptions): ts.TransformerFactory<ts.SourceFile> => {
   return transformCtx => {
-
     return tsSourceFile => {
       const moduleFile = getModuleFromSourceFile(compilerCtx, tsSourceFile);
 
@@ -76,7 +73,6 @@ export const nativeComponentTransform = (compilerCtx: d.CompilerCtx, transformOp
         if (transformOpts.componentExport === 'customelement') {
           // define custom element, will have no export
           tsSourceFile = defineCustomElement(tsSourceFile, moduleFile, transformOpts);
-
         } else if (transformOpts.proxy === 'defineproperty') {
           // exporting as a module, but also add the component proxy fn
           tsSourceFile = addModuleMetadataProxies(tsSourceFile, moduleFile);
