@@ -9,9 +9,7 @@ export function aliasPlugin(opts: BuildOptions): Plugin {
     ['@hydrate-factory', '@rindo/core/hydrate-factory'],
     ['@rindo/core/mock-doc', '@rindo/core/mock-doc'],
     ['@rindo/core/testing', '@rindo/core/testing'],
-    ['@sys-api-deno', './index.js'],
     ['@sys-api-node', './index.js'],
-    ['@deno-node-compat', './node-compat.js'],
   ]);
 
   // ensure we use the same one

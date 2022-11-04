@@ -1,7 +1,6 @@
 import type * as d from '../../../declarations';
-import { denoLoadTypeScript } from '../../../sys/deno/deno-load-typescript';
 import { dependencies } from '../dependencies.json';
-import { isFunction, IS_NODE_ENV, IS_BROWSER_ENV, IS_WEB_WORKER_ENV, IS_DENO_ENV } from '@utils';
+import { isFunction, IS_NODE_ENV, IS_BROWSER_ENV, IS_WEB_WORKER_ENV } from '@utils';
 import { nodeLoadTypeScript } from '../../../sys/node/node-load-typescript';
 import { patchRemoteTsSys } from './typescript-patch';
 import ts from 'typescript';
@@ -47,9 +46,7 @@ export const loadTypescript = (sys: d.CompilerSystem, typescriptPath: string, sy
 
   // async at this point
   if (!importedTs.p) {
-    if (IS_DENO_ENV) {
-      importedTs.p = denoLoadTypeScript(sys, typescriptPath);
-    } else if (IS_BROWSER_ENV) {
+    if (IS_BROWSER_ENV) {
       importedTs.p = browserMainLoadTypeScript(tsUrl);
     } else {
       throw new Error(`Unable to load TypeScript`);

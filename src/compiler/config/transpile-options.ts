@@ -1,6 +1,6 @@
 import type { TranspileOptions, TranspileResults, Config, TransformOptions, TransformCssToEsmInput, ImportData, CompilerSystem } from '../../declarations';
 import { createSystem } from '../sys/rindo-sys';
-import { isString, IS_NODE_ENV, requireFunc, IS_DENO_ENV } from '@utils';
+import { isString, IS_NODE_ENV, requireFunc } from '@utils';
 import { parseImportPath } from '../transformers/rindo-import-path';
 import { RINDO_INTERNAL_CLIENT_ID } from '../bundle/entry-alias-ids';
 import type { CompilerOptions } from 'typescript';
@@ -36,8 +36,6 @@ export const getTranspileConfig = (input: TranspileOptions) => {
   } else if (!transpileCtx.sys) {
     if (IS_NODE_ENV) {
       transpileCtx.sys = requireFunc('../sys/node/index.js').createNodeSysNoWatch();
-    } else if (IS_DENO_ENV) {
-      throw new Error(`"sys" must be provided in options`);
     } else {
       transpileCtx.sys = createSystem();
     }
