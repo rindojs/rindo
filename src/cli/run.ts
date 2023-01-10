@@ -14,6 +14,7 @@ import { taskPrerender } from './task-prerender';
 import { taskServe } from './task-serve';
 import { taskTelemetry } from './task-telemetry';
 import { telemetryAction } from './telemetry/telemetry';
+import { ValidatedConfig } from '../declarations';
 
 export const run = async (init: d.CliInitOptions) => {
   const { args, logger, sys } = init;
@@ -35,7 +36,7 @@ export const run = async (init: d.CliInitOptions) => {
     }
 
     if (task === 'help' || flags.help) {
-      await taskHelp({ flags: { task: 'help', args }, outputTargets: [] }, logger, sys);
+      await taskHelp({ task: 'help', args }, logger, sys);
       return;
     }
 
@@ -116,39 +117,39 @@ export const runTask = async (
   task: d.TaskCommand,
   sys?: d.CompilerSystem
 ) => {
-  config.flags = config.flags || { task };
-  config.outputTargets = config.outputTargets || [];
+  const strictConfig: ValidatedConfig = { ...config, flags: { ...config.flags } ?? { task } };
+  strictConfig.outputTargets = strictConfig.outputTargets || [];
 
   switch (task) {
     case 'build':
-      await taskBuild(coreCompiler, config, sys);
+      await taskBuild(coreCompiler, strictConfig, sys);
       break;
 
     case 'docs':
-      await taskDocs(coreCompiler, config);
+      await taskDocs(coreCompiler, strictConfig);
       break;
 
     case 'generate':
     case 'g':
-      await taskGenerate(coreCompiler, config);
+      await taskGenerate(coreCompiler, strictConfig);
       break;
 
     case 'help':
-      await taskHelp(config, config.logger, sys);
+      await taskHelp(strictConfig.flags, config.logger, sys);
       break;
 
     case 'prerender':
-      await taskPrerender(coreCompiler, config);
+      await taskPrerender(coreCompiler, strictConfig);
       break;
 
     case 'serve':
-      await taskServe(config);
+      await taskServe(strictConfig);
       break;
 
     case 'telemetry':
       // TODO: make this parameter no longer optional, remove the surrounding if statement
       if (sys) {
-        await taskTelemetry(config, sys, config.logger);
+        await taskTelemetry(strictConfig.flags, sys, config.logger);
       }
       break;
 
@@ -158,7 +159,7 @@ export const runTask = async (
 
     default:
       config.logger.error(`${config.logger.emoji('❌ ')}Invalid rindo command, please see the options below:`);
-      await taskHelp(config, config.logger, sys);
+      await taskHelp(strictConfig.flags, config.logger, sys);
       return config.sys.exit(1);
   }
 };

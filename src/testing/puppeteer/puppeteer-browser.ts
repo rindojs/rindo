@@ -1,7 +1,7 @@
-import type { Config, E2EProcessEnv } from '@rindo/core/internal';
+import type { E2EProcessEnv, ValidatedConfig } from '@rindo/core/internal';
 import type * as puppeteer from 'puppeteer';
 
-export async function startPuppeteerBrowser(config: Config) {
+export async function startPuppeteerBrowser(config: ValidatedConfig) {
   if (!config.flags.e2e) {
     return null;
   }
