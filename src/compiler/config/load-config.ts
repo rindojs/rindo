@@ -6,7 +6,6 @@ import type {
   UnvalidatedConfig,
 } from '../../declarations';
 import { buildError, catchError, hasError, isString, normalizePath } from '@utils';
-import { createLogger } from '../sys/logger/console-logger';
 import { createSystem } from '../sys/rindo-sys';
 import { dirname } from 'path';
 import { IS_NODE_ENV } from '../sys/environment';
@@ -72,7 +71,7 @@ export const loadConfig = async (init: LoadConfigInit = {}): Promise<LoadConfigR
 
     unknownConfig.config.sys = sys;
 
-    const validated = validateConfig(unknownConfig.config);
+    const validated = validateConfig(unknownConfig.config, init);
     results.diagnostics.push(...validated.diagnostics);
     if (hasError(results.diagnostics)) {
       return results;
@@ -88,7 +87,6 @@ export const loadConfig = async (init: LoadConfigInit = {}): Promise<LoadConfigR
       results.config.logLevel = 'info';
     }
 
-    results.config.logger = init.logger || results.config.logger || createLogger();
     results.config.logger.setLevel(results.config.logLevel);
 
     if (!hasError(results.diagnostics)) {
