@@ -45,6 +45,11 @@ export async function cli(opts: BuildOptions): Promise<ReadonlyArray<RollupOptio
   dts = dts.replace('@rindo/core/internal', '../internal/index');
   await fs.writeFile(join(opts.output.cliDir, dtsFilename), dts);
 
+  // copy config-flags.d.ts
+  let configDts = await fs.readFile(join(inputDir, 'config-flags.d.ts'), 'utf8');
+  configDts = configDts.replace('@rindo/core/declarations', '../internal/index');
+  await fs.writeFile(join(opts.output.cliDir, 'config-flags.d.ts'), configDts);
+
   // write @rindo/core/compiler/package.json
   writePkgJson(opts, opts.output.cliDir, {
     name: '@rindo/core/cli',
