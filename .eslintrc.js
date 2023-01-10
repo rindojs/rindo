@@ -27,14 +27,7 @@ module.exports = {
         checkDestructured: false,
       }],
     // require that jsdoc attached to a method/function require one `@param` per parameter
-    "jsdoc/require-param": [
-      "error", {
-        // if `checkStructured` is `true`, it asks that the JSDoc describe the fields being destructured.
-        // turn this off to not leak function internals/discourage describing them
-        checkDestructured: false,
-        // always check setters as they should require a parameter (by definition)
-        checkSetters: true
-      }],
+    "jsdoc/require-param": ["off"],
     // rely on TypeScript types to be the source of truth, minimize verbosity in comments
     "jsdoc/require-param-type": ["off"],
     "jsdoc/require-param-description": ["error"],
