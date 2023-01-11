@@ -1,3 +1,13 @@
+## 🏵 [2.17.4](https://github.com/navify/rindo/compare/v2.17.3...v2.17.4) (2023-01-11)
+
+
+### Bug Fixes
+
+* **compiler:** don't break HMR by mangling CSS ([aa5c1a6](https://github.com/navify/rindo/commit/aa5c1a6041f9e328e131cc5872fb8be2a9e64b45))
+* **task:** consider config sys in task runner ([15143f0](https://github.com/navify/rindo/commit/15143f03e75e50c543561ea7f2a66d5093f822f0))
+
+
+
 ## 🌱 [2.17.3](https://github.com/navify/rindo/compare/v2.17.2...v2.17.3) (2023-01-11)
 
 
