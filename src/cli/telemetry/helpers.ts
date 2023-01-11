@@ -27,6 +27,7 @@ export const isInteractive = (sys: d.CompilerSystem, flags: ConfigFlags, object?
 
 export const UUID_REGEX = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
+// Plucked from https://github.com/navify/jigra/blob/HEAD/cli/src/util/uuid.ts
 export function uuidv4(): string {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0;
@@ -52,7 +53,7 @@ export async function readJson(sys: d.CompilerSystem, path: string): Promise<any
  * @param flags The configuration flags passed into the Rindo command
  * @returns true if --debug has been passed, otherwise false
  */
-export function hasDebug(flags: ConfigFlags) {
+export function hasDebug(flags: ConfigFlags): boolean {
   return flags.debug;
 }
 
@@ -61,6 +62,6 @@ export function hasDebug(flags: ConfigFlags) {
  * @param flags The configuration flags passed into the Rindo command
  * @returns true if both --debug and --verbose have been passed, otherwise false
  */
-export function hasVerbose(flags: ConfigFlags) {
+export function hasVerbose(flags: ConfigFlags): boolean {
   return flags.verbose && hasDebug(flags);
 }
