@@ -1,3 +1,20 @@
+## ⚽️ [2.17.2](https://github.com/navify/rindo/compare/v2.17.2-0...v2.17.2) (2023-01-11)
+
+
+### Bug Fixes
+
+* **cli:** fix bug with parsing --fooBar=baz type CLI flags ([93b2284](https://github.com/navify/rindo/commit/93b22840e03ed6219ef63ec9e62dc5a0b93b5448))
+* **cli:** remove usage of deprecated npm env var from arg parser ([8be00ec](https://github.com/navify/rindo/commit/8be00ec7e39e582494b576eda597d452c0956153))
+* **compiler:** update package.json validation for the 'module' field ([075d98a](https://github.com/navify/rindo/commit/075d98ada89439d08bf226a53f1a12dae4d2ef32))
+* **mock-doc:** add missing methods to the element mock ([d5dafba](https://github.com/navify/rindo/commit/d5dafba7ea887ed286b057442a49bb62022228fd))
+
+
+### Features
+
+* **ci:** fail the browserstack tests if any files were changed or added ([bfd39e2](https://github.com/navify/rindo/commit/bfd39e29cc103e94788545d805a4bdfe77212ff6))
+
+
+
 ## 📬 [2.17.2-0](https://github.com/navify/rindo/compare/v2.17.1...v2.17.2-0) (2023-01-11)
 
 
