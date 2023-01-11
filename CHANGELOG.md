@@ -1,3 +1,15 @@
+## 🍏 [2.17.1](https://github.com/navify/rindo/compare/v2.17.0...v2.17.1) (2023-01-11)
+
+
+### Bug Fixes
+
+* **cli:** add explicit support for Jest CLI arguments ([0e7f285](https://github.com/navify/rindo/commit/0e7f285f56ff59f997642b9d4abdc92f57098e51))
+* **compiler:** handle null window.location.origin ([9f1fc34](https://github.com/navify/rindo/commit/9f1fc34a00265f6ad5f156b3d6b5a52b02c45fa6))
+* **github:** don't run prettier check ([2235217](https://github.com/navify/rindo/commit/22352177ce854eb1829cb1b1e320e8e5775b0257))
+* **styles:** ensure styles are applied before paint ([502c120](https://github.com/navify/rindo/commit/502c1201f6c1628d2c5d75d6e27f77046c8b7650))
+
+
+
 # 🏉 [2.17.0](https://github.com/navify/rindo/compare/v2.16.1...v2.17.0) (2022-08-12)
 
 
