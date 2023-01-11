@@ -1,3 +1,12 @@
+## 🌱 [2.17.3](https://github.com/navify/rindo/compare/v2.17.2...v2.17.3) (2023-01-11)
+
+
+### Bug Fixes
+
+* **validation:** update module location suggestion ([30fb63d](https://github.com/navify/rindo/commit/30fb63dc424e9e0e5c208c85688fc029f5a6f6c2))
+
+
+
 ## ⚽️ [2.17.2](https://github.com/navify/rindo/compare/v2.17.2-0...v2.17.2) (2023-01-11)
 
 
