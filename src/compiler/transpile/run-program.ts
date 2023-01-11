@@ -12,7 +12,7 @@ import { updateRindoTypesImports } from '../types/rindo-types';
 import { validateTranspiledComponents } from './validate-components';
 
 export const runTsProgram = async (
-  config: d.Config,
+  config: d.ValidatedConfig,
   compilerCtx: d.CompilerCtx,
   buildCtx: d.BuildCtx,
   tsBuilder: ts.BuilderProgram
