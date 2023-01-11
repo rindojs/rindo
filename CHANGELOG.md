@@ -1,3 +1,18 @@
+# ☕️ [2.18.0](https://github.com/navify/rindo/compare/v2.17.4...v2.18.0) (2023-01-11)
+
+
+### Bug Fixes
+
+* **collection:** properly transform imports ([0cbb529](https://github.com/navify/rindo/commit/0cbb529ab9b5e2c081bd36a7b8efafe4ab0f6206))
+
+
+### Features
+
+* **loader:** add private field to loader's package.json ([1756b2c](https://github.com/navify/rindo/commit/1756b2cd9840bde5063c807b6e90779862319ce4))
+* **typescript:** add support for typescript v4.7 ([40be168](https://github.com/navify/rindo/commit/40be1682be6aae0f5e7a0634a14d0f4ed7fb4c4b))
+
+
+
 ## 🏵 [2.17.4](https://github.com/navify/rindo/compare/v2.17.3...v2.17.4) (2023-01-11)
 
 
