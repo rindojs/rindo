@@ -1,3 +1,17 @@
+## 📬 [2.17.2-0](https://github.com/navify/rindo/compare/v2.17.1...v2.17.2-0) (2023-01-11)
+
+
+### Bug Fixes
+
+* **compiler:** fix typedef file generated for dist-custom-elements ([4a5ad6e](https://github.com/navify/rindo/commit/4a5ad6eae475ab8bec910cbf6a2591a70436c607))
+
+
+### Features
+
+* **mock-doc:** dispatch blur and focus events ([8f9d5c8](https://github.com/navify/rindo/commit/8f9d5c8b34be0b210cb3e96145112d372ef1db00))
+
+
+
 ## 🍏 [2.17.1](https://github.com/navify/rindo/compare/v2.17.0...v2.17.1) (2023-01-11)
 
 
