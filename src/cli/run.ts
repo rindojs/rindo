@@ -133,6 +133,7 @@ export const runTask = async (
     logger,
     outputTargets: config.outputTargets ?? [],
     sys: sys ?? coreCompiler.createSystem({ logger }),
+    testing: config.testing ?? {},
   };
 
   switch (task) {
