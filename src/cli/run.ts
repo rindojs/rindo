@@ -137,7 +137,7 @@ export const runTask = async (
 
   switch (task) {
     case 'build':
-      await taskBuild(coreCompiler, strictConfig, sys);
+      await taskBuild(coreCompiler, strictConfig);
       break;
 
     case 'docs':
@@ -162,10 +162,7 @@ export const runTask = async (
       break;
 
     case 'telemetry':
-      // TODO: make this parameter no longer optional, remove the surrounding if statement
-      if (sys) {
-        await taskTelemetry(strictConfig.flags, sys, strictConfig.logger);
-      }
+      await taskTelemetry(strictConfig.flags, sys, strictConfig.logger);
       break;
 
     case 'version':
