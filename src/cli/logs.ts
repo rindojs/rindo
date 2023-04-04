@@ -1,8 +1,18 @@
-import type { Config, Logger, CompilerSystem, TaskCommand } from '../declarations';
+import type { Logger, CompilerSystem, TaskCommand, ValidatedConfig } from '../declarations';
 import type { ConfigFlags } from './config-flags';
 import type { CoreCompiler } from './load-compiler';
 
-export const startupLog = (logger: Logger, task: TaskCommand) => {
+/**
+ * Log the name of this package (`@rindo/core`) to an output stream
+ *
+ * The output stream is determined by the {@link Logger} instance that is provided as an argument to this function
+ *
+ * The name of the package may not be logged, by design, for certain `task` types and logging levels
+ *
+ * @param logger the logging entity to use to output the name of the package
+ * @param task the current task
+ */
+export const startupLog = (logger: Logger, task: TaskCommand): void => {
   if (task === 'info' || task === 'serve' || task === 'version') {
     return;
   }
@@ -10,7 +20,18 @@ export const startupLog = (logger: Logger, task: TaskCommand) => {
   logger.info(logger.cyan(`@rindo/core`));
 };
 
-export const startupLogVersion = (logger: Logger, task: TaskCommand, coreCompiler: CoreCompiler) => {
+/**
+ * Log this package's version to an output stream
+ *
+ * The output stream is determined by the {@link Logger} instance that is provided as an argument to this function
+ *
+ * The package version may not be logged, by design, for certain `task` types and logging levels
+ *
+ * @param logger the logging entity to use for output
+ * @param task the current task
+ * @param coreCompiler the compiler instance to derive version information from
+ */
+export const startupLogVersion = (logger: Logger, task: TaskCommand, coreCompiler: CoreCompiler): void => {
   if (task === 'info' || task === 'serve' || task === 'version') {
     return;
   }
@@ -28,18 +49,33 @@ export const startupLogVersion = (logger: Logger, task: TaskCommand, coreCompile
   logger.info(startupMsg);
 };
 
+/**
+ * Log details from a {@link CompilerSystem} used by Rindo to an output stream
+ *
+ * The output stream is determined by the {@link Logger} instance that is provided as an argument to this function
+ *
+ * @param sys the `CompilerSystem` to report details on
+ * @param logger the logging entity to use for output
+ * @param flags user set flags for the current invocation of Rindo
+ * @param coreCompiler the compiler instance being used for this invocation of Rindo
+ */
 export const loadedCompilerLog = (
   sys: CompilerSystem,
   logger: Logger,
   flags: ConfigFlags,
   coreCompiler: CoreCompiler
-) => {
+): void => {
   const sysDetails = sys.details;
   const runtimeInfo = `${sys.name} ${sys.version}`;
-  const platformInfo = `${sysDetails.platform}, ${sysDetails.cpuModel}`;
-  const statsInfo = `cpus: ${sys.hardwareConcurrency}, freemem: ${Math.round(
-    sysDetails.freemem() / 1000000
-  )}MB, totalmem: ${Math.round(sysDetails.totalmem / 1000000)}MB`;
+
+  const platformInfo = sysDetails
+    ? `${sysDetails.platform}, ${sysDetails.cpuModel}`
+    : `Unknown Platform, Unknown CPU Model`;
+  const statsInfo = sysDetails
+    ? `cpus: ${sys.hardwareConcurrency}, freemem: ${Math.round(
+      sysDetails.freemem() / 1000000
+    )}MB, totalmem: ${Math.round(sysDetails.totalmem / 1000000)}MB`
+    : 'Unknown CPU Core Count, Unknown Memory';
 
   if (logger.getLevel() === 'debug') {
     logger.debug(runtimeInfo);
@@ -54,7 +90,15 @@ export const loadedCompilerLog = (
   }
 };
 
-export const startupCompilerLog = (coreCompiler: CoreCompiler, config: Config) => {
+/**
+ * Log various warnings to an output stream
+ *
+ * The output stream is determined by the {@link Logger} instance attached to the `config` argument to this function
+ *
+ * @param coreCompiler the compiler instance being used for this invocation of Rindo
+ * @param config a validated configuration object to be used for this run of Rindo
+ */
+export const startupCompilerLog = (coreCompiler: CoreCompiler, config: ValidatedConfig) => {
   if (config.suppressLogs === true) {
     return;
   }
