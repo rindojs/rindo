@@ -1,7 +1,7 @@
 import type * as d from '../../declarations';
+import { initDevClient } from './init-dev-client';
 // TODO: Investigate whether we can delete these polyfills
 import { applyPolyfills } from './polyfills';
-import { initDevClient } from './init-dev-client';
 
 declare const iframeWindow: Window;
 declare const appWindow: d.DevClientWindow;

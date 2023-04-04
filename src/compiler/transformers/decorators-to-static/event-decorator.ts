@@ -1,15 +1,17 @@
-import type * as d from '../../../declarations';
 import { augmentDiagnosticWithNode, buildWarn } from '@utils';
+import ts from 'typescript';
+
+import type * as d from '../../../declarations';
 import {
   convertValueToLiteral,
   createStaticGetter,
   getAttributeTypeInfo,
   resolveType,
+  retrieveTsDecorators,
   serializeSymbol,
   validateReferences,
 } from '../transform-utils';
 import { getDeclarationParameters, isDecoratorNamed } from './decorator-utils';
-import ts from 'typescript';
 
 export const eventDecoratorsToStatic = (
   diagnostics: d.Diagnostic[],
@@ -42,7 +44,7 @@ const parseEventDecorator = (
   typeChecker: ts.TypeChecker,
   prop: ts.PropertyDeclaration
 ): d.ComponentCompilerStaticEvent | null => {
-  const eventDecorator = prop.decorators?.find(isDecoratorNamed('Event'));
+  const eventDecorator = retrieveTsDecorators(prop)?.find(isDecoratorNamed('Event'));
 
   if (eventDecorator == null) {
     return null;

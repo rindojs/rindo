@@ -1,12 +1,12 @@
 import type * as d from '../declarations';
-import { readJson, uuidv4, UUID_REGEX } from './telemetry/helpers';
+import { readJson, UUID_REGEX, uuidv4 } from './telemetry/helpers';
 
 export const isTest = () => process.env.JEST_WORKER_ID !== undefined;
 
 export const defaultConfig = (sys: d.CompilerSystem) =>
-  sys.resolvePath(`${sys.homeDir()}/.familyjs/${isTest() ? 'tmp-config.json' : 'config.json'}`);
+  sys.resolvePath(`${sys.homeDir()}/.family/${isTest() ? 'tmp-config.json' : 'config.json'}`);
 
-export const defaultConfigDirectory = (sys: d.CompilerSystem) => sys.resolvePath(`${sys.homeDir()}/.familyjs`);
+export const defaultConfigDirectory = (sys: d.CompilerSystem) => sys.resolvePath(`${sys.homeDir()}/.family`);
 
 /**
  * Reads an Family configuration file from disk, parses it, and performs any necessary corrections to it if certain
@@ -24,7 +24,7 @@ export async function readConfig(sys: d.CompilerSystem): Promise<d.TelemetryConf
     };
 
     await writeConfig(sys, config);
-  } else if (!UUID_REGEX.test(config['tokens.telemetry'])) {
+  } else if (!config['tokens.telemetry'] || !UUID_REGEX.test(config['tokens.telemetry'])) {
     const newUuid = uuidv4();
     await writeConfig(sys, { ...config, 'tokens.telemetry': newUuid });
     config['tokens.telemetry'] = newUuid;

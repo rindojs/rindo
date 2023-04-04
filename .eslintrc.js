@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
-  plugins: ['@typescript-eslint', 'jsdoc', 'jest'],
+  plugins: ['@typescript-eslint', 'jsdoc', 'jest', 'simple-import-sort'],
   extends: [
     'plugin:jest/recommended',
     // including prettier here ensures that we don't set any rules which will conflict
@@ -55,7 +55,16 @@ module.exports = {
       },
     ],
     // require that jsdoc attached to a method/function require one `@param` per parameter
-    "jsdoc/require-param": ["off"],
+    'jsdoc/require-param': [
+      'error',
+      {
+        // if `checkStructured` is `true`, it asks that the JSDoc describe the fields being destructured.
+        // turn this off to not leak function internals/discourage describing them
+        checkDestructured: false,
+        // always check setters as they should require a parameter (by definition)
+        checkSetters: true,
+      },
+    ],
     // rely on TypeScript types to be the source of truth, minimize verbosity in comments
     'jsdoc/require-param-type': ['off'],
     'jsdoc/require-param-description': ['error'],
@@ -68,7 +77,18 @@ module.exports = {
     'no-var': 'error',
     'prefer-rest-params': 'error',
     'prefer-spread': 'error',
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
   },
+  overrides: [
+    {
+      // the rindo entry point still uses `var`, ignore errors related to it
+      files: 'bin/**',
+      rules: {
+        'no-var': 'off',
+      },
+    },
+  ],
   // inform ESLint about the global variables defined in a Jest context
   // see https://github.com/jest-community/eslint-plugin-jest/#usage
   env: {

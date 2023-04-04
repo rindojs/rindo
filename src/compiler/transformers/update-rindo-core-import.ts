@@ -1,4 +1,5 @@
 import ts from 'typescript';
+
 import { RINDO_CORE_ID } from '../bundle/entry-alias-ids';
 
 export const updateRindoCoreImports = (updatedCoreImportPath: string): ts.TransformerFactory<ts.SourceFile> => {
@@ -28,7 +29,6 @@ export const updateRindoCoreImports = (updatedCoreImportPath: string): ts.Transf
                   const newImport = ts.factory.updateImportDeclaration(
                     s,
                     undefined,
-                    undefined,
                     ts.factory.createImportClause(
                       false,
                       undefined,
@@ -53,7 +53,7 @@ export const updateRindoCoreImports = (updatedCoreImportPath: string): ts.Transf
       });
 
       if (madeChanges) {
-        return ts.updateSourceFileNode(
+        return ts.factory.updateSourceFile(
           tsSourceFile,
           newStatements,
           tsSourceFile.isDeclarationFile,

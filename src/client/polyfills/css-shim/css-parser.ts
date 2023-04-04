@@ -138,7 +138,7 @@ function _expandUnicodeEscapes(s: string): string {
  * @param node the CSS root node to stringify
  * @param preserveProperties if `false`, custom CSS properties will be removed from the CSS. If `true`, they will be
  * preserved.
- * @param  text an optional string to append the stringified CSS to
+ * @param text an optional string to append the stringified CSS to
  * @returns the stringified CSS.
  */
 export function stringify(node: StyleNode, preserveProperties: boolean, text = ''): string {

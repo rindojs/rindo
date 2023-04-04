@@ -1,4 +1,4 @@
-import type { Logger, CompilerSystem, TaskCommand, ValidatedConfig } from '../declarations';
+import type { CompilerSystem, Logger, TaskCommand, ValidatedConfig } from '../declarations';
 import type { ConfigFlags } from './config-flags';
 import type { CoreCompiler } from './load-compiler';
 
@@ -73,8 +73,8 @@ export const loadedCompilerLog = (
     : `Unknown Platform, Unknown CPU Model`;
   const statsInfo = sysDetails
     ? `cpus: ${sys.hardwareConcurrency}, freemem: ${Math.round(
-      sysDetails.freemem() / 1000000
-    )}MB, totalmem: ${Math.round(sysDetails.totalmem / 1000000)}MB`
+        sysDetails.freemem() / 1000000
+      )}MB, totalmem: ${Math.round(sysDetails.totalmem / 1000000)}MB`
     : 'Unknown CPU Core Count, Unknown Memory';
 
   if (logger.getLevel() === 'debug') {

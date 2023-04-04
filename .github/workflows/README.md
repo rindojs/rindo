@@ -39,6 +39,12 @@ This workflow is responsible for building Rindo and validating the resultant art
 This workflow is responsible for validating that the code adheres to the Rindo team's formatting configuration before
 a pull request is merged.
 
+#### Concurrency
+
+When a `git push` is made to a branch, Rindo's CI is designed to stop existing job(s) associated with the workflow + 
+branch.
+A new CI run (of each workflow) will begin upon stopping the existing job(s) using the new `HEAD` of the branch.
+
 ### BrowserStack (`browserstack.yml`)
 
 This workflow is used to run a series of integration tests using [BrowserStack](https://www.browserstack.com).

@@ -1,4 +1,4 @@
-import { MockWindow, cloneWindow } from '@rindo/core/mock-doc';
+import { cloneWindow, MockWindow } from '@rindo/core/mock-doc';
 
 const templateWindows = new Map<string, Window>();
 

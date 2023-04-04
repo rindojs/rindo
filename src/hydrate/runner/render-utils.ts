@@ -55,7 +55,7 @@ function mapValidTags(tag: string) {
 
 export function generateHydrateResults(opts: d.HydrateDocumentOptions) {
   if (typeof opts.url !== 'string') {
-    opts.url = `https://hydrate-rindojs.web.app/`;
+    opts.url = `https://rindojs-hydrate.web.app/`;
   }
 
   if (typeof opts.buildId !== 'string') {
@@ -85,7 +85,7 @@ export function generateHydrateResults(opts: d.HydrateDocumentOptions) {
   };
 
   try {
-    const url = new URL(opts.url, `https://hydrate-rindojs.web.app/`);
+    const url = new URL(opts.url, `https://rindojs-hydrate.web.app/`);
     results.url = url.href;
     results.host = url.host;
     results.hostname = url.hostname;

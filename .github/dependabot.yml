@@ -7,7 +7,7 @@ updates:
     directory: '/' # Location of package manifests
     schedule:
       interval: 'daily'
-    open-pull-requests-limit: 5
+    open-pull-requests-limit: 50
     # Disable rebasing for pull requests, as having several open pull requests all get simultaneously rebased gets
     # noisy from a notification standpoint
     rebase-strategy: 'disabled'
@@ -15,4 +15,43 @@ updates:
       - dependency-name: '@types/node'
         versions: ['17', '18']
       - dependency-name: 'typescript'
-        versions: ['4.8']
+        versions: ['>=4.10', '>=5.0']
+      # disable Jest updates until the new testing architecture is in place
+      - dependency-name: '@types/jest'
+        versions: ['>=28']
+      - dependency-name: 'jest'
+        versions: ['>=28']
+      - dependency-name: 'jest-cli'
+        versions: ['>=28']
+      - dependency-name: 'jest-environment-node'
+        versions: ['>=28']
+      # Disable dependency updates used in release scripts
+      # TODO: remove these once deps are removed
+      - dependency-name: 'inquirer'
+        versions: ['>7.3.3']
+      - dependency-name: '@types/inquirer'
+        versions: ['>7.3.1']
+  - package-ecosystem: 'npm'
+    directory: './test/bundler' # Location of package manifests
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 50
+    # Disable rebasing for pull requests, as having several open pull requests all get simultaneously rebased gets
+    # noisy from a notification standpoint
+    rebase-strategy: 'disabled'
+    ignore:
+      # These values should match the values ignored by Dependabot for the project's root `package.json` (above)
+      - dependency-name: '@types/node'
+        versions: ['17', '18']
+  - package-ecosystem: 'github-actions'
+    directory: '/'
+    schedule:
+      interval: 'daily'
+  - package-ecosystem: 'npm' # See documentation for possible values
+    directory: './.github/workflows/actions/auto-request-reviews'
+    schedule:
+      interval: 'daily'
+    open-pull-requests-limit: 50
+    # Disable rebasing for pull requests, as having several open pull requests all get simultaneously rebased gets
+    # noisy from a notification standpoint
+    rebase-strategy: 'disabled'

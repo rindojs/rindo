@@ -1,15 +1,16 @@
-import type * as d from '../../../declarations';
 import { buildError, isBoolean, isString } from '@utils';
+import { isAbsolute, join } from 'path';
+
+import type * as d from '../../../declarations';
 import {
   COPY,
   DIST_GLOBAL_STYLES,
   DIST_LAZY,
-  WWW,
-  isOutputTargetWww,
   isOutputTargetDist,
+  isOutputTargetWww,
+  WWW,
 } from '../../output-targets/output-utils';
 import { getAbsolutePath } from '../config-utils';
-import { isAbsolute, join } from 'path';
 import { validateCopy } from '../validate-copy';
 import { validatePrerender } from '../validate-prerender';
 import { validateServiceWorker } from '../validate-service-worker';
@@ -31,47 +32,53 @@ export const validateWww = (config: d.ValidatedConfig, diagnostics: d.Diagnostic
     err.messageText = `You need at least one "www" output target configured in your rindo.config.ts, when the "--prerender" flag is used`;
   }
 
-  return userWwwOutputs.reduce((outputs, o) => {
-    const outputTarget = validateWwwOutputTarget(config, o, diagnostics);
-    outputs.push(outputTarget);
+  return userWwwOutputs.reduce(
+    (
+      outputs: (d.OutputTargetWww | d.OutputTargetDistLazy | d.OutputTargetCopy | d.OutputTargetDistGlobalStyles)[],
+      o
+    ) => {
+      const outputTarget = validateWwwOutputTarget(config, o, diagnostics);
+      outputs.push(outputTarget);
 
-    // Add dist-lazy output target
-    const buildDir = outputTarget.buildDir;
-    outputs.push({
-      type: DIST_LAZY,
-      dir: buildDir,
-      esmDir: buildDir,
-      systemDir: config.buildEs5 ? buildDir : undefined,
-      systemLoaderFile: config.buildEs5 ? join(buildDir, `${config.fsNamespace}.js`) : undefined,
-      polyfills: outputTarget.polyfills,
-      isBrowserBuild: true,
-    });
+      // Add dist-lazy output target
+      const buildDir = outputTarget.buildDir;
+      outputs.push({
+        type: DIST_LAZY,
+        dir: buildDir,
+        esmDir: buildDir,
+        systemDir: config.buildEs5 ? buildDir : undefined,
+        systemLoaderFile: config.buildEs5 ? join(buildDir, `${config.fsNamespace}.js`) : undefined,
+        polyfills: outputTarget.polyfills,
+        isBrowserBuild: true,
+      });
 
-    // Copy for dist
-    outputs.push({
-      type: COPY,
-      dir: buildDir,
-      copyAssets: 'dist',
-    });
+      // Copy for dist
+      outputs.push({
+        type: COPY,
+        dir: buildDir,
+        copyAssets: 'dist',
+      });
 
-    // Copy for www
-    outputs.push({
-      type: COPY,
-      dir: outputTarget.appDir,
-      copy: validateCopy(outputTarget.copy, [
-        { src: 'assets', warn: false },
-        { src: 'manifest.json', warn: false },
-      ]),
-    });
+      // Copy for www
+      outputs.push({
+        type: COPY,
+        dir: outputTarget.appDir,
+        copy: validateCopy(outputTarget.copy, [
+          { src: 'assets', warn: false },
+          { src: 'manifest.json', warn: false },
+        ]),
+      });
 
-    // Generate global style with original name
-    outputs.push({
-      type: DIST_GLOBAL_STYLES,
-      file: join(buildDir, `${config.fsNamespace}.css`),
-    });
+      // Generate global style with original name
+      outputs.push({
+        type: DIST_GLOBAL_STYLES,
+        file: join(buildDir, `${config.fsNamespace}.css`),
+      });
 
-    return outputs;
-  }, []);
+      return outputs;
+    },
+    []
+  );
 };
 
 const validateWwwOutputTarget = (

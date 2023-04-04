@@ -1,6 +1,7 @@
-import type * as d from '../../declarations';
 import { normalizePath } from '@utils';
 import { relative } from 'path';
+
+import type * as d from '../../declarations';
 
 export const generateServiceWorkerUrl = (outputTarget: d.OutputTargetWww, serviceWorker: d.ServiceWorkerConfig) => {
   let swUrl = normalizePath(relative(outputTarget.appDir, serviceWorker.swDest));
@@ -9,7 +10,7 @@ export const generateServiceWorkerUrl = (outputTarget: d.OutputTargetWww, servic
     swUrl = '/' + swUrl;
   }
 
-  const baseUrl = new URL(outputTarget.baseUrl, 'http://config-rindojs.web.app');
+  const baseUrl = new URL(outputTarget.baseUrl, 'http://rindojs-config.web.app');
   let basePath = baseUrl.pathname;
   if (!basePath.endsWith('/')) {
     basePath += '/';

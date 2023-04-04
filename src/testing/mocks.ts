@@ -1,24 +1,25 @@
+import { createWorkerContext } from '@rindo/core/compiler';
 import type {
   BuildCtx,
   Cache,
   CompilerCtx,
   Config,
   LoadConfigInit,
-  ValidatedConfig,
   Module,
   UnvalidatedConfig,
+  ValidatedConfig,
 } from '@rindo/core/internal';
+import { MockWindow } from '@rindo/core/mock-doc';
+import { noop } from '@utils';
+import path from 'path';
+
+import { createConfigFlags } from '../cli/config-flags';
 import { BuildContext } from '../compiler/build/build-ctx';
 import { Cache as CompilerCache } from '../compiler/cache';
-import { createInMemoryFs } from '../compiler/sys/in-memory-fs';
-import { createTestingSystem, TestingSystem } from './testing-sys';
-import { createWorkerContext } from '@rindo/core/compiler';
-import { MockWindow } from '@rindo/core/mock-doc';
-import { TestingLogger } from './testing-logger';
-import path from 'path';
-import { noop } from '@utils';
 import { buildEvents } from '../compiler/events';
-import { createConfigFlags } from '../cli/config-flags';
+import { createInMemoryFs } from '../compiler/sys/in-memory-fs';
+import { TestingLogger } from './testing-logger';
+import { createTestingSystem, TestingSystem } from './testing-sys';
 
 /**
  * Creates a mock instance of an internal, validated Rindo configuration object

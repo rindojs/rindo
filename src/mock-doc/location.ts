@@ -16,7 +16,7 @@ export class MockLocation implements Location {
     return this._href;
   }
   set href(value) {
-    const url = new URL(value, 'http://mockdoc-rindojs.web.app');
+    const url = new URL(value, 'http://rindojs-mockdoc.web.app');
     this._href = url.href;
     this.protocol = url.protocol;
     this.host = url.host;

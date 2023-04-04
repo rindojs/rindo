@@ -1,8 +1,12 @@
-import type * as d from '../declarations';
-import { dependencies } from '../compiler/sys/dependencies.json';
-import { findConfig } from './find-config';
 import { hasError, isFunction, shouldIgnoreError } from '@utils';
-import { loadCoreCompiler, CoreCompiler } from './load-compiler';
+
+import { dependencies } from '../compiler/sys/dependencies.json';
+import { createLogger } from '../compiler/sys/logger/console-logger';
+import type * as d from '../declarations';
+import { ValidatedConfig } from '../declarations';
+import { createConfigFlags } from './config-flags';
+import { findConfig } from './find-config';
+import { CoreCompiler, loadCoreCompiler } from './load-compiler';
 import { loadedCompilerLog, startupLog, startupLogVersion } from './logs';
 import { parseFlags } from './parse-flags';
 import { taskBuild } from './task-build';
@@ -13,10 +17,8 @@ import { taskInfo } from './task-info';
 import { taskPrerender } from './task-prerender';
 import { taskServe } from './task-serve';
 import { taskTelemetry } from './task-telemetry';
+import { taskTest } from './task-test';
 import { telemetryAction } from './telemetry/telemetry';
-import { createLogger } from '../compiler/sys/logger/console-logger';
-import { ValidatedConfig } from '../declarations';
-import { createConfigFlags } from './config-flags';
 
 export const run = async (init: d.CliInitOptions) => {
   const { args, logger, sys } = init;
@@ -37,7 +39,7 @@ export const run = async (init: d.CliInitOptions) => {
       sys.applyGlobalPatch(sys.getCurrentDirectory());
     }
 
-    if (task === 'help' || flags.help) {
+    if (!task || task === 'help' || flags.help) {
       await taskHelp(createConfigFlags({ task: 'help', args }), logger, sys);
 
       return;
@@ -165,6 +167,10 @@ export const runTask = async (
 
     case 'telemetry':
       await taskTelemetry(strictConfig.flags, sys, strictConfig.logger);
+      break;
+
+    case 'test':
+      await taskTest(strictConfig);
       break;
 
     case 'version':

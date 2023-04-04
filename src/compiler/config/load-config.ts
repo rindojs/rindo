@@ -1,3 +1,7 @@
+import { buildError, catchError, hasError, isString, normalizePath } from '@utils';
+import { dirname } from 'path';
+import ts from 'typescript';
+
 import type {
   CompilerSystem,
   Diagnostic,
@@ -5,14 +9,11 @@ import type {
   LoadConfigResults,
   UnvalidatedConfig,
 } from '../../declarations';
-import { buildError, catchError, hasError, isString, normalizePath } from '@utils';
-import { createSystem } from '../sys/rindo-sys';
-import { dirname } from 'path';
 import { IS_NODE_ENV } from '../sys/environment';
 import { nodeRequire } from '../sys/node-require';
-import { validateConfig } from './validate-config';
+import { createSystem } from '../sys/rindo-sys';
 import { validateTsConfig } from '../sys/typescript/typescript-config';
-import ts from 'typescript';
+import { validateConfig } from './validate-config';
 
 /**
  * Load and validate a configuration to use throughout the lifetime of any Rindo task (build, test, etc.).
@@ -67,7 +68,6 @@ export const loadConfig = async (init: LoadConfigInit = {}): Promise<LoadConfigR
       unknownConfig.config.rootDir = normalizePath(dirname(configPath));
     } else {
       // no rindo.config.ts or .js file, which is fine
-      // #0CJS ¯\_(ツ)_/¯
       unknownConfig.config = { ...config };
       unknownConfig.config.configPath = null;
       unknownConfig.config.rootDir = normalizePath(sys.getCurrentDirectory());

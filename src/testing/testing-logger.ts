@@ -1,4 +1,4 @@
-import type { Diagnostic, Logger, LogLevel, LoggerTimeSpan } from '@rindo/core/internal';
+import type { Diagnostic, Logger, LoggerTimeSpan, LogLevel } from '@rindo/core/internal';
 
 export class TestingLogger implements Logger {
   private isEnabled = false;

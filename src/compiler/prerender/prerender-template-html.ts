@@ -1,5 +1,7 @@
+import { createDocument, serializeNodeToHtml } from '@rindo/core/mock-doc';
+import { catchError, isFunction, isPromise, isString } from '@utils';
+
 import type * as d from '../../declarations';
-import { catchError, isPromise, isFunction, isString } from '@utils';
 import {
   hasRindoScript,
   inlineExternalStyleSheets,
@@ -7,7 +9,6 @@ import {
   minifyStyleElements,
   removeRindoScripts,
 } from './prerender-optimize';
-import { createDocument, serializeNodeToHtml } from '@rindo/core/mock-doc';
 
 export const generateTemplateHtml = async (
   config: d.Config,

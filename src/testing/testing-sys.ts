@@ -1,7 +1,8 @@
 import type { CompilerSystem } from '@rindo/core/internal';
-import { createSystem } from '../compiler/sys/rindo-sys';
 import { createHash } from 'crypto';
 import path from 'path';
+
+import { createSystem } from '../compiler/sys/rindo-sys';
 
 export interface TestingSystem extends CompilerSystem {
   diskReads: number;

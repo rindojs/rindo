@@ -260,6 +260,7 @@ export declare const setMode: (handler: ResolutionHandler) => void;
 /**
  * `getMode()` is used for libraries which provide multiple "modes" for styles.
  * @param ref a reference to the node to get styles for
+ * @returns the current mode or undefined, if not found
  */
 export declare function getMode<T = string | undefined>(ref: any): T;
 
@@ -276,6 +277,7 @@ export declare function setPlatformHelpers(helpers: {
  * if the path needs to be customized.
  * @param path the path to use in calculating the asset path. this value will be
  * used in conjunction with the base asset path
+ * @returns the base path
  */
 export declare function getAssetPath(path: string): string;
 
@@ -292,12 +294,24 @@ export declare function getAssetPath(path: string): string;
  * bundling, and where your assets can be loaded from. Additionally custom bundling
  * will have to ensure the static assets are copied to its build directory.
  * @param path the asset path to set
+ * @returns the set path
  */
 export declare function setAssetPath(path: string): string;
 
 /**
+ * Used to specify a nonce value that corresponds with an application's
+ * [Content Security Policy (CSP)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP).
+ * When set, the nonce will be added to all dynamically created script and style tags at runtime.
+ * Alternatively, the nonce value can be set on a `meta` tag in the DOM head
+ * (<meta name="csp-nonce" content="{ nonce value here }" />) and will result in the same behavior.
+ * @param nonce The value to be used for the nonce attribute.
+ */
+export declare function setNonce(nonce: string): void;
+
+/**
  * Retrieve a Rindo element for a given reference
  * @param ref the ref to get the Rindo element for
+ * @returns a reference to the element
  */
 export declare function getElement(ref: any): HTMLRindoElement;
 
@@ -312,6 +326,7 @@ export declare function forceUpdate(ref: any): void;
 
 /**
  * getRenderingRef
+ * @returns the rendering ref
  */
 export declare function getRenderingRef(): any;
 
@@ -492,8 +507,44 @@ interface HostAttributes {
   [prop: string]: any;
 }
 
+/**
+ * Utilities for working with functional Rindo components. An object
+ * conforming to this interface is passed by the Rindo runtime as the third
+ * argument to a functional component, allowing component authors to work with
+ * features like children.
+ *
+ * The children of a functional component will be passed as the second
+ * argument, so a functional component which uses these utils to transform its
+ * children might look like the following:
+ *
+ * ```ts
+ * export const AddClass: FunctionalComponent = (_, children, utils) => (
+ *  utils.map(children, child => ({
+ *    ...child,
+ *    vattrs: {
+ *      ...child.vattrs,
+ *      class: `${child.vattrs.class} add-class`
+ *    }
+ *  }))
+ * );
+ * ```
+ *
+ * For more see the Rindo documentation, here:
+ * https://rindojs.web.app/docs/functional-components
+ */
 export interface FunctionalUtilities {
+  /**
+   * Utility for reading the children of a functional component at runtime.
+   * Since the Rindo runtime uses a different interface for children it is
+   * not recommendeded to read the children directly, and is preferable to use
+   * this utility to, for instance, perform a side effect for each child.
+   */
   forEach: (children: VNode[], cb: (vnode: ChildNode, index: number, array: ChildNode[]) => void) => void;
+  /**
+   * Utility for transforming the children of a functional component. Given an
+   * array of children and a callback this will return a list of the results of
+   * passing each child to the supplied callback.
+   */
   map: (children: VNode[], cb: (vnode: ChildNode, index: number, array: ChildNode[]) => ChildNode) => VNode[];
 }
 
@@ -501,6 +552,14 @@ export interface FunctionalComponent<T = {}> {
   (props: T, children: VNode[], utils: FunctionalUtilities): VNode | VNode[];
 }
 
+/**
+ * A Child VDOM node
+ *
+ * This has most of the same properties as {@link VNode} but friendlier names
+ * (i.e. `vtag` instead of `$tag$`, `vchildren` instead of `$children$`) in
+ * order to provide a friendlier public interface for users of the
+ * {@link FunctionalUtilities}).
+ */
 export interface ChildNode {
   vtag?: string | number | Function;
   vkey?: string | number;
@@ -523,7 +582,7 @@ export declare const Host: FunctionalComponent<HostAttributes>;
  */
 export declare const Fragment: FunctionalComponent<{}>;
 
-// eslint-disable-next-line jsdoc/require-param -- we don't want to JSDoc these overloads at this time
+/* eslint-disable jsdoc/require-param, jsdoc/require-returns -- we don't want to JSDoc these overloads at this time */
 /**
  * The "h" namespace is used to import JSX types for elements and attributes.
  * It is imported in order to avoid conflicting global JSX issues.
@@ -545,6 +604,8 @@ export declare namespace h {
   }
 }
 
+/* eslint-enable jsdoc/require-param, jsdoc/require-returns -- we don't want to JSDoc these overloads at this time */
+
 export declare function h(sel: any): VNode;
 export declare function h(sel: Node, data: VNodeData | null): VNode;
 export declare function h(sel: any, data: VNodeData | null): VNode;
@@ -554,6 +615,9 @@ export declare function h(sel: any, data: VNodeData | null, text: string): VNode
 export declare function h(sel: any, data: VNodeData | null, children: Array<VNode | undefined | null>): VNode;
 export declare function h(sel: any, data: VNodeData | null, children: VNode): VNode;
 
+/**
+ * A virtual DOM node
+ */
 export interface VNode {
   $flags$: number;
   $tag$: string | number | Function;

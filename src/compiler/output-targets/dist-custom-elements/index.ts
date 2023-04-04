@@ -1,6 +1,3 @@
-import type * as d from '../../../declarations';
-import type { BundleOptions } from '../../bundle/bundle-interface';
-import { bundleOutput } from '../../bundle/bundle-output';
 import {
   catchError,
   dashToPascalCase,
@@ -10,17 +7,21 @@ import {
   isString,
   rollupToRindoSourceMap,
 } from '@utils';
+import { join } from 'path';
+import ts from 'typescript';
+
+import type * as d from '../../../declarations';
+import type { BundleOptions } from '../../bundle/bundle-interface';
+import { bundleOutput } from '../../bundle/bundle-output';
+import { RINDO_APP_GLOBALS_ID, RINDO_INTERNAL_CLIENT_ID, USER_INDEX_ENTRY_ID } from '../../bundle/entry-alias-ids';
+import { optimizeModule } from '../../optimize/optimize-module';
+import { addDefineCustomElementFunctions } from '../../transformers/component-native/add-define-custom-element-function';
+import { proxyCustomElement } from '../../transformers/component-native/proxy-custom-element-function';
+import { nativeComponentTransform } from '../../transformers/component-native/tranform-to-native-component';
+import { removeCollectionImports } from '../../transformers/remove-collection-imports';
+import { updateRindoCoreImports } from '../../transformers/update-rindo-core-import';
 import { getCustomElementsBuildConditionals } from '../dist-custom-elements-bundle/custom-elements-build-conditionals';
 import { isOutputTargetDistCustomElements } from '../output-utils';
-import { join } from 'path';
-import { nativeComponentTransform } from '../../transformers/component-native/tranform-to-native-component';
-import { addDefineCustomElementFunctions } from '../../transformers/component-native/add-define-custom-element-function';
-import { optimizeModule } from '../../optimize/optimize-module';
-import { removeCollectionImports } from '../../transformers/remove-collection-imports';
-import { RINDO_INTERNAL_CLIENT_ID, USER_INDEX_ENTRY_ID, RINDO_APP_GLOBALS_ID } from '../../bundle/entry-alias-ids';
-import { proxyCustomElement } from '../../transformers/component-native/proxy-custom-element-function';
-import { updateRindoCoreImports } from '../../transformers/update-rindo-core-import';
-import ts from 'typescript';
 
 /**
  * Main output target function for `dist-custom-elements`. This function just
@@ -103,7 +104,6 @@ export const getBundleOptions = (
  * @param outputTarget the outputTarget we're currently dealing with
  * @returns an empty promise
  */
-
 export const bundleCustomElements = async (
   config: d.ValidatedConfig,
   compilerCtx: d.CompilerCtx,
@@ -232,7 +232,7 @@ export const generateEntryPoint = (outputTarget: d.OutputTargetDistCustomElement
   const imp: string[] = [];
 
   imp.push(
-    `export { setAssetPath, setPlatformOptions } from '${RINDO_INTERNAL_CLIENT_ID}';`,
+    `export { setAssetPath, setNonce, setPlatformOptions } from '${RINDO_INTERNAL_CLIENT_ID}';`,
     `export * from '${USER_INDEX_ENTRY_ID}';`
   );
 

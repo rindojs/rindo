@@ -1,10 +1,11 @@
-import type * as d from '../../declarations';
-import { copyRindoCoreDts, updateRindoTypesImports } from './rindo-types';
-import { join, relative } from 'path';
-import { generateAppTypes } from './generate-app-types';
-import { generateCustomElementsBundleTypes } from '../output-targets/dist-custom-elements-bundle/custom-elements-bundle-types';
-import { generateCustomElementsTypes } from '../output-targets/dist-custom-elements/custom-elements-types';
 import { isDtsFile } from '@utils';
+import { join, relative } from 'path';
+
+import type * as d from '../../declarations';
+import { generateCustomElementsTypes } from '../output-targets/dist-custom-elements/custom-elements-types';
+import { generateCustomElementsBundleTypes } from '../output-targets/dist-custom-elements-bundle/custom-elements-bundle-types';
+import { generateAppTypes } from './generate-app-types';
+import { copyRindoCoreDts, updateRindoTypesImports } from './rindo-types';
 
 /**
  * For a single output target, generate types, then copy the Rindo core type declaration file

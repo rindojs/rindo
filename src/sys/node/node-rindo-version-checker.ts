@@ -1,9 +1,10 @@
-import type { Logger, PackageJsonData } from '../../declarations';
 import { isString, noop } from '@utils';
 import fs from 'graceful-fs';
+import { tmpdir } from 'os';
 import path from 'path';
 import semverLt from 'semver/functions/lt';
-import { tmpdir } from 'os';
+
+import type { Logger, PackageJsonData } from '../../declarations';
 
 const REGISTRY_URL = `https://registry.npmjs.org/@rindo/core`;
 const CHECK_INTERVAL = 1000 * 60 * 60 * 24 * 7;
@@ -17,7 +18,9 @@ export async function checkVersion(logger: Logger, currentVersion: string): Prom
         if (semverLt(currentVersion, latestVersion)) {
           printUpdateMessage(logger, currentVersion, latestVersion);
         } else {
-          console.debug(`${logger.cyan('@rindo/core')} version ${logger.green(currentVersion)} is the latest version`);
+          console.debug(
+            `${logger.cyan('@rindo/core')} version ${logger.green(currentVersion)} is the latest version`
+          );
         }
       };
     }

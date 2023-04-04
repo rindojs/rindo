@@ -1,15 +1,20 @@
-import type * as d from '../../../declarations';
-import { bundleHydrateFactory } from './bundle-hydrate-factory';
 import { catchError, createOnWarnFn, generatePreamble, loadRollupDiagnostics } from '@utils';
+import MagicString from 'magic-string';
+import { join } from 'path';
+import { RollupOptions } from 'rollup';
+import { rollup } from 'rollup';
+
+import type * as d from '../../../declarations';
 import { getBuildFeatures, updateBuildConditionals } from '../../app-core/app-data';
+import {
+  RINDO_HYDRATE_FACTORY_ID,
+  RINDO_INTERNAL_HYDRATE_ID,
+  RINDO_MOCK_DOC_ID,
+} from '../../bundle/entry-alias-ids';
+import { bundleHydrateFactory } from './bundle-hydrate-factory';
 import { HYDRATE_FACTORY_INTRO, HYDRATE_FACTORY_OUTRO } from './hydrate-factory-closure';
 import { updateToHydrateComponents } from './update-to-hydrate-components';
 import { writeHydrateOutputs } from './write-hydrate-outputs';
-import { RollupOptions } from 'rollup';
-import { RINDO_HYDRATE_FACTORY_ID, RINDO_INTERNAL_HYDRATE_ID, RINDO_MOCK_DOC_ID } from '../../bundle/entry-alias-ids';
-import MagicString from 'magic-string';
-import { rollup } from 'rollup';
-import { join } from 'path';
 
 export const generateHydrateApp = async (
   config: d.ValidatedConfig,

@@ -1,6 +1,7 @@
-import type * as d from '../../declarations';
 import { buildError, isBoolean, isNumber, isString, normalizePath } from '@utils';
 import { isAbsolute, join } from 'path';
+
+import type * as d from '../../declarations';
 import { isOutputTargetWww } from '../output-targets/output-utils';
 
 export const validateDevServer = (
@@ -99,8 +100,10 @@ export const validateDevServer = (
     devServer.protocol = devServer.https ? 'https' : addressProtocol ? addressProtocol : 'http';
   }
 
-  if (devServer.historyApiFallback !== null && devServer.historyApiFallback !== false) {
-    devServer.historyApiFallback = devServer.historyApiFallback || {};
+  if (devServer.historyApiFallback !== null) {
+    if (Array.isArray(devServer.historyApiFallback) || typeof devServer.historyApiFallback !== 'object') {
+      devServer.historyApiFallback = {};
+    }
 
     if (!isString(devServer.historyApiFallback.index)) {
       devServer.historyApiFallback.index = 'index.html';
@@ -122,7 +125,7 @@ export const validateDevServer = (
   const wwwOutputTarget = (config.outputTargets ?? []).find(isOutputTargetWww);
 
   if (wwwOutputTarget) {
-    const baseUrl = new URL(wwwOutputTarget.baseUrl ?? '', 'http://config-rindojs.web.app');
+    const baseUrl = new URL(wwwOutputTarget.baseUrl ?? '', 'http://rindojs-config.web.app');
     basePath = baseUrl.pathname;
     serveDir = wwwOutputTarget.appDir ?? '';
   } else {

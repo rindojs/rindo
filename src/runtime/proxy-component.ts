@@ -1,11 +1,26 @@
-import type * as d from '../declarations';
 import { BUILD } from '@app-data';
 import { consoleDevWarn, getHostRef, plt } from '@platform';
-import { getValue, setValue } from './set-value';
+
+import type * as d from '../declarations';
 import { HOST_FLAGS, MEMBER_FLAGS } from '../utils/constants';
 import { PROXY_FLAGS } from './runtime-constants';
+import { getValue, setValue } from './set-value';
 
-export const proxyComponent = (Cstr: d.ComponentConstructor, cmpMeta: d.ComponentRuntimeMeta, flags: number) => {
+/**
+ * Attach a series of runtime constructs to a compiled Rindo component
+ * constructor, including getters and setters for the `@Prop` and `@State`
+ * decorators, callbacks for when attributes change, and so on.
+ *
+ * @param Cstr the constructor for a component that we need to process
+ * @param cmpMeta metadata collected previously about the component
+ * @param flags a number used to store a series of bit flags
+ * @returns a reference to the same constructor passed in (but now mutated)
+ */
+export const proxyComponent = (
+  Cstr: d.ComponentConstructor,
+  cmpMeta: d.ComponentRuntimeMeta,
+  flags: number
+): d.ComponentConstructor => {
   if (BUILD.member && cmpMeta.$members$) {
     if (BUILD.watchCallback && Cstr.watchers) {
       cmpMeta.$watchers$ = Cstr.watchers;
@@ -104,7 +119,7 @@ export const proxyComponent = (Cstr: d.ComponentConstructor, cmpMeta: d.Componen
           //
           //  https://developers.google.com/web/fundamentals/web-components/best-practices#lazy-properties
           //
-          //  TODO: we should think about whether or not we actually want to be reflecting the attributes to
+          //  TODO we should think about whether or not we actually want to be reflecting the attributes to
           //  properties here given that this goes against best practices outlined here
           //  https://developers.google.com/web/fundamentals/web-components/best-practices#avoid-reentrancy
           if (this.hasOwnProperty(propName)) {

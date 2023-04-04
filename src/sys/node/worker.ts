@@ -1,5 +1,7 @@
 import '@rindo/core/compiler';
+
 import * as nodeApi from '@sys-api-node';
+
 import { initNodeWorkerThread } from './node-worker-thread';
 
 const coreCompiler = (global as any).rindo as typeof import('@rindo/core/compiler');

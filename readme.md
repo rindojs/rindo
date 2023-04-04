@@ -9,49 +9,53 @@
 </h1>
 
 <p align="center">
-  A compiler for generating <a href="https://www.webcomponents.org/introduction">Web Components</a> 
+  A compiler for generating <a href="https://www.webcomponents.org/introduction" target="_blank" rel="noopener noref">Web Components</a>, built by the <a href="https://family-js.web.app/">Family team</a>.
+</p>
+<p align="center">
+  Rindo allows developers to use technologies like TypeScript and JSX to define components, then generate 100% standards-based Web Components that run on both <a href="https://rindojs.web.app/docs/browser-support" target="_blank" rel="noopener noref">modern browsers and legacy browsers</a>
 </p>
 
-[Rindo](https://rindojs.web.app/) is a simple compiler for generating Web Components and static site generated progressive web apps (PWA). Rindo was built by the [Family](https://familyjs-js.web.app/) team for its next generation of performant mobile and desktop Web Components.
+<p align="center">
+  <a href="https://www.npmjs.com/package/@rindo/core">
+    <img src="https://img.shields.io/npm/v/@rindo/core.svg" alt="RindoJS is released under the MIT license." /></a>
+  <a href="https://github.com/familyjs/rindo/blob/main/LICENSE.md">
+    <img src="https://img.shields.io/badge/license-MIT-yellow.svg" alt="RindoJS is released under the MIT license." />
+  </a>
+  <a href="https://github.com/familyjs/rindo/blob/main/.github/CONTRIBUTING.md">
+    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg" alt="PRs welcome!" />
+  </a>
+</p>
 
-Rindo combines the best concepts of the most popular frontend frameworks into a compile-time rather than run-time tool. It combines TypeScript, JSX, an asynchronous rendering pipeline to ensure smooth running animations and lazy-loading, to generate 100% standards-based Web Components that run on both [modern browsers and legacy browsers](https://rindojs.web.app/docs/browser-support).
+<h2 align="center">
+  <a href="https://rindojs.web.app/docs/getting-started#starting-a-new-project">Quick Start</a>
+  <span> · </span>
+  <a href="https://rindojs.web.app/docs/introduction">Documentation</a>
+  <span> · </span>
+  <a href="https://github.com/familyjs/rindo/blob/main/.github/CONTRIBUTING.md">Contribute</a>
+</h2>
 
-Rindo components are just Web Components, so they work in any major framework or with no framework at all. In many cases, Rindo can be used as a drop in replacement for traditional frontend frameworks given the capabilities now available in the browser, though using it as such is certainly not required.
+### Getting Started
 
-Rindo also enables a number of key capabilities on top of Web Components, in particular Server Side Rendering (SSR) without the need to run a headless browser, pre-rendering, and objects-as-properties (instead of just strings).
+Start a new project by following our quick [Getting Started guide](https://rindojs.web.app/docs/getting-started).
+We would love to hear from you!
+If you have any feedback or run into issues using Rindo, please file an [issue](https://github.com/familyjs/rindo/issues/new) on this repository.
 
-## Getting Started
-
-To create a new project using an interactive cli, run:
-
-```bash
-npm init rindo
-```
-
-To start developing your new Rindo project, run:
-
-```bash
-npm start
-```
-
-## Creating components
-
-Rindo components are TypeScript classes with decorator metadata. The decorators themselves are purely build-time annotations so the compiler can read metadata about each component, and removed entirely for smaller efficient components.
-
-Create new components by creating files with a `.tsx` extension, such as `my-component.tsx`, and place them in `src/components`.
-
+### Examples
+A Rindo component looks a lot like a class-based React component, with the addition of TypeScript decorators:
 ```tsx
 import { Component, Prop, h } from '@rindo/core';
 
 @Component({
-  tag: 'my-component',
-  styleUrl: 'my-component.css'
+  tag: 'my-component',            // the name of the component's custom HTML tag
+  styleUrl: 'my-component.css',   // css styles to apply to the component
+  shadow: true,                   // this component uses the ShadowDOM
 })
 export class MyComponent {
-
+  // The component accepts two arguments:
   @Prop() first: string;
   @Prop() last: string;
 
+   //The following HTML is rendered when our component is used
   render() {
     return (
       <div>
@@ -62,13 +66,22 @@ export class MyComponent {
 }
 ```
 
-To use this component, just use it like any other HTML element:
+The component above can be used like any other HTML element:
 
 ```html
 <my-component first="Rindo" last="JS"></my-component>
 ```
 
-## Thanks
+Since Rindo generates web components, they work in any major framework or with no framework at all.
+In many cases, Rindo can be used as a drop in replacement for traditional frontend framework, though using it as such is certainly not required.
+
+### Contributing
+
+Thanks for your interest in contributing!
+Please take a moment to read up on our guidelines for [contributing](https://github.com/familyjs/rindo/blob/main/.github/CONTRIBUTING.md).
+Please note that this project is released with a [Contributor Code of Conduct](https://github.com/familyjs/rindo/blob/main/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+### Thanks
 Rindo's internal testing suite is supported by the [BrowserStack Open-Source Program](https://www.browserstack.com/open-source)
 <br>
-<a target="_blank" href="https://www.browserstack.com/"><img width="200" src="https://www.browserstack.com/images/layout/browserstack-logo-600x315.png"></a>
+<a href="https://www.browserstack.com/" target="_blank" rel="noopener noref"><img width="200" src="https://www.browserstack.com/images/layout/browserstack-logo-600x315.png"></a>

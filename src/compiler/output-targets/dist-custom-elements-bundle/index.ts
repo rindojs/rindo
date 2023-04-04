@@ -1,6 +1,3 @@
-import type * as d from '../../../declarations';
-import type { BundleOptions } from '../../bundle/bundle-interface';
-import { bundleOutput } from '../../bundle/bundle-output';
 import {
   catchError,
   dashToPascalCase,
@@ -11,14 +8,18 @@ import {
   rollupToRindoSourceMap,
   stringifyRuntimeData,
 } from '@utils';
-import { getCustomElementsBuildConditionals } from './custom-elements-build-conditionals';
-import { isOutputTargetDistCustomElementsBundle } from '../output-utils';
 import { join } from 'path';
-import { nativeComponentTransform } from '../../transformers/component-native/tranform-to-native-component';
+
+import type * as d from '../../../declarations';
+import type { BundleOptions } from '../../bundle/bundle-interface';
+import { bundleOutput } from '../../bundle/bundle-output';
+import { RINDO_APP_GLOBALS_ID, RINDO_INTERNAL_CLIENT_ID, USER_INDEX_ENTRY_ID } from '../../bundle/entry-alias-ids';
 import { optimizeModule } from '../../optimize/optimize-module';
+import { nativeComponentTransform } from '../../transformers/component-native/tranform-to-native-component';
 import { removeCollectionImports } from '../../transformers/remove-collection-imports';
-import { RINDO_INTERNAL_CLIENT_ID, USER_INDEX_ENTRY_ID, RINDO_APP_GLOBALS_ID } from '../../bundle/entry-alias-ids';
 import { updateRindoCoreImports } from '../../transformers/update-rindo-core-import';
+import { isOutputTargetDistCustomElementsBundle } from '../output-utils';
+import { getCustomElementsBuildConditionals } from './custom-elements-build-conditionals';
 
 export const outputCustomElementsBundle = async (
   config: d.ValidatedConfig,

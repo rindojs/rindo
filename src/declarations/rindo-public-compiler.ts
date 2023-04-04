@@ -1,6 +1,6 @@
-import type { JsonDocs } from './rindo-public-docs';
-import type { PrerenderUrlResults } from '../internal';
 import type { ConfigFlags } from '../cli/config-flags';
+import type { PrerenderUrlResults } from '../internal';
+import type { JsonDocs } from './rindo-public-docs';
 
 export * from './rindo-public-docs';
 
@@ -187,7 +187,7 @@ export interface RindoConfig {
   invisiblePrehydration?: boolean;
 
   /**
-   * Sets the task queue used by rindo's runtime. The task queue schedules DOM read and writes
+   * Sets the task queue used by Rindo's runtime. The task queue schedules DOM read and writes
    * across the frames to efficiently render and reduce layout thrashing. By default,
    * `async` is used. It's recommended to also try each setting to decide which works
    * best for your use-case. In all cases, if your app has many CPU intensive tasks causing the
@@ -554,6 +554,10 @@ export interface RindoDevServerConfig {
 export interface DevServerConfig extends RindoDevServerConfig {
   browserUrl?: string;
   devServerDir?: string;
+  /**
+   * A list of glob patterns like `subdir/*.js`  to exclude from hot-module
+   * reloading updates.
+   */
   excludeHmr?: string[];
   historyApiFallback?: HistoryApiFallback;
   openBrowser?: boolean;
@@ -1198,6 +1202,7 @@ export interface BuildOnEvents {
 }
 
 export interface BuildEmitEvents {
+  emit(eventName: CompilerEventName, path: string): void;
   emit(eventName: CompilerEventFileAdd, path: string): void;
   emit(eventName: CompilerEventFileDelete, path: string): void;
   emit(eventName: CompilerEventFileUpdate, path: string): void;
@@ -1796,7 +1801,7 @@ export interface EmulateViewport {
  */
 export const LOG_LEVELS = ['debug', 'info', 'warn', 'error'] as const;
 
-export type LogLevel = typeof LOG_LEVELS[number];
+export type LogLevel = (typeof LOG_LEVELS)[number];
 
 /**
  * Common logger to be used by the compiler, dev-server and CLI. The CLI will use a
@@ -2021,6 +2026,12 @@ export interface OutputTargetBaseNext {
 export interface OutputTargetDistCustomElements extends OutputTargetBaseNext {
   type: 'dist-custom-elements';
   empty?: boolean;
+  /**
+   * Triggers the following behaviors when enabled:
+   * 1. All `@rindo/core/*` module references are treated as external during bundling.
+   * 2. File names are not hashed.
+   * 3. File minification will follow the behavior defined at the root of the Rindo config.
+   */
   externalRuntime?: boolean;
   copy?: CopyTask[];
   inlineDynamicImports?: boolean;
