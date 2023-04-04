@@ -31,7 +31,7 @@
     "license": "node scripts --license",
     "lint": "eslint \"src/*.ts\" \"src/**/*.ts\"",
     "prettier": "npm run prettier.base -- --write",
-    "prettier.base": "prettier \"./({bin,scripts,src}/**/*.{ts,tsx,js,jsx})|bin/rindo\"",
+    "prettier.base": "prettier \"./({bin,scripts,src}/**/*.{ts,tsx,js,jsx})|bin/rindo|.github/(**/)?*.(yml|yaml)|*.js\"",
     "prettier.dry-run": "npm run prettier.base -- --list-different",
     "release": "node scripts --release --publish",
     "release.prepare": "node scripts --release --prepare",
