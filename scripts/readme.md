@@ -16,7 +16,7 @@ release.
 3. Commit the changes - use the commit message :emoji: v<VERSION>. e.g. :star2: v2.7.0 
 4. `npm run release`
 5. Publish the release notes in GitHub
-6. Navigate to the [Rindo Site](https://github.com/navify/rindo-site/pulls) repository and merge and PRs 
+6. Navigate to the [Rindo Site](https://github.com/familyjs/rindo-site/pulls) repository and merge and PRs 
    containing documentation that has been approved, but not merged that is related to the release. Such PRs should be
    labelled as `do not merge: waiting for next rindo release`. It's a good idea to review _all_ PRs though, just in
    case :wink:

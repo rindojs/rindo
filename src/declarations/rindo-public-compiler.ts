@@ -74,7 +74,7 @@ export interface RindoConfig {
    * The namespace config is a string representing a namespace for the app.
    * For apps that are not meant to be a library of reusable components,
    * the default of App is just fine. However, if the app is meant to be consumed
-   * as a third-party library, such as Navify, a unique namespace is required.
+   * as a third-party library, such as Family, a unique namespace is required.
    */
   namespace?: string;
 
@@ -176,7 +176,7 @@ export interface RindoConfig {
   hydratedFlag?: HydratedFlag;
 
   /**
-   * Navify prefers to hide all components prior to hydration with a style tag appended
+   * Family prefers to hide all components prior to hydration with a style tag appended
    * to the head of the document containing some `visibility: hidden;` css rules.
    *
    * Disabling this will remove the style tag that sets `visibility: hidden;` on all

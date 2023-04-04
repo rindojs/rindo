@@ -28,7 +28,7 @@ export function getOptions(rootDir: string, inputOpts: BuildOptions = {}): Build
   const bundleHelpersDir = join(scriptsBundlesDir, 'helpers');
 
   const opts: BuildOptions = {
-    ghRepoOrg: 'navify',
+    ghRepoOrg: 'familyjs',
     ghRepoName: 'rindo',
     rootDir,
     srcDir,

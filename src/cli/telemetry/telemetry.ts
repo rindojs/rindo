@@ -1,7 +1,7 @@
 import { tryFn, hasDebug, readJson, hasVerbose, uuidv4 } from './helpers';
 import { shouldTrack } from './shouldTrack';
 import type * as d from '../../declarations';
-import { readConfig, updateConfig, writeConfig } from '../navify-config';
+import { readConfig, updateConfig, writeConfig } from '../family-config';
 import { CoreCompiler } from '../load-compiler';
 import { isOutputTargetHydrate, WWW } from '../../compiler/output-targets/output-utils';
 
@@ -256,7 +256,7 @@ export const anonymizeConfigForTelemetry = (config: d.ValidatedConfig): d.Config
 /**
  * Reads package-lock.json, yarn.lock, and package.json files in order to cross-reference
  * the dependencies and devDependencies properties. Pulls up the current installed version
- * of each package under the @rindo, @navify, and @jigra scopes.
+ * of each package under the @rindo, @familyjs, and @jigra scopes.
  *
  * @param sys the system instance where telemetry is invoked
  * @param config the Rindo configuration associated with the current task that triggered telemetry
@@ -286,19 +286,19 @@ async function getInstalledPackages(
       ...packageJson.dependencies,
     });
 
-    // Collect packages only in the rindo, navify, or jigra org's:
+    // Collect packages only in the rindo, familyjs, or jigra org's:
     // https://www.npmjs.com/org/rindo
-    const navifyPackages = rawPackages.filter(
-      ([k]) => k.startsWith('@rindo/') || k.startsWith('@navify/') || k.startsWith('@jigra/')
+    const familyPackages = rawPackages.filter(
+      ([k]) => k.startsWith('@rindo/') || k.startsWith('@familyjs/') || k.startsWith('@jigra/')
     );
 
     try {
-      packages = yarn ? await yarnPackages(sys, navifyPackages) : await npmPackages(sys, navifyPackages);
+      packages = yarn ? await yarnPackages(sys, familyPackages) : await npmPackages(sys, familyPackages);
     } catch (e) {
-      packages = navifyPackages.map(([k, v]) => `${k}@${v.replace('^', '')}`);
+      packages = familyPackages.map(([k, v]) => `${k}@${v.replace('^', '')}`);
     }
 
-    packagesNoVersions = navifyPackages.map(([k]) => `${k}`);
+    packagesNoVersions = familyPackages.map(([k]) => `${k}`);
 
     return { packages, packagesNoVersions };
   } catch (err) {
@@ -310,14 +310,14 @@ async function getInstalledPackages(
 /**
  * Visits the npm lock file to find the exact versions that are installed
  * @param sys The system where the command is invoked
- * @param navifyPackages a list of the found packages matching `@rindo`, `@jigra`, or `@navify` from the package.json file.
+ * @param familyPackages a list of the found packages matching `@rindo`, `@jigra`, or `@familyjs` from the package.json file.
  * @returns an array of strings of all the packages and their versions.
  */
-async function npmPackages(sys: d.CompilerSystem, navifyPackages: [string, string][]): Promise<string[]> {
+async function npmPackages(sys: d.CompilerSystem, familyPackages: [string, string][]): Promise<string[]> {
   const appRootDir = sys.getCurrentDirectory();
   const packageLockJson: any = await tryFn(readJson, sys, sys.resolvePath(appRootDir + '/package-lock.json'));
 
-  return navifyPackages.map(([k, v]) => {
+  return familyPackages.map(([k, v]) => {
     let version = packageLockJson?.dependencies[k]?.version ?? packageLockJson?.devDependencies[k]?.version ?? v;
     version = version.includes('file:') ? sanitizeDeclaredVersion(v) : version;
     return `${k}@${version}`;
@@ -327,15 +327,15 @@ async function npmPackages(sys: d.CompilerSystem, navifyPackages: [string, strin
 /**
  * Visits the yarn lock file to find the exact versions that are installed
  * @param sys The system where the command is invoked
- * @param navifyPackages a list of the found packages matching `@rindo`, `@jigra`, or `@navify` from the package.json file.
+ * @param familyPackages a list of the found packages matching `@rindo`, `@jigra`, or `@familyjs` from the package.json file.
  * @returns an array of strings of all the packages and their versions.
  */
-async function yarnPackages(sys: d.CompilerSystem, navifyPackages: [string, string][]): Promise<string[]> {
+async function yarnPackages(sys: d.CompilerSystem, familyPackages: [string, string][]): Promise<string[]> {
   const appRootDir = sys.getCurrentDirectory();
   const yarnLock = sys.readFileSync(sys.resolvePath(appRootDir + '/yarn.lock'));
   const yarnLockYml = sys.parseYarnLockFile(yarnLock);
 
-  return navifyPackages.map(([k, v]) => {
+  return familyPackages.map(([k, v]) => {
     const identifiedVersion = `${k}@${v}`;
     let version = yarnLockYml.object[identifiedVersion]?.version;
     version = version.includes('undefined') ? sanitizeDeclaredVersion(identifiedVersion) : version;
@@ -412,7 +412,7 @@ async function sendTelemetry(sys: d.CompilerSystem, config: d.ValidatedConfig, d
     };
 
     // This request is only made if telemetry is on.
-    const response = await sys.fetch('https://api-navifyjs.web.app/events/metrics', {
+    const response = await sys.fetch('https://familyjs-api.web.app/events/metrics', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

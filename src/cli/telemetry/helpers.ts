@@ -27,7 +27,7 @@ export const isInteractive = (sys: d.CompilerSystem, flags: ConfigFlags, object?
 
 export const UUID_REGEX = new RegExp(/^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i);
 
-// Plucked from https://github.com/navify/jigra/blob/HEAD/cli/src/util/uuid.ts
+// Plucked from https://github.com/familyjs/jigra/blob/HEAD/cli/src/util/uuid.ts
 export function uuidv4(): string {
   return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
     const r = (Math.random() * 16) | 0;

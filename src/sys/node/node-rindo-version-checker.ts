@@ -7,7 +7,7 @@ import { tmpdir } from 'os';
 
 const REGISTRY_URL = `https://registry.npmjs.org/@rindo/core`;
 const CHECK_INTERVAL = 1000 * 60 * 60 * 24 * 7;
-const CHANGELOG = `https://github.com/navify/rindo/blob/main/CHANGELOG.md`;
+const CHANGELOG = `https://github.com/familyjs/rindo/blob/main/CHANGELOG.md`;
 
 export async function checkVersion(logger: Logger, currentVersion: string): Promise<() => void> {
   try {

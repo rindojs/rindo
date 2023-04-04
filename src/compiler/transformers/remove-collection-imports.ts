@@ -4,11 +4,11 @@ import ts from 'typescript';
 export const removeCollectionImports = (compilerCtx: d.CompilerCtx): ts.TransformerFactory<ts.SourceFile> => {
   /*
     // remove side effect collection imports like:
-    import 'navicons';
+    import 'famicons';
 
     // do not remove collection imports with importClauses:
-    import * as asdf 'navicons';
-    import { asdf } '@navify/core';
+    import * as asdf 'famicons';
+    import { asdf } '@familyjs/core';
   */
   return () => {
     return (tsSourceFile) => {

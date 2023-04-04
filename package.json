@@ -47,7 +47,7 @@
     "watch": "node scripts && npm run tsc && concurrently \"npm run rollup.watch\" \"npm run tsc.watch\""
   },
   "devDependencies": {
-    "@navify/prettier-config": "^2.0.0",
+    "@familyjs/prettier-config": "^2.0.0",
     "@rollup/plugin-commonjs": "15.1.0",
     "@rollup/plugin-json": "4.1.0",
     "@rollup/plugin-node-resolve": "9.0.0",
@@ -130,22 +130,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/navify/rindo.git"
+    "url": "git+https://github.com/familyjs/rindo.git"
   },
-  "author": "Navify Team",
+  "author": "Family Team",
   "homepage": "https://rindojs.web.app/",
   "description": "A Compiler for Web Components and Progressive Web Apps",
   "keywords": [
     "web components",
     "components",
     "rindo",
-    "navify",
+    "familyjs",
     "webapp",
     "custom elements",
     "pwa",
     "progressive web app"
   ],
-  "prettier": "@navify/prettier-config",
+  "prettier": "@familyjs/prettier-config",
   "volta": {
     "node": "16.13.0",
     "npm": "8.1.1"

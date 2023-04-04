@@ -1,6 +1,6 @@
 # Rindo Style Guide
 
-This is a component style guide created and enforced internally by the core team of Rindo, for the purpose of standardizing [Navify Core](https://navifyframework.com/) components. This should only be used as a reference for other teams in creating their own style guides. Feel free to modify to your team's own preference.
+This is a component style guide created and enforced internally by the core team of Rindo, for the purpose of standardizing [Family Core](https://family-js.web.app/) components. This should only be used as a reference for other teams in creating their own style guides. Feel free to modify to your team's own preference.
 
 
 ## File structure
@@ -9,7 +9,7 @@ This is a component style guide created and enforced internally by the core team
 - One component per directory. Though it may make sense to group similar components into the same directory, we've found it's easier to document components when each one has its own directory.
 - Implementation (.tsx) and styles of a component should live in the same directory.
 
-Example from navify-core:
+Example from family-core:
 
 ```
 ├── card
@@ -37,7 +37,7 @@ Example from navify-core:
 ### HTML tag
 
 #### Prefix
-The prefix has a major role when you are creating a collection of components intended to be used across diferent projects, like [@navify/core](https://www.npmjs.com/package/@navify/core). Web Components are not scoped because they are globally declared within the webpage, which means an "unique" prefix is needed to prevent collisions. The prefix is also able help to quickly indentify the collection of a component. Additionally, web components are required to contain a "-" dash within the tag name, so using the first section to namespace your components is a natural fit.
+The prefix has a major role when you are creating a collection of components intended to be used across diferent projects, like [@familyjs/core](https://www.npmjs.com/package/@familyjs/core). Web Components are not scoped because they are globally declared within the webpage, which means an "unique" prefix is needed to prevent collisions. The prefix is also able help to quickly indentify the collection of a component. Additionally, web components are required to contain a "-" dash within the tag name, so using the first section to namespace your components is a natural fit.
 
 We do not recommend using "rindo" as prefix, since Rindo DOES NOT emit rindo components, but rather the output is simply standards compliant web components.
 
@@ -47,10 +47,10 @@ rindo-component
 stnl-component
 ```
 
-Instead, use your own naming or brand. For example, [Navify](https://navifyframework.com/) components are all prefixed with `ion-`.
+Instead, use your own naming or brand. For example, [Family](https://family-js.web.app/) components are all prefixed with `fml-`.
 ```
-ion-button
-ion-header
+fml-button
+fml-header
 ```
 
 #### Name
@@ -63,14 +63,14 @@ Components are not actions, they are conceptually "things". It is better to use 
 When several components are related and/or coupled, it is a good idea to share the name, and then add different modifiers, for example:
 
 ```
-ion-menu
-ion-menu-controller
+fml-menu
+fml-menu-controller
 ```
 
 ```
-ion-card
-ion-card-header
-ion-card-content
+fml-card
+fml-card-header
+fml-card-content
 ```
 
 
@@ -80,12 +80,12 @@ The name of the ES6 class of the components SHOULD NOT have prefix since classes
 
 ```ts
 @Component({
-  tag: 'ion-button'
+  tag: 'fml-button'
 })
 export class Button { ... }
 
 @Component({
-  tag: 'ion-menu'
+  tag: 'fml-menu'
 })
 export class Menu { ... }
 ```
@@ -93,7 +93,7 @@ export class Menu { ... }
 
 ## TypeScript
 
-1. **Follow** [tslint-navify-rules](https://github.com/navify/tslint-navify-rules/blob/main/tslint.js)
+1. **Follow** [tslint-family-rules](https://github.com/familyjs/tslint-family-rules/blob/main/tslint.js)
 
 2. **Variable decorators should be inlined.**
 
@@ -125,7 +125,7 @@ onClick() {
 
 ```ts
 @Component({
-  tag: 'ion-something',
+  tag: 'fml-something',
   styleUrl: 'something.scss',
   styleUrls: {
     ios: 'something.ios.scss',
@@ -168,7 +168,7 @@ export class Something {
    * Inlined decorator, alphabetical order.
    */
   @Prop({ context: 'config' }) config: Config;
-  @Prop({ connect: 'ion-menu-controller' }) lazyMenuCtrl: Lazy<MenuController>;
+  @Prop({ connect: 'fml-menu-controller' }) lazyMenuCtrl: Lazy<MenuController>;
 
   /**
    * 5. Public Property API

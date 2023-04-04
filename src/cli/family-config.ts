@@ -4,12 +4,12 @@ import { readJson, uuidv4, UUID_REGEX } from './telemetry/helpers';
 export const isTest = () => process.env.JEST_WORKER_ID !== undefined;
 
 export const defaultConfig = (sys: d.CompilerSystem) =>
-  sys.resolvePath(`${sys.homeDir()}/.navify/${isTest() ? 'tmp-config.json' : 'config.json'}`);
+  sys.resolvePath(`${sys.homeDir()}/.familyjs/${isTest() ? 'tmp-config.json' : 'config.json'}`);
 
-export const defaultConfigDirectory = (sys: d.CompilerSystem) => sys.resolvePath(`${sys.homeDir()}/.navify`);
+export const defaultConfigDirectory = (sys: d.CompilerSystem) => sys.resolvePath(`${sys.homeDir()}/.familyjs`);
 
 /**
- * Reads an Navify configuration file from disk, parses it, and performs any necessary corrections to it if certain
+ * Reads an Family configuration file from disk, parses it, and performs any necessary corrections to it if certain
  * values are deemed to be malformed
  * @param sys The system where the command is invoked
  * @returns the config read from disk that has been potentially been updated
@@ -34,7 +34,7 @@ export async function readConfig(sys: d.CompilerSystem): Promise<d.TelemetryConf
 }
 
 /**
- * Writes an Navify configuration file to disk.
+ * Writes an Family configuration file to disk.
  * @param sys The system where the command is invoked
  * @param config The config passed into the Rindo command
  * @returns boolean If the command was successful
@@ -53,7 +53,7 @@ export async function writeConfig(sys: d.CompilerSystem, config: d.TelemetryConf
 }
 
 /**
- * Update a subset of the Navify config.
+ * Update a subset of the Family config.
  * @param sys The system where the command is invoked
  * @param newOptions The new options to save
  * @returns boolean If the command was successful

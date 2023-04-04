@@ -5,13 +5,13 @@ Rindo is able to generate components into various formats so they can be best in
 
 ## Output Target Terms
 
-`script`: A prebuilt, stand-alone webapp already built from the components. These are already built to be loaded by just a script tag, no additional builds or bundling required. Both the `www` and `dist` output target types save an "app" into their directories. When saving the webapp into the `dist/` directory, it can be easily packaged up and used with a service like `unpkg.com`. See https://www.npmjs.com/package/@navify/core
+`script`: A prebuilt, stand-alone webapp already built from the components. These are already built to be loaded by just a script tag, no additional builds or bundling required. Both the `www` and `dist` output target types save an "app" into their directories. When saving the webapp into the `dist/` directory, it can be easily packaged up and used with a service like `unpkg.com`. See https://www.npmjs.com/package/@familyjs/core
 
 `collection`: Source files transpiled down to simple JavaScript, and all component metadata placed on the component class as static getters. When one Rindo distribution imports another, it will use these files when generating its own distribution. What's important is that the source code of a `collection` is future proof, meaning no matter what version of Rindo it can import and understand the component metadata.
 
 `host`: The actual "host" element sitting in the webpage's DOM.
 
-`lazy-loaded`: A lazy-loaded webapp creates all the proxied host custom elements up front, but only downloads the component implementation on-demand. Lazy-loaded components work by having a proxied "host" custom element, and lazy-loads the component class and css, and rather than the host element having the "instance", such as a traditional custom element, the instance is of the lazy-loaded component class. If a Rindo library has a low number of components, then having them all packaged into a single-file would be best. But for a very large library of components, such as Navify, it'd be best to have them lazy-loaded instead. Part of the configuration can decide when to make a library either lazy-loaded or single-file.
+`lazy-loaded`: A lazy-loaded webapp creates all the proxied host custom elements up front, but only downloads the component implementation on-demand. Lazy-loaded components work by having a proxied "host" custom element, and lazy-loads the component class and css, and rather than the host element having the "instance", such as a traditional custom element, the instance is of the lazy-loaded component class. If a Rindo library has a low number of components, then having them all packaged into a single-file would be best. But for a very large library of components, such as Family, it'd be best to have them lazy-loaded instead. Part of the configuration can decide when to make a library either lazy-loaded or single-file.
 
 `module`: Component code meant to be imported by other bundlers in order for them to be intergrated within other apps.
 

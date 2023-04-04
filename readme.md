@@ -12,7 +12,7 @@
   A compiler for generating <a href="https://www.webcomponents.org/introduction">Web Components</a> 
 </p>
 
-[Rindo](https://rindojs.web.app/) is a simple compiler for generating Web Components and static site generated progressive web apps (PWA). Rindo was built by the [Navify](https://navify.web.app/) team for its next generation of performant mobile and desktop Web Components.
+[Rindo](https://rindojs.web.app/) is a simple compiler for generating Web Components and static site generated progressive web apps (PWA). Rindo was built by the [Family](https://familyjs-js.web.app/) team for its next generation of performant mobile and desktop Web Components.
 
 Rindo combines the best concepts of the most popular frontend frameworks into a compile-time rather than run-time tool. It combines TypeScript, JSX, an asynchronous rendering pipeline to ensure smooth running animations and lazy-loading, to generate 100% standards-based Web Components that run on both [modern browsers and legacy browsers](https://rindojs.web.app/docs/browser-support).
 

@@ -294,7 +294,7 @@ const isLocalCssImport = (srcImport: string) => {
  * Given a file path and a mode name, create an appropriate variable name
  *
  * @param filePath the path we want to use
- * @param modeName the name for the current style mode (i.e. `md` or `ios` on Navify)
+ * @param modeName the name for the current style mode (i.e. `md` or `ios` on Family)
  * @returns an appropriate Css var name
  */
 const createCssVarName = (filePath: string, modeName: string): string => {

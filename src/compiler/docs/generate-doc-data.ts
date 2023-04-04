@@ -176,7 +176,7 @@ const parseTypeIntoValues = (type: string) => {
         return;
       }
       if (/^("|').+("|')$/gm.test(u)) {
-        // navify is a string
+        // family is a string
         parsedUnions.push({
           value: u.slice(1, -1),
           type: 'string',
