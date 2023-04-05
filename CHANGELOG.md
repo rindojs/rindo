@@ -1,3 +1,12 @@
+# 🐺 [3.0.0-beta.0](https://github.com/familyjs/rindo/compare/v3.0.0-alpha.2...v3.0.0-beta.0) (2023-04-05)
+
+
+### Features
+
+* **compiler:** remove inlineDynamicImports from custom elements targets ([b0f1f3a](https://github.com/familyjs/rindo/commit/b0f1f3a5371d55879b99ad7856a9c95f0604c831))
+
+
+
 # 🐬 [3.0.0-alpha.2](https://github.com/familyjs/rindo/compare/v3.0.0-alpha.1...v3.0.0-alpha.2) (2023-04-05)
 
 
