@@ -2285,6 +2285,7 @@ export interface E2EProcessEnv {
   __RINDO_SPEC_TESTS__?: 'true';
 
   __RINDO_PUPPETEER_MODULE__?: string;
+  __RINDO_PUPPETEER_VERSION__?: number;
   __RINDO_DEFAULT_TIMEOUT__?: string;
 }
 
