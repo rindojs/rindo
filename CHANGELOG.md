@@ -1,3 +1,7 @@
+# 🐬 [3.0.0-alpha.2](https://github.com/familyjs/rindo/compare/v3.0.0-alpha.1...v3.0.0-alpha.2) (2023-04-05)
+
+
+
 # 🏖 [3.0.0-alpha.1](https://github.com/familyjs/rindo/compare/v3.0.0-alpha.0...v3.0.0-alpha.1) (2023-04-05)
 
 
