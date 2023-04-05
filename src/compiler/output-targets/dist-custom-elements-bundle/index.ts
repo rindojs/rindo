@@ -1,3 +1,4 @@
+// TODO: fully delete dist-custom-elements-bundle code
 import {
   catchError,
   dashToPascalCase,

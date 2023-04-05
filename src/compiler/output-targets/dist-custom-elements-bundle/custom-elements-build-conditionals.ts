@@ -1,3 +1,4 @@
+// TODO: move this into ../dist-custom-elements and rename things accordingly
 import type * as d from '../../../declarations';
 import { getBuildFeatures, updateBuildConditionals } from '../../app-core/app-data';
 

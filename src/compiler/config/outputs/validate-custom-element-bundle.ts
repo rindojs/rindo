@@ -1,3 +1,4 @@
+// TODO: fully delete dist-custom-elements-bundle code
 import { isBoolean } from '@utils';
 
 import type * as d from '../../../declarations';
