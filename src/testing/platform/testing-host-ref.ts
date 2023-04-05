@@ -1,5 +1,5 @@
-import { addHostEventListeners } from '@runtime';
 import type * as d from '@rindo/core/internal';
+import { addHostEventListeners } from '@runtime';
 
 import { hostRefs } from './testing-constants';
 

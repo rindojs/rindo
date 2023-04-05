@@ -37,11 +37,7 @@ export const generateAppTypes = async (
 
   if (!areTypesInternal) {
     componentsDtsFilePath = resolve(destination, GENERATED_DTS);
-    componentTypesFileContent = updateRindoTypesImports(
-      destination,
-      componentsDtsFilePath,
-      componentTypesFileContent
-    );
+    componentTypesFileContent = updateRindoTypesImports(destination, componentsDtsFilePath, componentTypesFileContent);
   }
 
   const writeResults = await compilerCtx.fs.writeFile(componentsDtsFilePath, componentTypesFileContent, {

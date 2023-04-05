@@ -6,11 +6,7 @@ import { rollup } from 'rollup';
 
 import type * as d from '../../../declarations';
 import { getBuildFeatures, updateBuildConditionals } from '../../app-core/app-data';
-import {
-  RINDO_HYDRATE_FACTORY_ID,
-  RINDO_INTERNAL_HYDRATE_ID,
-  RINDO_MOCK_DOC_ID,
-} from '../../bundle/entry-alias-ids';
+import { RINDO_HYDRATE_FACTORY_ID, RINDO_INTERNAL_HYDRATE_ID, RINDO_MOCK_DOC_ID } from '../../bundle/entry-alias-ids';
 import { bundleHydrateFactory } from './bundle-hydrate-factory';
 import { HYDRATE_FACTORY_INTRO, HYDRATE_FACTORY_OUTRO } from './hydrate-factory-closure';
 import { updateToHydrateComponents } from './update-to-hydrate-components';
