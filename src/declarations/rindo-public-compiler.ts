@@ -273,11 +273,14 @@ export interface ConfigExtras {
    */
   cssVarsShim?: boolean;
 
+  // TODO: Remove code related to the dynamic import shim
   /**
-   * Dynamic `import()` shim. This is only needed for Edge 18 and below, and Firefox 67
-   * and below. Defaults to `false`.
+   * Dynamic `import()` shim. This is only needed for Edge 18 and below, and
+   * Firefox 67 and below. Defaults to `false`.
+   * @deprecated Since Rindo v3.0.0. IE 11, Edge <= 18, and old Safari
+   * versions are no longer supported.
    */
-  dynamicImportShim?: boolean;
+  __deprecated__dynamicImportShim?: boolean;
 
   /**
    * Experimental flag. Projects that use a Rindo library built using the `dist` output target may have trouble lazily

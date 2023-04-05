@@ -169,6 +169,7 @@ export interface BuildConditionals extends Partial<BuildFeatures> {
   slotChildNodesFix?: boolean;
   scopedSlotTextContentFix?: boolean;
   cloneNodeFix?: boolean;
+  // TODO: Remove code related to the dynamic import shim
   dynamicImportShim?: boolean;
   hydratedAttribute?: boolean;
   hydratedClass?: boolean;
