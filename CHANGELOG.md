@@ -1,3 +1,12 @@
+# 🏖 [3.0.0-alpha.1](https://github.com/familyjs/rindo/compare/v3.0.0-alpha.0...v3.0.0-alpha.1) (2023-04-05)
+
+
+### Features
+
+* **e2e:** add support for puppteer v19 ([cba47f5](https://github.com/familyjs/rindo/commit/cba47f5ef321e605529a60a378f4d6feb0067425))
+
+
+
 # 🍌 [3.0.0-alpha.0](https://github.com/familyjs/rindo/compare/v2.22.2...v3.0.0-alpha.0) (2023-04-05)
 
 
