@@ -152,7 +152,8 @@ export const updateBuildConditionals = (config: Config, b: BuildConditionals) =>
   // TODO: Remove code related to the dynamic import shim
   b.dynamicImportShim = config.extras.__deprecated__dynamicImportShim;
   b.lifecycleDOMEvents = !!(b.isDebug || config._isTesting || config.extras.lifecycleDOMEvents);
-  b.safari10 = config.extras.safari10;
+  // TODO: Remove code related to deprecated `safari10` field.
+  b.safari10 = config.extras.__deprecated__safari10;
   b.scopedSlotTextContentFix = !!config.extras.scopedSlotTextContentFix;
   b.scriptDataOpts = config.extras.scriptDataOpts;
   // TODO: Remove code related to deprecated shadowDomShim field

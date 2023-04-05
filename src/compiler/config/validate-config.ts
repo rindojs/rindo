@@ -76,7 +76,8 @@ export const validateConfig = (
   // TODO: Remove code related to the dynamic import shim
   validatedConfig.extras.__deprecated__dynamicImportShim = !!validatedConfig.extras.__deprecated__dynamicImportShim;
   validatedConfig.extras.lifecycleDOMEvents = !!validatedConfig.extras.lifecycleDOMEvents;
-  validatedConfig.extras.safari10 = !!validatedConfig.extras.safari10;
+  // TODO: Remove code related to deprecated `safari10` field.
+  validatedConfig.extras.__deprecated__safari10 = !!validatedConfig.extras.__deprecated__safari10;
   validatedConfig.extras.scriptDataOpts = !!validatedConfig.extras.scriptDataOpts;
   // TODO: Remove code related to deprecated shadowDomShim field
   validatedConfig.extras.__deprecated__shadowDomShim = !!validatedConfig.extras.__deprecated__shadowDomShim;

@@ -15,7 +15,8 @@ export const optimizeJs = async (inputOpts: OptimizeJsInput) => {
     const prettyOutput = !!inputOpts.pretty;
     const config: Config = {
       extras: {
-        safari10: true,
+        // TODO: Remove code related to deprecated `safari10` field.
+        __deprecated__safari10: true,
       },
     };
     const sourceTarget = inputOpts.target === 'es5' ? 'es5' : 'latest';
