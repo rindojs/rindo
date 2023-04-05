@@ -1,3 +1,4 @@
+// TODO: Remove code implementing the CSS variable shim
 import { CustomStyle } from './custom-style';
 
 (function (win: any) {

@@ -87,7 +87,9 @@ const updateComponent = async (hostRef: d.HostRef, instance: any, isInitialLoad:
   } else {
     callRender(hostRef, instance, elm);
   }
+  // TODO: Remove code implementing the CSS variable shim
   if (BUILD.cssVarShim && plt.$cssShim$) {
+    // TODO: Remove code implementing the CSS variable shim
     plt.$cssShim$.updateHost(elm);
   }
   if (BUILD.isDev) {

@@ -10,8 +10,10 @@ export const patchBrowser = (): Promise<d.CustomElementsDefineOptions> => {
     consoleDevInfo('Running in development mode.');
   }
 
+  // TODO: Remove code implementing the CSS variable shim
   if (BUILD.cssVarShim) {
     // shim css vars
+    // TODO: Remove code implementing the CSS variable shim
     plt.$cssShim$ = (win as any).__cssshim;
   }
 

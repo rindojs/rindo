@@ -267,11 +267,15 @@ export interface ConfigExtras {
    */
   cloneNodeFix?: boolean;
 
+  // TODO: Remove code implementing the CSS variable shim
   /**
    * Include the CSS Custom Property polyfill/shim for legacy browsers. ESM builds will
    * not include the css vars shim. Defaults to `false`
+   *
+   * @deprecated Since Rindo v3.0.0. IE 11, Edge <= 18, and old Safari
+   * versions are no longer supported.
    */
-  cssVarsShim?: boolean;
+  __deprecated__cssVarsShim?: boolean;
 
   // TODO: Remove code related to the dynamic import shim
   /**
