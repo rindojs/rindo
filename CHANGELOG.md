@@ -1,3 +1,12 @@
+## 🍿 [2.22.2](https://github.com/familyjs/rindo/compare/v2.18.0...v2.22.2) (2023-04-05)
+
+
+### Bug Fixes
+
+* **cli:** typo in telemetry command ([ef8af77](https://github.com/familyjs/rindo/commit/ef8af77680d85ea99e922ce981268308d1dc91c3))
+
+
+
 # ☕️ [2.18.0](https://github.com/familyjs/rindo/compare/v2.17.4...v2.18.0) (2023-01-11)
 
 
