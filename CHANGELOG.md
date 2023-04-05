@@ -1,3 +1,26 @@
+# 🍌 [3.0.0-alpha.0](https://github.com/familyjs/rindo/compare/v2.22.2...v3.0.0-alpha.0) (2023-04-05)
+
+
+### Bug Fixes
+
+* **compiler:** destroy callback naming ([283bde7](https://github.com/familyjs/rindo/commit/283bde7235be927b7ac6847837ac7034c047f9d1))
+* **declarations:** correct event handler names for composition events ([42a8e7e](https://github.com/familyjs/rindo/commit/42a8e7e5421868ebc82168ff96b8d7155c0cecc2))
+* **runtime:** autocapitalize property is a string ([e921bf8](https://github.com/familyjs/rindo/commit/e921bf84e0cb1f7112f4d0be4df72dd4fc5bfa16))
+* **runtime:** onInput event type ([110faf1](https://github.com/familyjs/rindo/commit/110faf1c94eb04802a0fe050b3f361fd70d164ae))
+
+
+### Features
+
+* **cli:** update flag defaults for V3 ([40c09c2](https://github.com/familyjs/rindo/commit/40c09c27363e9739f6b1f4a90b719f57e503333f))
+* **compiler:** add `CustomElementExportBehavior` to custom elements … ([b59761d](https://github.com/familyjs/rindo/commit/b59761dd6aa9966e617ad6ddb6ce59a239143c8a))
+* **compiler:** add `defineCustomElements` method & signature typedef ([3f7b9bc](https://github.com/familyjs/rindo/commit/3f7b9bc868d1967015c8e44e9ef2d838e8dc6a53))
+* **compiler:** export custom types in compiled output ([42d5fa2](https://github.com/familyjs/rindo/commit/42d5fa2d05504c970ef66eab362257e65c8d6446))
+* **compiler:** moves `autoDefineCustomElements` to an export behavior ([1ea058b](https://github.com/familyjs/rindo/commit/1ea058b2920de688613d6be7ac333bd2a381794f))
+* **node:** drop node 12 support ([ba96132](https://github.com/familyjs/rindo/commit/ba96132cb986bc17cb62536e1871e370d751dc22))
+* **output_targets:** remove legacy angular target ([bc35358](https://github.com/familyjs/rindo/commit/bc35358b03232956ca41e4e909bbd24d6ee6f01b))
+
+
+
 ## 🍿 [2.22.2](https://github.com/familyjs/rindo/compare/v2.18.0...v2.22.2) (2023-04-05)
 
 
