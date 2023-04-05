@@ -1,3 +1,12 @@
+## 🐉 [2.22.3](https://github.com/familyjs/rindo/compare/v2.22.2...v2.22.3) (2023-04-05)
+
+
+### Bug Fixes
+
+* **compiler:** use file system polling events in watch mode ([fc6ef8b](https://github.com/familyjs/rindo/commit/fc6ef8bfabe600225be31e819e57760b9bd7f023))
+
+
+
 ## 🍿 [2.22.2](https://github.com/familyjs/rindo/compare/v2.18.0...v2.22.2) (2023-04-05)
 
 
