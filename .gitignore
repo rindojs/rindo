@@ -45,7 +45,6 @@ dist/
 test/**/www/*
 test/**/hydrate/*
 .rindo
-/dependencies.json
 coverage/**
 
 # TODO: Remove these once `strictNullChecks` is enabled

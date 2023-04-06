@@ -990,11 +990,20 @@ export interface CompilerSystem {
    */
   createWorkerController?(maxConcurrentWorkers: number): WorkerMainController;
   encodeToBase64(str: string): string;
+
+  // TODO: Remove this from the sys interface
+  /**
+   * @deprecated
+   */
   ensureDependencies?(opts: {
     rootDir: string;
     logger: Logger;
     dependencies: CompilerDependency[];
   }): Promise<{ rindoPath: string; diagnostics: Diagnostic[] }>;
+  // TODO: Remove this from the sys interface
+  /**
+   * @deprecated
+   */
   ensureResources?(opts: { rootDir: string; logger: Logger; dependencies: CompilerDependency[] }): Promise<void>;
   /**
    * process.exit()
