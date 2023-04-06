@@ -1,3 +1,12 @@
+## 🐸 [3.0.1](https://github.com/familyjs/rindo/compare/v3.0.0...v3.0.1) (2023-04-06)
+
+
+### Bug Fixes
+
+* **compiler:** ensure rollup outputs a single file for hydrateFactory ([28f8c60](https://github.com/familyjs/rindo/commit/28f8c602a11bc00dd2b0758177b68b5f98628057))
+
+
+
 # 📣 [3.0.0](https://github.com/familyjs/rindo/compare/v3.0.0-rc.1...v3.0.0) (2023-04-05)
 
 
