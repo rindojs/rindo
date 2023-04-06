@@ -184,11 +184,11 @@ function bundleExternal(opts: BuildOptions, outputDir: string, cachedDir: string
     };
 
     webpack(webpackConfig, async (err, stats) => {
-      const {minify} = await import('terser');
+      const { minify } = await import('terser');
       if (err && err.message) {
         rejectBundle(err);
       } else {
-        const info = stats.toJson({errors: true});
+        const info = stats.toJson({ errors: true });
         if (stats.hasErrors()) {
           const webpackError = info.errors.join('\n');
           rejectBundle(webpackError);
