@@ -1,5 +1,4 @@
 import color from 'ansi-colors';
-import execa from 'execa';
 import fs from 'fs-extra';
 import open from 'open';
 import semver from 'semver';
@@ -96,6 +95,7 @@ export function prettyVersionDiff(oldVersion: string, inc: any): string {
  * @param opts build options to be used to update the changelog
  */
 export async function updateChangeLog(opts: BuildOptions): Promise<void> {
+  const { execa } = await import('execa');
   await execa('npm', ['run', 'changelog'], { cwd: opts.rootDir });
 
   let changelog = await fs.readFile(opts.changelogPath, 'utf8');
