@@ -13,6 +13,7 @@ export async function runJest(config: d.ValidatedConfig, env: d.E2EProcessEnv) {
     const emulateConfigs = getEmulateConfigs(config.testing, config.flags);
     env.__RINDO_EMULATE_CONFIGS__ = JSON.stringify(emulateConfigs);
     env.__RINDO_ENV__ = JSON.stringify(config.env);
+    env.__RINDO_TRANSPILE_PATHS__ = config.transformAliasedImportPaths ? 'true' : 'false';
 
     if (config.flags.ci || config.flags.e2e) {
       env.__RINDO_DEFAULT_TIMEOUT__ = '30000';

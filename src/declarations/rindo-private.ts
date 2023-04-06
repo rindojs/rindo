@@ -2293,6 +2293,11 @@ export interface E2EProcessEnv {
   __RINDO_PUPPETEER_MODULE__?: string;
   __RINDO_PUPPETEER_VERSION__?: number;
   __RINDO_DEFAULT_TIMEOUT__?: string;
+
+  /**
+   * Property for injecting transformAliasedImportPaths into the Jest context
+   */
+  __RINDO_TRANSPILE_PATHS__?: 'true' | 'false';
 }
 
 export interface AnyHTMLElement extends HTMLElement {

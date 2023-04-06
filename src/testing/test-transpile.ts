@@ -15,6 +15,7 @@ export function transpile(input: string, opts: TranspileOptions = {}): Transpile
     style: null,
     styleImportData: 'queryparams',
     target: 'es2015', // default to es2015
+    transformAliasedImportPaths: parseRindoTranspilePaths(process.env.__RINDO_TRANSPILE_PATHS__),
   };
 
   try {
@@ -26,4 +27,14 @@ export function transpile(input: string, opts: TranspileOptions = {}): Transpile
   } catch (e) {}
 
   return transpileSync(input, opts);
+}
+
+/**
+ * Turn a value which we assert can be 'true' or 'false' to a boolean.
+ *
+ * @param rindoTranspilePaths a value to 'parse'
+ * @returns a boolean
+ */
+function parseRindoTranspilePaths(rindoTranspilePaths: string): boolean {
+  return rindoTranspilePaths === 'true' ? true : false;
 }
