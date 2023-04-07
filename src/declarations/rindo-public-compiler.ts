@@ -302,8 +302,18 @@ export interface ConfigExtras {
    * loading components when using a bundler such as Wite or Parcel. Setting this flag to `true` will change how Rindo
    * lazily loads components in a way that works with additional bundlers. Setting this flag to `true` will increase
    * the size of the compiled output. Defaults to `false`.
+   * @deprecated This flag has been deprecated in favor of `enableImportInjection`, which provides the same
+   * functionality. `experimentalImportInjection` will be removed in a future major version of Rindo.
    */
   experimentalImportInjection?: boolean;
+
+  /**
+   * Projects that use a Rindo library built using the `dist` output target may have trouble lazily
+   * loading components when using a bundler such as Vite or Parcel. Setting this flag to `true` will change how Rindo
+   * lazily loads components in a way that works with additional bundlers. Setting this flag to `true` will increase
+   * the size of the compiled output. Defaults to `false`.
+   */
+  enableImportInjection?: boolean;
 
   /**
    * Dispatches component lifecycle events. Mainly used for testing. Defaults to `false`.
