@@ -44,6 +44,13 @@ a pull request is merged.
 This workflow initiates a developer build of Rindo from the `main` branch.
 It is intended to be manually invoked by a member of the Rindo team.
 
+### Nightly Release (`release-nightly.yml`)
+
+This workflow initiates a nightly build of Rindo from the `main` branch.
+A nightly build is similar to a 'Dev Release', except that:
+- it is run on a set cadence (it is not expectedthat a developer to manually invoke it)
+- it is published to the npm registry under the 'nightly' tag
+
 #### Concurrency
 
 When a `git push` is made to a branch, Rindo's CI is designed to stop existing job(s) associated with the workflow + 
