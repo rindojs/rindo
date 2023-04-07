@@ -1,3 +1,19 @@
+# 💥 [3.1.0](https://github.com/familyjs/rindo/compare/v3.0.1...v3.1.0) (2023-04-07)
+
+
+### Bug Fixes
+
+* **browser:** polyfill assert, process ([e484c23](https://github.com/familyjs/rindo/commit/e484c236743170eabc3de5361b351ea514ce76a1))
+* **runtime:** prevent null data-opts access ([3cb5697](https://github.com/familyjs/rindo/commit/3cb56978e7fc58d9ed8c839d69df4a8b6e89458d))
+
+
+### Features
+
+* **compiler:** transform module aliases in emitted js, typedefs ([e36e5f7](https://github.com/familyjs/rindo/commit/e36e5f7811153b0a505a148e2cc0f0393c25dbb6))
+* **testing:** add support for transforming path aliases in spec tests ([a98e891](https://github.com/familyjs/rindo/commit/a98e891aa0027bdf1919a531e9c4ec39c75ed3a1))
+
+
+
 ## 🐸 [3.0.1](https://github.com/familyjs/rindo/compare/v3.0.0...v3.0.1) (2023-04-06)
 
 
