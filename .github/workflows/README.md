@@ -39,6 +39,11 @@ This workflow is responsible for building Rindo and validating the resultant art
 This workflow is responsible for validating that the code adheres to the Rindo team's formatting configuration before
 a pull request is merged.
 
+### Dev Release (`release-dev.yml`)
+
+This workflow initiates a developer build of Rindo from the `main` branch.
+It is intended to be manually invoked by a member of the Rindo team.
+
 #### Concurrency
 
 When a `git push` is made to a branch, Rindo's CI is designed to stop existing job(s) associated with the workflow + 
