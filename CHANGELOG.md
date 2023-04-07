@@ -1,3 +1,20 @@
+# 🏙 [3.2.0](https://github.com/familyjs/rindo/compare/v3.1.0...v3.2.0) (2023-04-07)
+
+
+### Bug Fixes
+
+* **cli:** support Jest-specific CLI flag aliases ([79eb652](https://github.com/familyjs/rindo/commit/79eb6526fb53611f87517ac50cd3a2e64f9f2aa0))
+* **compiler:** use file system polling events in watch mode ([e724316](https://github.com/familyjs/rindo/commit/e72431613fec15621392f7e84762422dc5b5dbae))
+* **test:** support importing from ES modules in spec tests ([e965ff3](https://github.com/familyjs/rindo/commit/e965ff35d0f96e6095ba67ff71fb9a4bac00652f))
+* **typo:** fix info task output ([eab32c5](https://github.com/familyjs/rindo/commit/eab32c509db6d717a082ba76cb1818b86efb602d))
+
+
+### Features
+
+* **config:** add `enableImportInjection` flag ([9619b0f](https://github.com/familyjs/rindo/commit/9619b0f927003ffbb46f081bcb06c92dcecda626))
+
+
+
 # 💥 [3.1.0](https://github.com/familyjs/rindo/compare/v3.0.1...v3.1.0) (2023-04-07)
 
 
