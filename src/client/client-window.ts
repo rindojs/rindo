@@ -19,7 +19,10 @@ export const plt: d.PlatformRuntime = {
   ce: (eventName, opts) => new CustomEvent(eventName, opts),
 };
 
-export const supportsShadow = BUILD.shadowDomShim && BUILD.shadowDom ? /*@__PURE__*/ (() => (doc.head.attachShadow + '').indexOf('[native') > -1)() : true;
+export const supportsShadow =
+  BUILD.shadowDomShim && BUILD.shadowDom
+    ? /*@__PURE__*/ (() => (doc.head.attachShadow + '').indexOf('[native') > -1)()
+    : true;
 
 export const supportsListenerOptions = /*@__PURE__*/ (() => {
   let supportsListenerOptions = false;
@@ -43,7 +46,7 @@ export const supportsConstructibleStylesheets = BUILD.constructableCSS
   ? /*@__PURE__*/ (() => {
       try {
         new CSSStyleSheet();
-        return typeof (new CSSStyleSheet()).replace === 'function';
+        return typeof new CSSStyleSheet().replace === 'function';
       } catch (e) {}
       return false;
     })()

@@ -24,13 +24,7 @@ import type {
   LoggerLineUpdater,
 } from './rindo-public-compiler';
 
-import type {
-  ComponentInterface,
-  ListenOptions,
-  ListenTargetOptions,
-  VNode,
-  VNodeData,
-} from './rindo-public-runtime';
+import type { ComponentInterface, ListenOptions, ListenTargetOptions, VNode, VNodeData } from './rindo-public-runtime';
 
 export interface PrintLine {
   lineIndex: number;
@@ -2213,7 +2207,7 @@ export interface JestEnvironmentGlobal {
     fullName: string;
     testPath: string;
   };
-  env: {[prop: string]: string};
+  env: { [prop: string]: string };
   screenshotDescriptions: Set<string>;
 }
 

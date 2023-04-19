@@ -9,7 +9,9 @@ export class MockCustomElementRegistry implements CustomElementRegistry {
 
   define(tagName: string, cstr: any, options?: any) {
     if (tagName.toLowerCase() !== tagName) {
-      throw new Error(`Failed to execute 'define' on 'CustomElementRegistry': "${tagName}" is not a valid custom element name`);
+      throw new Error(
+        `Failed to execute 'define' on 'CustomElementRegistry': "${tagName}" is not a valid custom element name`,
+      );
     }
 
     if (this.__registry == null) {
@@ -214,7 +216,10 @@ export function attributeChanged(node: MockNode, attrName: string, oldValue: str
   attrName = attrName.toLowerCase();
 
   const observedAttributes = (node as any).constructor.observedAttributes as string[];
-  if (Array.isArray(observedAttributes) === true && observedAttributes.some(obs => obs.toLowerCase() === attrName) === true) {
+  if (
+    Array.isArray(observedAttributes) === true &&
+    observedAttributes.some(obs => obs.toLowerCase() === attrName) === true
+  ) {
     try {
       (node as any).attributeChangedCallback(attrName, oldValue, newValue);
     } catch (e) {

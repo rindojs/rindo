@@ -14,9 +14,11 @@ export const IS_WINDOWS_ENV = OS_PLATFORM === 'win32' || OS_PLATFORM === 'window
 
 export const IS_CASE_SENSITIVE_FILE_NAMES = !IS_WINDOWS_ENV;
 
-export const IS_BROWSER_ENV = typeof location !== 'undefined' && typeof navigator !== 'undefined' && typeof XMLHttpRequest !== 'undefined';
+export const IS_BROWSER_ENV =
+  typeof location !== 'undefined' && typeof navigator !== 'undefined' && typeof XMLHttpRequest !== 'undefined';
 
-export const IS_WEB_WORKER_ENV = IS_BROWSER_ENV && typeof self !== 'undefined' && typeof (self as any).importScripts === 'function';
+export const IS_WEB_WORKER_ENV =
+  IS_BROWSER_ENV && typeof self !== 'undefined' && typeof (self as any).importScripts === 'function';
 
 export const HAS_WEB_WORKER = IS_BROWSER_ENV && typeof Worker === 'function';
 

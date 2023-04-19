@@ -93,7 +93,7 @@ export const consoleDevInfo = (..._: any[]) => {
   /* noop for hydrate */
 };
 
-export const setErrorHandler = (handler: d.ErrorHandler) => customError = handler;
+export const setErrorHandler = (handler: d.ErrorHandler) => (customError = handler);
 
 /*hydrate context start*/ export const Context = {}; /*hydrate context end*/
 

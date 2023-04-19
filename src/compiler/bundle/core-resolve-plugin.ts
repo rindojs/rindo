@@ -15,7 +15,12 @@ import {
 } from './entry-alias-ids';
 import type { Plugin } from 'rollup';
 
-export const coreResolvePlugin = (config: d.Config, compilerCtx: d.CompilerCtx, platform: 'client' | 'hydrate' | 'worker', externalRuntime: boolean): Plugin => {
+export const coreResolvePlugin = (
+  config: d.Config,
+  compilerCtx: d.CompilerCtx,
+  platform: 'client' | 'hydrate' | 'worker',
+  externalRuntime: boolean,
+): Plugin => {
   const compilerExe = config.sys.getCompilerExecutingPath();
   const internalClient = getRindoInternalModule(config, compilerExe, 'client/index.js');
   const internalClientPatchBrowser = getRindoInternalModule(config, compilerExe, 'client/patch-browser.js');
@@ -136,7 +141,13 @@ export const Build = {
 
 export const getRindoInternalModule = (config: d.Config, compilerExe: string, internalModule: string) => {
   if (isRemoteUrl(compilerExe)) {
-    return normalizePath(config.sys.getLocalModulePath({ rootDir: config.rootDir, moduleId: '@rindo/core', path: 'internal/' + internalModule }));
+    return normalizePath(
+      config.sys.getLocalModulePath({
+        rootDir: config.rootDir,
+        moduleId: '@rindo/core',
+        path: 'internal/' + internalModule,
+      }),
+    );
   }
 
   const compilerExeDir = dirname(compilerExe);

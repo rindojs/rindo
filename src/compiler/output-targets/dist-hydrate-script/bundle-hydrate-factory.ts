@@ -8,7 +8,13 @@ import { removeCollectionImports } from '../../transformers/remove-collection-im
 import { RINDO_INTERNAL_HYDRATE_ID } from '../../bundle/entry-alias-ids';
 import { updateRindoCoreImports } from '../../transformers/update-rindo-core-import';
 
-export const bundleHydrateFactory = async (config: d.Config, compilerCtx: d.CompilerCtx, buildCtx: d.BuildCtx, _build: d.BuildConditionals, appFactoryEntryCode: string) => {
+export const bundleHydrateFactory = async (
+  config: d.Config,
+  compilerCtx: d.CompilerCtx,
+  buildCtx: d.BuildCtx,
+  _build: d.BuildConditionals,
+  appFactoryEntryCode: string,
+) => {
   try {
     const bundleOpts: BundleOptions = {
       id: 'hydrate',
@@ -45,5 +51,9 @@ const getHydrateCustomTransformer = (config: d.Config, compilerCtx: d.CompilerCt
     styleImportData: 'queryparams',
   };
 
-  return [updateRindoCoreImports(transformOpts.coreImportPath), hydrateComponentTransform(compilerCtx, transformOpts), removeCollectionImports(compilerCtx)];
+  return [
+    updateRindoCoreImports(transformOpts.coreImportPath),
+    hydrateComponentTransform(compilerCtx, transformOpts),
+    removeCollectionImports(compilerCtx),
+  ];
 };

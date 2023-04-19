@@ -90,7 +90,11 @@ export function normalizeValue(value: string) {
   };
 }
 
-export function getActiveSelectors(hostEl: HTMLElement, hostScopeMap: WeakMap<HTMLElement, CSSScope>, globalScopes: CSSScope[]): CSSSelector[] {
+export function getActiveSelectors(
+  hostEl: HTMLElement,
+  hostScopeMap: WeakMap<HTMLElement, CSSScope>,
+  globalScopes: CSSScope[],
+): CSSSelector[] {
   // computes the css scopes that might affect this particular element
   // avoiding using spread arrays to avoid ts helper fns when in es5
   const scopes: CSSScope[] = [];

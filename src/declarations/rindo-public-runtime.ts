@@ -181,7 +181,7 @@ export declare const Build: UserBuildConditionals;
 /**
  * The `Env` object provides access to the "env" object declared in the project's `rindo.config.ts`.
  */
-export declare const Env: {[prop: string]: string | undefined};
+export declare const Env: { [prop: string]: string | undefined };
 
 /**
  * The `@Component()` decorator is used to provide metadata about the component class.

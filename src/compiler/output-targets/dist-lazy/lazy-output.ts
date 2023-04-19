@@ -88,7 +88,11 @@ const getLazyCustomTransformer = (config: d.Config, compilerCtx: d.CompilerCtx) 
     style: 'static',
     styleImportData: 'queryparams',
   };
-  return [updateRindoCoreImports(transformOpts.coreImportPath), lazyComponentTransform(compilerCtx, transformOpts), removeCollectionImports(compilerCtx)];
+  return [
+    updateRindoCoreImports(transformOpts.coreImportPath),
+    lazyComponentTransform(compilerCtx, transformOpts),
+    removeCollectionImports(compilerCtx),
+  ];
 };
 
 const getLazyEntry = (isBrowser: boolean) => {

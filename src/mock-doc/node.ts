@@ -494,7 +494,9 @@ export class MockElement extends MockNode {
     const parentElement = this.parentElement;
     if (
       parentElement != null &&
-      (parentElement.nodeType === NODE_TYPES.ELEMENT_NODE || parentElement.nodeType === NODE_TYPES.DOCUMENT_FRAGMENT_NODE || parentElement.nodeType === NODE_TYPES.DOCUMENT_NODE)
+      (parentElement.nodeType === NODE_TYPES.ELEMENT_NODE ||
+        parentElement.nodeType === NODE_TYPES.DOCUMENT_FRAGMENT_NODE ||
+        parentElement.nodeType === NODE_TYPES.DOCUMENT_NODE)
     ) {
       const children = parentElement.children;
       const index = children.indexOf(this) + 1;
@@ -515,7 +517,9 @@ export class MockElement extends MockNode {
     const parentElement = this.parentElement;
     if (
       parentElement != null &&
-      (parentElement.nodeType === NODE_TYPES.ELEMENT_NODE || parentElement.nodeType === NODE_TYPES.DOCUMENT_FRAGMENT_NODE || parentElement.nodeType === NODE_TYPES.DOCUMENT_NODE)
+      (parentElement.nodeType === NODE_TYPES.ELEMENT_NODE ||
+        parentElement.nodeType === NODE_TYPES.DOCUMENT_FRAGMENT_NODE ||
+        parentElement.nodeType === NODE_TYPES.DOCUMENT_NODE)
     ) {
       const children = parentElement.children;
       const index = children.indexOf(this) - 1;

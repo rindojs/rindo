@@ -11,7 +11,12 @@ import MagicString from 'magic-string';
 import { rollup } from 'rollup';
 import { join } from 'path';
 
-export const generateHydrateApp = async (config: d.Config, compilerCtx: d.CompilerCtx, buildCtx: d.BuildCtx, outputTargets: d.OutputTargetHydrate[]) => {
+export const generateHydrateApp = async (
+  config: d.Config,
+  compilerCtx: d.CompilerCtx,
+  buildCtx: d.BuildCtx,
+  outputTargets: d.OutputTargetHydrate[],
+) => {
   try {
     const packageDir = join(config.sys.getCompilerExecutingPath(), '..', '..');
     const input = join(packageDir, 'internal', 'hydrate', 'runner.js');

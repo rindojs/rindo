@@ -33,8 +33,12 @@ export const getRindoModuleUrl = (compilerExe: string, p: string) => {
 
 export const getRindoInternalDtsUrl = (compilerExe: string) => getRindoModuleUrl(compilerExe, 'internal/index.d.ts');
 
-export const getCommonDirUrl = (sys: d.CompilerSystem, pkgVersions: Map<string, string>, dirPath: string, fileName: string) =>
-  getNodeModuleFetchUrl(sys, pkgVersions, dirPath) + '/' + fileName;
+export const getCommonDirUrl = (
+  sys: d.CompilerSystem,
+  pkgVersions: Map<string, string>,
+  dirPath: string,
+  fileName: string,
+) => getNodeModuleFetchUrl(sys, pkgVersions, dirPath) + '/' + fileName;
 
 export const getNodeModuleFetchUrl = (sys: d.CompilerSystem, pkgVersions: Map<string, string>, filePath: string) => {
   // /node_modules/lodash/package.json

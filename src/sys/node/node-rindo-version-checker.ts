@@ -17,9 +17,7 @@ export async function checkVersion(logger: Logger, currentVersion: string): Prom
         if (semiver(currentVersion, latestVersion) < 0) {
           printUpdateMessage(logger, currentVersion, latestVersion);
         } else {
-          console.debug(
-            `${logger.cyan('@rindo/core')} version ${logger.green(currentVersion)} is the latest version`,
-          );
+          console.debug(`${logger.cyan('@rindo/core')} version ${logger.green(currentVersion)} is the latest version`);
         }
       };
     }
