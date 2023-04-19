@@ -1,0 +1,38 @@
+name: Build
+
+on: push
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        node: [12.10.0]
+        os: ['ubuntu-latest', 'windows-latest']
+
+    name: Node ${{ matrix.node }} on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Use Node.js ${{ matrix.node }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build -- --ci
+
+      - name: Pack build artifacts
+        if: matrix.os != 'windows-latest'
+        run: mv `npm pack` rindo-build.tgz
+
+      - name: Unload build artifacts
+        uses: actions/upload-artifact@master
+        if: matrix.os == 'ubuntu-latest' && matrix.node == '12.10.0'
+        with:
+          name: rindo-build
+          path: rindo-build.tgz
