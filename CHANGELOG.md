@@ -1,3 +1,20 @@
+## 🎉 [3.2.1](https://github.com/familyjs/rindo/compare/v3.2.0...v3.2.1) (2023-04-21)
+
+
+### Bug Fixes
+
+* **compiler:** sourcemap for dist-custom-elements generation ([7c04a83](https://github.com/familyjs/rindo/commit/7c04a836404ddd693e879d6e785d52bbcff4011f))
+* **compiler:** write exports for defineCustomElement typedefs ([776bf96](https://github.com/familyjs/rindo/commit/776bf96fe3b9fe8290c5ccb3dd4cbb09ea98a874))
+* **mock-doc:** add missing properties of object returned by matchMedia ([5a6d060](https://github.com/familyjs/rindo/commit/5a6d060537396ed0e564167aa91b3b76c6d92783))
+* **test:** fix infinite loops w/ react ([19da147](https://github.com/familyjs/rindo/commit/19da147f5b9656dcbeab07da8b356f3c14c9da7f))
+
+
+### Reverts
+
+* **lint:** turn on the 'import/no-duplicates' rule ([036d65a](https://github.com/familyjs/rindo/commit/036d65a73e8cdfde144c88081a252ca2bbcac008))
+
+
+
 # 🏙 [3.2.0](https://github.com/familyjs/rindo/compare/v3.1.0...v3.2.0) (2023-04-07)
 
 
