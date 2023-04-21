@@ -4,6 +4,7 @@ import {
   generatePreamble,
   getSourceMappingUrlForEndOfFile,
   hasError,
+  isOutputTargetDistCustomElements,
   isString,
   rollupToRindoSourceMap,
 } from '@utils';
@@ -20,7 +21,6 @@ import { proxyCustomElement } from '../../transformers/component-native/proxy-cu
 import { nativeComponentTransform } from '../../transformers/component-native/tranform-to-native-component';
 import { removeCollectionImports } from '../../transformers/remove-collection-imports';
 import { updateRindoCoreImports } from '../../transformers/update-rindo-core-import';
-import { isOutputTargetDistCustomElements } from '../output-utils';
 import { getCustomElementsBuildConditionals } from './custom-elements-build-conditionals';
 
 /**
