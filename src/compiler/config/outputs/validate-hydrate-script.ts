@@ -1,6 +1,6 @@
 import {
-  isBoolean,
   DIST_HYDRATE_SCRIPT,
+  isBoolean,
   isOutputTargetDist,
   isOutputTargetHydrate,
   isOutputTargetWww,
