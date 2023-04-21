@@ -18,6 +18,7 @@ import type {
   LoggerTimeSpan,
   OptimizeCssInput,
   OptimizeCssOutput,
+  OutputTarget,
   OutputTargetWww,
   PageReloadStrategy,
   PrerenderConfig,
@@ -251,6 +252,9 @@ export interface BuildCtx {
   indexBuildCount: number;
   indexDoc: Document;
   isRebuild: boolean;
+  /**
+   * A collection of Rindo's intermediate representation of components, tied to the current build
+   */
   moduleFiles: Module[];
   packageJson: PackageJsonData;
   pendingCopyTasks: Promise<CopyResults>[];
@@ -694,6 +698,9 @@ export interface CompilerCtx {
   hasSuccessfulBuild: boolean;
   isActivelyBuilding: boolean;
   lastBuildResults: CompilerBuildResults;
+  /**
+   * A mapping of a file path to a Rindo {@link Module}
+   */
   moduleMap: ModuleMap;
   nodeMap: NodeMap;
   resolvedCollections: Set<string>;
@@ -1392,6 +1399,12 @@ export interface MinifyJsResult {
   };
 }
 
+/**
+ * A mapping from a TypeScript or JavaScript source file path on disk, to a Rindo {@link Module}.
+ *
+ * It is advised that the key (path) be normalized before storing/retrieving the `Module` to avoid unnecessary lookup
+ * failures.
+ */
 export type ModuleMap = Map<string, Module>;
 
 /**
@@ -1399,12 +1412,21 @@ export type ModuleMap = Map<string, Module>;
  * various pieces of information like the classes declared within it, the path
  * to the original source file, HTML tag names defined in the file, and so on.
  *
- * Note that this gets serialized/parsed as JSON and therefore cannot be a
+ * Note that this gets serialized/parsed as JSON and therefore cannot contain a
  * `Map` or a `Set`.
  */
 export interface Module {
   cmps: ComponentCompilerMeta[];
+  /**
+   * A collection of modules that a component will need. The modules in this list must have import statements generated
+   * in order for the component to function.
+   */
   coreRuntimeApis: string[];
+  /**
+   * A collection of modules that a component will need for a specific output target. The modules in this list must
+   * have import statements generated in order for the component to function, but only for a specific output target.
+   */
+  outputTargetCoreRuntimeApis: Partial<Record<OutputTarget['type'], string[]>>;
   collectionName: string;
   dtsFilePath: string;
   excludeFromCollection: boolean;
