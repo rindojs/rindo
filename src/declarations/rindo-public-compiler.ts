@@ -195,7 +195,7 @@ export interface RindoConfig {
   invisiblePrehydration?: boolean;
 
   /**
-   * Sets the task queue used by Rindo's runtime. The task queue schedules DOM read and writes
+   * Sets the task queue used by rindo's runtime. The task queue schedules DOM read and writes
    * across the frames to efficiently render and reduce layout thrashing. By default,
    * `async` is used. It's recommended to also try each setting to decide which works
    * best for your use-case. In all cases, if your app has many CPU intensive tasks causing the
