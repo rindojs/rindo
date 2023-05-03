@@ -1,3 +1,12 @@
+## 2.18.1 (2023-05-03)
+
+
+### Features
+
+* transfer to FamilyJS ([ca680b2](https://github.com/familyjs/rindo/commit/ca680b245ccf651c8284b7f106530040734e878a))
+
+
+
 # ☕️ [2.18.0](https://github.com/familyjs/rindo/compare/v2.17.4...v2.18.0) (2023-01-11)
 
 
