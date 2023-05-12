@@ -45,7 +45,7 @@
     "tsc.watch": "tsc --incremental --watch"
   },
   "devDependencies": {
-    "@familyjs/prettier-config": "^2.0.0",
+    "@familyjs/prettier-config": "^3.0.0",
     "@rollup/plugin-commonjs": "15.1.0",
     "@rollup/plugin-json": "6.0.0",
     "@rollup/plugin-node-resolve": "9.0.0",
