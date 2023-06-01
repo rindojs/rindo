@@ -54,7 +54,11 @@ async function copyRindoInternalDts(opts: BuildOptions, outputInternalDir: strin
   // @rindo/core/internal/rindo-private.d.ts
   const privateDtsSrcPath = join(declarationsInputDir, 'rindo-private.d.ts');
   const privateDtsDestPath = join(outputInternalDir, 'rindo-private.d.ts');
-  const privateDts = cleanDts(await fs.readFile(privateDtsSrcPath, 'utf8'));
+  let privateDts = cleanDts(await fs.readFile(privateDtsSrcPath, 'utf8'));
+
+  // the private `.d.ts` imports the `Result` type from the `@utils` module, so
+  // we need to rewrite the path so it imports from the right relative path
+  privateDts = privateDts.replace('@utils', './utils');
   await fs.writeFile(privateDtsDestPath, privateDts);
 
   // @rindo/core/internal/rindo-public.compiler.d.ts
