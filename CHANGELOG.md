@@ -1,3 +1,14 @@
+## 🎭 [3.2.4](https://github.com/familyjs/rindo/compare/v3.2.3...v3.2.4) (2023-06-01)
+
+
+### Bug Fixes
+
+* **declarations:** add `onCancel` to dialog attributes ([49c2d46](https://github.com/familyjs/rindo/commit/49c2d46c08092c92512e011fd30c61d1aeaa096c))
+* **runtime:** initialize custom elements even when there is no styles ([2a19735](https://github.com/familyjs/rindo/commit/2a19735cf66fafdf35a879727c64c26e95fe72c6))
+* **testing:** jest component disconnected callback ([3cfec43](https://github.com/familyjs/rindo/commit/3cfec4370777a48bfc0cb1679aebc05a3483ff1d))
+
+
+
 ## 🐰 [3.2.3](https://github.com/familyjs/rindo/compare/v3.2.2...v3.2.3) (2023-04-30)
 
 
