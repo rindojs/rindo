@@ -11,6 +11,7 @@ import { BuildOptions, getOptions } from './utils/options';
  * Runner for creating a release of Rindo
  * @param rootDir the root directory of the Rindo repository
  * @param args stringified arguments used to influence the release steps that are taken
+ * @returns a void promise
  */
 export async function release(rootDir: string, args: ReadonlyArray<string>): Promise<void> {
   const buildDir = join(rootDir, 'build');
@@ -83,6 +84,7 @@ async function prepareRelease(opts: BuildOptions, args: ReadonlyArray<string>): 
  * Initiates publishing a Rindo release.
  * @param opts build options containing the metadata needed to publish a new version of Rindo
  * @param args stringified arguments used to influence the steps that are taken
+ * @returns a void promise
  */
 async function publishRelease(opts: BuildOptions, args: ReadonlyArray<string>): Promise<void> {
   const pkg = opts.packageJson;
