@@ -1,3 +1,23 @@
+# 🍝 [3.3.0](https://github.com/familyjs/rindo/compare/v3.2.4...v3.3.0) (2023-06-01)
+
+
+### Bug Fixes
+
+* **compiler:** components typedef path aliases ([fc90275](https://github.com/familyjs/rindo/commit/fc90275eda26faee552b5b740c508d25cf05e977))
+
+
+### Features
+
+* **testing:** support puppeteer's 'headless': 'new' ([1fade6d](https://github.com/familyjs/rindo/commit/1fade6dcf2b0543e2102d8237435d034126a411e))
+* **typescript:** upgrade to TypeScript 5 ([0edd70c](https://github.com/familyjs/rindo/commit/0edd70cc2a1894e9c93db9acc5c2ed1e6c226c8b))
+
+
+### Reverts
+
+* Revert "refactor(compiler): add a Result union type for polymorphic returns" ([1d45905](https://github.com/familyjs/rindo/commit/1d4590556f9b613861dc2689f2d7a12643fb4f81))
+
+
+
 ## 🎭 [3.2.4](https://github.com/familyjs/rindo/compare/v3.2.3...v3.2.4) (2023-06-01)
 
 
