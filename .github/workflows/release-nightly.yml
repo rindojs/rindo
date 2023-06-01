@@ -56,6 +56,8 @@ jobs:
     name: Publish Nightly Build
     needs: [get-nightly-version, build_core]
     runs-on: ubuntu-20.04
+    permissions:
+      id-token: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@24cb9080177205b6e8c946b17badbe402adc938f # v3.4.0
