@@ -63,8 +63,6 @@ export const BUILD: BuildConditionals = {
   cloneNodeFix: false,
   hydratedAttribute: false,
   hydratedClass: true,
-  // TODO: Remove code related to deprecated `safari10` field.
-  safari10: false,
   scriptDataOpts: false,
   scopedSlotTextContentFix: false,
   // TODO: Remove code related to deprecated shadowDomShim field

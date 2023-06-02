@@ -27,8 +27,6 @@ export const getHydrateBuildConditionals = (cmps: d.ComponentCompilerMeta[]) => 
   build.cssAnnotations = true;
   // TODO: Remove code related to deprecated shadowDomShim field
   build.shadowDomShim = true;
-  // TODO: Remove code related to deprecated `safari10` field.
-  build.safari10 = false;
   build.hydratedAttribute = false;
   build.hydratedClass = true;
   build.scriptDataOpts = false;

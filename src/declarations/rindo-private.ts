@@ -174,8 +174,6 @@ export interface BuildConditionals extends Partial<BuildFeatures> {
   hydratedAttribute?: boolean;
   hydratedClass?: boolean;
   initializeNextTick?: boolean;
-  // TODO: Remove code related to deprecated `safari10` field.
-  safari10?: boolean;
   scriptDataOpts?: boolean;
   // TODO: Remove code related to deprecated shadowDomShim field
   shadowDomShim?: boolean;
