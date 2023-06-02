@@ -1,3 +1,12 @@
+# 🐇 [4.0.0-beta.0](https://github.com/familyjs/rindo/compare/v3.3.0...v4.0.0-beta.0) (2023-06-02)
+
+
+### Bug Fixes
+
+* **e2e:** honor devtools and browserDevtools settings ([4597d1f](https://github.com/familyjs/rindo/commit/4597d1f04bd2bdc4039234105f95206bbedb745a))
+
+
+
 # 🍝 [3.3.0](https://github.com/familyjs/rindo/compare/v3.2.4...v3.3.0) (2023-06-01)
 
 
