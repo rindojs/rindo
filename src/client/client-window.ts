@@ -29,7 +29,7 @@ export const setPlatformHelpers = (helpers: {
 };
 
 export const supportsShadow =
-  // TODO: Remove code related to deprecated shadowDomShim field
+  // TODO: Remove code related to legacy shadowDomShim field
   BUILD.shadowDomShim && BUILD.shadowDom
     ? /*@__PURE__*/ (() => (doc.head.attachShadow + '').indexOf('[native') > -1)()
     : true;

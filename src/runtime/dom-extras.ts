@@ -125,7 +125,7 @@ export const patchChildSlotNodes = (elm: any, cmpMeta: d.ComponentRuntimeMeta) =
       return this[n];
     }
   }
-  // TODO: Remove code related to deprecated shadowDomShim field
+  // TODO: Remove code related to legacy shadowDomShim field
   if (cmpMeta.$flags$ & CMP_FLAGS.needsShadowDomShim) {
     const childNodesFn = elm.__lookupGetter__('childNodes');
 

@@ -65,7 +65,7 @@ export const BUILD: BuildConditionals = {
   hydratedClass: true,
   scriptDataOpts: false,
   scopedSlotTextContentFix: false,
-  // TODO: Remove code related to deprecated shadowDomShim field
+  // TODO: Remove code related to legacy shadowDomShim field
   shadowDomShim: false,
   slotChildNodesFix: false,
   invisiblePrehydration: true,

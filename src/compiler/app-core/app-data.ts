@@ -152,11 +152,9 @@ export const updateBuildConditionals = (config: Config, b: BuildConditionals) =>
   b.lifecycleDOMEvents = !!(b.isDebug || config._isTesting || config.extras.lifecycleDOMEvents);
   b.scopedSlotTextContentFix = !!config.extras.scopedSlotTextContentFix;
   b.scriptDataOpts = config.extras.scriptDataOpts;
-  // TODO: Remove code related to deprecated shadowDomShim field
-  b.shadowDomShim = config.extras.__deprecated__shadowDomShim;
   b.attachStyles = true;
   b.invisiblePrehydration = typeof config.invisiblePrehydration === 'undefined' ? true : config.invisiblePrehydration;
-  // TODO: Remove code related to deprecated shadowDomShim field
+  // TODO: Remove code related to legacy shadowDomShim field
   if (b.shadowDomShim) {
     b.slotRelocation = b.slot;
   }

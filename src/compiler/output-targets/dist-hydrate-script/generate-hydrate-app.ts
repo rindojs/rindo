@@ -133,7 +133,7 @@ const getHydrateBuildConditionals = (config: d.ValidatedConfig, cmps: d.Componen
   build.cloneNodeFix = false;
   build.appendChildSlotFix = false;
   build.slotChildNodesFix = false;
-  // TODO: Remove code related to deprecated shadowDomShim field
+  // TODO: Remove code related to legacy shadowDomShim field
   build.shadowDomShim = false;
 
   return build;

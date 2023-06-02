@@ -173,7 +173,7 @@ export interface BuildConditionals extends Partial<BuildFeatures> {
   hydratedClass?: boolean;
   initializeNextTick?: boolean;
   scriptDataOpts?: boolean;
-  // TODO: Remove code related to deprecated shadowDomShim field
+  // TODO: Remove code related to legacy shadowDomShim field
   shadowDomShim?: boolean;
   asyncQueue?: boolean;
   transformTagName?: boolean;
