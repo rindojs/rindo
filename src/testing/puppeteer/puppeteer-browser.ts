@@ -29,8 +29,6 @@ export async function startPuppeteerBrowser(config: ValidatedConfig) {
   env.__RINDO_BROWSER_WAIT_UNTIL = config.testing.browserWaitUntil;
 
   if (config.flags.devtools) {
-    config.testing.browserDevtools = true;
-    config.testing.browserHeadless = false;
     env.__RINDO_E2E_DEVTOOLS__ = 'true';
   }
 
