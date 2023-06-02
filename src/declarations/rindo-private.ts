@@ -164,8 +164,6 @@ export interface BuildConditionals extends Partial<BuildFeatures> {
   cssAnnotations?: boolean;
   lazyLoad?: boolean;
   profile?: boolean;
-  // TODO: Remove code implementing the CSS variable shim
-  cssVarShim?: boolean;
   constructableCSS?: boolean;
   appendChildSlotFix?: boolean;
   slotChildNodesFix?: boolean;
@@ -1103,19 +1101,6 @@ export interface HostRuleHeader {
   value?: string;
 }
 
-// TODO: Remove code implementing the CSS variable shim
-export interface CssVarShim {
-  i(): Promise<any>;
-  addLink(linkEl: HTMLLinkElement): Promise<any>;
-  addGlobalStyle(styleEl: HTMLStyleElement): void;
-
-  createHostStyle(hostEl: HTMLElement, templateName: string, cssText: string, isScoped: boolean): HTMLStyleElement;
-
-  removeHost(hostEl: HTMLElement): void;
-  updateHost(hostEl: HTMLElement): void;
-  updateGlobal(): void;
-}
-
 export interface DevClientWindow extends Window {
   ['s-dev-server']: boolean;
   ['s-initial-load']: boolean;
@@ -1734,8 +1719,6 @@ export interface HostRef {
 }
 
 export interface PlatformRuntime {
-  // TODO: Remove code implementing the CSS variable shim
-  $cssShim$?: CssVarShim;
   $flags$: number;
   $orgLocNodes$?: Map<string, RenderNode>;
   $resourcesUrl$: string;
