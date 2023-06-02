@@ -48,8 +48,6 @@ export function resetBuildConditionals(b: d.BuildConditionals) {
   b.invisiblePrehydration = true;
   b.appendChildSlotFix = false;
   b.cloneNodeFix = false;
-  // TODO: Remove code related to the dynamic import shim
-  b.dynamicImportShim = false;
   b.hotModuleReplacement = false;
   // TODO: Remove code related to deprecated `safari10` field.
   b.safari10 = false;

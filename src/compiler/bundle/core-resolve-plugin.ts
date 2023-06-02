@@ -130,14 +130,6 @@ export const Build = {
       }
       return null;
     },
-
-    resolveImportMeta(prop, { format }) {
-      // TODO: Remove code related to the dynamic import shim
-      if (config.extras.__deprecated__dynamicImportShim && prop === 'url' && format === 'es') {
-        return '""';
-      }
-      return null;
-    },
   };
 };
 

@@ -32,8 +32,6 @@ export const getHydrateBuildConditionals = (cmps: d.ComponentCompilerMeta[]) => 
   build.hydratedAttribute = false;
   build.hydratedClass = true;
   build.scriptDataOpts = false;
-  // TODO: Remove code related to the dynamic import shim
-  build.dynamicImportShim = false;
   build.attachStyles = true;
 
   return build;

@@ -79,8 +79,6 @@ export const BUILD: BuildConditionals = {
   constructableCSS: true,
   cmpShouldUpdate: true,
   devTools: false,
-  // TODO: Remove code related to the dynamic import shim
-  dynamicImportShim: false,
   shadowDelegatesFocus: true,
   initializeNextTick: false,
   asyncLoading: false,
