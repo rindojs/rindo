@@ -1,3 +1,13 @@
+## 🎇 [3.4.1](https://github.com/familyjs/rindo/compare/v3.4.0...v3.4.1) (2023-07-16)
+
+
+### Bug Fixes
+
+* **compiler:** fix issue with aliased paths getting cut off ([e171f1f](https://github.com/familyjs/rindo/commit/e171f1f1f3bdb2cd0b9d863f8b763a07db9f0b96))
+* **compiler:** reorder tsconfig#path transforms ([b4ac60d](https://github.com/familyjs/rindo/commit/b4ac60df6726e3ea750e415c2cbd6ac796db8023))
+
+
+
 # 📺 [3.4.0](https://github.com/familyjs/rindo/compare/v3.3.1...v3.4.0) (2023-07-16)
 
 
