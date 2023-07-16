@@ -1,6 +1,7 @@
 name: BrowserStack Tests
 
 on:
+  merge_group:
   pull_request_target:
     branches:
       - 'main'
@@ -9,6 +10,7 @@ on:
   push:
     branches:
       - 'main'
+      - 'rindo/v4-dev'
 
 env:
   BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSER_STACK_ACCESS_KEY }}
