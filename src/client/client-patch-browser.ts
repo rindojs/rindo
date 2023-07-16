@@ -29,10 +29,10 @@ export const patchBrowser = (): Promise<d.CustomElementsDefineOptions> => {
   // @ts-ignore
   const scriptElm = BUILD.scriptDataOpts
     ? Array.from(doc.querySelectorAll('script')).find(
-      (s) =>
-        new RegExp(`\/${NAMESPACE}(\\.esm)?\\.js($|\\?|#)`).test(s.src) ||
-        s.getAttribute('data-rindo-namespace') === NAMESPACE
-    )
+        (s) =>
+          new RegExp(`\/${NAMESPACE}(\\.esm)?\\.js($|\\?|#)`).test(s.src) ||
+          s.getAttribute('data-rindo-namespace') === NAMESPACE
+      )
     : null;
   const importMeta = import.meta.url;
   const opts = BUILD.scriptDataOpts ? ((scriptElm as any) || {})['data-opts'] || {} : {};
