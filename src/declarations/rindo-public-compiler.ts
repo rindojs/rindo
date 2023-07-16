@@ -42,6 +42,36 @@ export interface RindoConfig {
    * To disable this feature, set enableCache to false.
    */
   enableCache?: boolean;
+  /**
+   * The directory where sub-directories will be created for caching when `enableCache` is set
+   * `true` or if using Rindo's Screenshot Connector.
+   *
+   * @default '.rindo'
+   *
+   * @example
+   *
+   * A Rindo config like the following:
+   * ```ts
+   * export const config = {
+   *  ...,
+   *  enableCache: true,
+   *  cacheDir: '.cache',
+   *  testing: {
+   *    screenshotConnector: 'connector.js'
+   *  }
+   * }
+   * ```
+   *
+   * Will result in the following file structure:
+   * ```tree
+   * rindo-project-root
+   * └── .cache
+   *     ├── .build <-- Where build related file caching is written
+   *     |
+   *     └── screenshot-cache.json <-- Where screenshot caching is written
+   * ```
+   */
+  cacheDir?: string;
 
   /**
    * Rindo is traditionally used to compile many components into an app,
@@ -239,10 +269,8 @@ export interface RindoConfig {
   entryComponentsHint?: string[];
   buildDist?: boolean;
   buildLogFilePath?: string;
-  cacheDir?: string;
   devInspector?: boolean;
   devServer?: RindoDevServerConfig;
-  enableCacheStats?: boolean;
   sys?: CompilerSystem;
   tsconfig?: string;
   validateTypes?: boolean;
