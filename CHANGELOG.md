@@ -1,3 +1,19 @@
+# 📺 [3.4.0](https://github.com/familyjs/rindo/compare/v3.3.1...v3.4.0) (2023-07-16)
+
+
+### Bug Fixes
+
+* **compiler:** handle static members with rindo decorators ([eda78b3](https://github.com/familyjs/rindo/commit/eda78b33b41c2cc4adbbb1bfb8e95ba2e78cbfb4))
+* **runtime:** add autocomplete to textarea ([b258daf](https://github.com/familyjs/rindo/commit/b258daf550df4b740571144d678d0a99968b37e1))
+* **runtime:** issue with update-component and patched Promise ([09357db](https://github.com/familyjs/rindo/commit/09357dbead4d1a656865d46863a24338301c1eb9))
+
+
+### Features
+
+* **compiler:** primary package output target validation ([45e5c6d](https://github.com/familyjs/rindo/commit/45e5c6dd7cd29534ab055550413f5ec7d08964bf))
+
+
+
 ## 🍈 [3.3.1](https://github.com/familyjs/rindo/compare/v3.3.0...v3.3.1) (2023-07-16)
 
 
