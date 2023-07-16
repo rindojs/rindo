@@ -1,3 +1,13 @@
+## 🍈 [3.3.1](https://github.com/familyjs/rindo/compare/v3.3.0...v3.3.1) (2023-07-16)
+
+
+### Bug Fixes
+
+* **compiler:** handle ts 5.0 static members ([56e34a7](https://github.com/familyjs/rindo/commit/56e34a74eb186fe7870110b9eb3e467bf32589ae))
+* **e2e:** honor devtools and browserDevtools settings ([4597d1f](https://github.com/familyjs/rindo/commit/4597d1f04bd2bdc4039234105f95206bbedb745a))
+
+
+
 # 🍝 [3.3.0](https://github.com/familyjs/rindo/compare/v3.2.4...v3.3.0) (2023-06-01)
 
 
