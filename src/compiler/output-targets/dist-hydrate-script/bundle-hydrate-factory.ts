@@ -1,4 +1,5 @@
 import { loadRollupDiagnostics } from '@utils';
+import * as ts from 'typescript';
 
 import type * as d from '../../../declarations';
 import type { BundleOptions } from '../../bundle/bundle-interface';
@@ -6,6 +7,7 @@ import { bundleOutput } from '../../bundle/bundle-output';
 import { RINDO_INTERNAL_HYDRATE_ID } from '../../bundle/entry-alias-ids';
 import { hydrateComponentTransform } from '../../transformers/component-hydrate/tranform-to-hydrate-component';
 import { removeCollectionImports } from '../../transformers/remove-collection-imports';
+import { rewriteAliasedSourceFileImportPaths } from '../../transformers/rewrite-aliased-paths';
 import { updateRindoCoreImports } from '../../transformers/update-rindo-core-import';
 import { getHydrateBuildConditionals } from './hydrate-build-conditionals';
 
@@ -21,7 +23,7 @@ export const bundleHydrateFactory = async (
       id: 'hydrate',
       platform: 'hydrate',
       conditionals: getHydrateBuildConditionals(buildCtx.components),
-      customTransformers: getHydrateCustomTransformer(config, compilerCtx),
+      customBeforeTransformers: getCustomBeforeTransformers(config, compilerCtx),
       inlineDynamicImports: true,
       inputs: {
         '@app-factory-entry': '@app-factory-entry',
@@ -43,7 +45,19 @@ export const bundleHydrateFactory = async (
   return undefined;
 };
 
-const getHydrateCustomTransformer = (config: d.ValidatedConfig, compilerCtx: d.CompilerCtx) => {
+/**
+ * Generate a collection of transformations that are to be applied as a part of the `before` step in the TypeScript
+ * compilation process.
+ #
+ * @param config the Rindo configuration associated with the current build
+ * @param compilerCtx the current compiler context
+ * @returns a collection of transformations that should be applied to the source code, intended for the `before` part
+ * of the pipeline
+ */
+const getCustomBeforeTransformers = (
+  config: d.ValidatedConfig,
+  compilerCtx: d.CompilerCtx
+): ts.TransformerFactory<ts.SourceFile>[] => {
   const transformOpts: d.TransformOptions = {
     coreImportPath: RINDO_INTERNAL_HYDRATE_ID,
     componentExport: null,
@@ -53,10 +67,15 @@ const getHydrateCustomTransformer = (config: d.ValidatedConfig, compilerCtx: d.C
     style: 'static',
     styleImportData: 'queryparams',
   };
+  const customBeforeTransformers = [updateRindoCoreImports(transformOpts.coreImportPath)];
 
-  return [
-    updateRindoCoreImports(transformOpts.coreImportPath),
+  if (config.transformAliasedImportPaths) {
+    customBeforeTransformers.push(rewriteAliasedSourceFileImportPaths);
+  }
+
+  customBeforeTransformers.push(
     hydrateComponentTransform(compilerCtx, transformOpts),
-    removeCollectionImports(compilerCtx),
-  ];
+    removeCollectionImports(compilerCtx)
+  );
+  return customBeforeTransformers;
 };
