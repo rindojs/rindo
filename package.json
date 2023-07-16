@@ -78,7 +78,7 @@
     "eslint": "^8.23.1",
     "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-jest": "^27.0.4",
-    "eslint-plugin-jsdoc": "^44.0.0",
+    "eslint-plugin-jsdoc": "^46.0.0",
     "eslint-plugin-simple-import-sort": "^10.0.0",
     "execa": "7.1.1",
     "exit": "^0.1.2",
@@ -110,7 +110,7 @@
     "rollup-plugin-sourcemaps": "^0.6.3",
     "semver": "^7.3.7",
     "sizzle": "^2.3.6",
-    "terser": "5.17.6",
+    "terser": "5.17.7",
     "typescript": "~5.0.4",
     "webpack": "^5.75.0",
     "ws": "8.13.0"
@@ -139,6 +139,6 @@
   "prettier": "@familyjs/prettier-config",
   "volta": {
     "node": "20.1.0",
-    "npm": "9.6.7"
+    "npm": "9.7.1"
   }
 }
