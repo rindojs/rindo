@@ -1,3 +1,13 @@
+## 🏑 [4.0.1](https://github.com/familyjs/rindo/compare/v4.0.0...v4.0.1) (2023-07-17)
+
+
+### Bug Fixes
+
+* **compiler:** address when a home module cannot be found ([60c7d34](https://github.com/familyjs/rindo/commit/60c7d3406fce2d436e266c402566e3bb4eb7577a))
+* **compiler:** normalize recommended  path for  validation ([2be9dce](https://github.com/familyjs/rindo/commit/2be9dce455101c2d3e638b50f4098fbb74b50c66))
+
+
+
 # 🐹 [4.0.0](https://github.com/familyjs/rindo/compare/v3.4.1...v4.0.0) (2023-07-17)
 
 
