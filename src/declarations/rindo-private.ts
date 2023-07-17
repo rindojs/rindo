@@ -164,22 +164,16 @@ export interface BuildConditionals extends Partial<BuildFeatures> {
   cssAnnotations?: boolean;
   lazyLoad?: boolean;
   profile?: boolean;
-  // TODO: Remove code implementing the CSS variable shim
-  cssVarShim?: boolean;
   constructableCSS?: boolean;
   appendChildSlotFix?: boolean;
   slotChildNodesFix?: boolean;
   scopedSlotTextContentFix?: boolean;
   cloneNodeFix?: boolean;
-  // TODO: Remove code related to the dynamic import shim
-  dynamicImportShim?: boolean;
   hydratedAttribute?: boolean;
   hydratedClass?: boolean;
   initializeNextTick?: boolean;
-  // TODO: Remove code related to deprecated `safari10` field.
-  safari10?: boolean;
   scriptDataOpts?: boolean;
-  // TODO: Remove code related to deprecated shadowDomShim field
+  // TODO: Remove code related to legacy shadowDomShim field
   shadowDomShim?: boolean;
   asyncQueue?: boolean;
   transformTagName?: boolean;
@@ -809,23 +803,10 @@ export interface ComponentCompilerMeta extends ComponentCompilerFeatures {
   styles: StyleCompiler[];
   tagName: string;
   internal: boolean;
-  legacyConnect: ComponentCompilerLegacyConnect[];
-  legacyContext: ComponentCompilerLegacyContext[];
-
   dependencies?: string[];
   dependents?: string[];
   directDependencies?: string[];
   directDependents?: string[];
-}
-
-export interface ComponentCompilerLegacyConnect {
-  name: string;
-  connect: string;
-}
-
-export interface ComponentCompilerLegacyContext {
-  name: string;
-  context: string;
 }
 
 export type Encapsulation = 'shadow' | 'scoped' | 'none';
@@ -862,8 +843,8 @@ export interface ComponentCompilerVirtualProperty {
 export type ComponentCompilerPropertyType = 'any' | 'string' | 'boolean' | 'number' | 'unknown';
 
 /**
- * Information about the type of a Rindo-implemented component property, in
- * particular a `@Prop()` or `@Event()`.
+ * Information about a type used in a Rindo component or exported
+ * from a Rindo project.
  */
 export interface ComponentCompilerPropertyComplexType {
   /**
@@ -909,6 +890,30 @@ export interface ComponentCompilerTypeReference {
    * The path to the type reference, if applicable (global types should not need a path associated with them)
    */
   path?: string;
+  /**
+   * An ID for this type which is unique within a Rindo project.
+   */
+  id: string;
+}
+
+/**
+ * Information about a type which is referenced by another type on a Rindo
+ * component, for instance a {@link ComponentCompilerPropertyComplexType} or a
+ * {@link ComponentCompilerEventComplexType}.
+ */
+export interface ComponentCompilerReferencedType {
+  /**
+   * The path to the module where the type is declared.
+   */
+  path: string;
+  /**
+   * The string of the original type annotation in the Rindo source code
+   */
+  declaration: string;
+  /**
+   * An extracted docstring
+   */
+  docstring: string;
 }
 
 export interface ComponentCompilerStaticEvent {
@@ -1106,19 +1111,6 @@ export interface HostRule {
 export interface HostRuleHeader {
   name?: string;
   value?: string;
-}
-
-// TODO: Remove code implementing the CSS variable shim
-export interface CssVarShim {
-  i(): Promise<any>;
-  addLink(linkEl: HTMLLinkElement): Promise<any>;
-  addGlobalStyle(styleEl: HTMLStyleElement): void;
-
-  createHostStyle(hostEl: HTMLElement, templateName: string, cssText: string, isScoped: boolean): HTMLStyleElement;
-
-  removeHost(hostEl: HTMLElement): void;
-  updateHost(hostEl: HTMLElement): void;
-  updateGlobal(): void;
 }
 
 export interface DevClientWindow extends Window {
@@ -1739,8 +1731,6 @@ export interface HostRef {
 }
 
 export interface PlatformRuntime {
-  // TODO: Remove code implementing the CSS variable shim
-  $cssShim$?: CssVarShim;
   $flags$: number;
   $orgLocNodes$?: Map<string, RenderNode>;
   $resourcesUrl$: string;
@@ -2300,7 +2290,6 @@ export interface EventInitDict {
 export interface JestEnvironmentGlobal {
   __NEW_TEST_PAGE__: () => Promise<any>;
   __CLOSE_OPEN_PAGES__: () => Promise<any>;
-  Context: any;
   loadTestWindow: (testWindow: any) => Promise<void>;
   h: any;
   resourcesUrl: string;

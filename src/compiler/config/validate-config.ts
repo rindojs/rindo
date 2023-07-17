@@ -1,8 +1,7 @@
+import { createNodeLogger, createNodeSys } from '@sys-api-node';
 import { buildError, isBoolean, isNumber, isString, sortBy } from '@utils';
 
 import { ConfigBundle, Diagnostic, LoadConfigInit, UnvalidatedConfig, ValidatedConfig } from '../../declarations';
-import { createLogger } from '../sys/logger/console-logger';
-import { createSystem } from '../sys/rindo-sys';
 import { setBooleanConfig } from './config-utils';
 import { validateOutputTargets } from './outputs';
 import { validateDevServer } from './validate-dev-server';
@@ -60,8 +59,8 @@ export const validateConfig = (
 
   if (CACHED_VALIDATED_CONFIG !== null && CACHED_VALIDATED_CONFIG === userConfig) {
     // We've previously done the work to validate a Rindo config. Since our
-    // overall validated pipeline is unfortunately not idempotent we do not
-    // want to simply validate again. leaving aside the performance
+    // overall validation pipeline is unfortunately not idempotent we do not
+    // want to simply validate again. Leaving aside the performance
     // implications of needlessly repeating the validation, we don't want to do
     // certain operations multiple times.
     //
@@ -75,7 +74,7 @@ export const validateConfig = (
 
   const config = Object.assign({}, userConfig);
 
-  const logger = bootstrapConfig.logger || config.logger || createLogger();
+  const logger = bootstrapConfig.logger || config.logger || createNodeLogger();
 
   const validatedConfig: ValidatedConfig = {
     devServer: {}, // assign `devServer` before spreading `config`, in the event 'devServer' is not a key on `config`
@@ -86,9 +85,11 @@ export const validateConfig = (
     logger,
     outputTargets: config.outputTargets ?? [],
     rollupConfig: validateRollupConfig(config),
-    sys: config.sys ?? bootstrapConfig.sys ?? createSystem({ logger }),
+    sys: config.sys ?? bootstrapConfig.sys ?? createNodeSys({ logger }),
     testing: config.testing ?? {},
-    transformAliasedImportPaths: userConfig.transformAliasedImportPaths ?? false,
+    transformAliasedImportPaths: isBoolean(userConfig.transformAliasedImportPaths)
+      ? userConfig.transformAliasedImportPaths
+      : true,
     validatePrimaryPackageOutputTarget: userConfig.validatePrimaryPackageOutputTarget ?? false,
     ...validatePaths(config),
   };
@@ -105,16 +106,8 @@ export const validateConfig = (
   validatedConfig.extras = validatedConfig.extras || {};
   validatedConfig.extras.appendChildSlotFix = !!validatedConfig.extras.appendChildSlotFix;
   validatedConfig.extras.cloneNodeFix = !!validatedConfig.extras.cloneNodeFix;
-  // TODO: Remove code implementing the CSS variable shim
-  validatedConfig.extras.__deprecated__cssVarsShim = !!validatedConfig.extras.__deprecated__cssVarsShim;
-  // TODO: Remove code related to the dynamic import shim
-  validatedConfig.extras.__deprecated__dynamicImportShim = !!validatedConfig.extras.__deprecated__dynamicImportShim;
   validatedConfig.extras.lifecycleDOMEvents = !!validatedConfig.extras.lifecycleDOMEvents;
-  // TODO: Remove code related to deprecated `safari10` field.
-  validatedConfig.extras.__deprecated__safari10 = !!validatedConfig.extras.__deprecated__safari10;
   validatedConfig.extras.scriptDataOpts = !!validatedConfig.extras.scriptDataOpts;
-  // TODO: Remove code related to deprecated shadowDomShim field
-  validatedConfig.extras.__deprecated__shadowDomShim = !!validatedConfig.extras.__deprecated__shadowDomShim;
   validatedConfig.extras.slotChildNodesFix = !!validatedConfig.extras.slotChildNodesFix;
   validatedConfig.extras.initializeNextTick = !!validatedConfig.extras.initializeNextTick;
   validatedConfig.extras.tagNameTransform = !!validatedConfig.extras.tagNameTransform;

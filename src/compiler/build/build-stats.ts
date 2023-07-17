@@ -12,7 +12,7 @@ export function generateBuildStats(
   config: d.Config,
   buildCtx: d.BuildCtx
 ): d.CompilerBuildStats | { diagnostics: d.Diagnostic[] } {
-  // TODO: Investigate making this return only a single type
+  // TODO(RINDO-461): Investigate making this return only a single type
   const buildResults = buildCtx.buildResults;
 
   let jsonData: d.CompilerBuildStats | { diagnostics: d.Diagnostic[] };
@@ -157,8 +157,6 @@ function getComponentsFileMap(config: d.Config, buildCtx: d.BuildCtx) {
       excludeFromCollection: component.excludeFromCollection,
       events: component.events,
       internal: component.internal,
-      legacyConnect: component.legacyConnect,
-      legacyContext: component.legacyContext,
       listeners: component.listeners,
       methods: component.methods,
       potentialCmpRefs: component.potentialCmpRefs,

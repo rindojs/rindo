@@ -11,7 +11,6 @@ import {
   RINDO_CORE_ID,
   RINDO_INTERNAL_CLIENT_ID,
   RINDO_INTERNAL_CLIENT_PATCH_BROWSER_ID,
-  RINDO_INTERNAL_CLIENT_PATCH_ESM_ID,
   RINDO_INTERNAL_HYDRATE_ID,
   RINDO_INTERNAL_ID,
 } from './entry-alias-ids';
@@ -25,7 +24,6 @@ export const coreResolvePlugin = (
   const compilerExe = config.sys.getCompilerExecutingPath();
   const internalClient = getRindoInternalModule(config, compilerExe, 'client/index.js');
   const internalClientPatchBrowser = getRindoInternalModule(config, compilerExe, 'client/patch-browser.js');
-  const internalClientPatchEsm = getRindoInternalModule(config, compilerExe, 'client/patch-esm.js');
   const internalHydrate = getRindoInternalModule(config, compilerExe, 'hydrate/index.js');
 
   return {
@@ -70,15 +68,6 @@ export const coreResolvePlugin = (
           };
         }
         return internalClientPatchBrowser;
-      }
-      if (id === RINDO_INTERNAL_CLIENT_PATCH_ESM_ID) {
-        if (externalRuntime) {
-          return {
-            id: RINDO_INTERNAL_CLIENT_PATCH_ESM_ID,
-            external: true,
-          };
-        }
-        return internalClientPatchEsm;
       }
       if (id === RINDO_INTERNAL_HYDRATE_ID) {
         return internalHydrate;
@@ -127,14 +116,6 @@ export const Build = {
 
           return code;
         }
-      }
-      return null;
-    },
-
-    resolveImportMeta(prop, { format }) {
-      // TODO: Remove code related to the dynamic import shim
-      if (config.extras.__deprecated__dynamicImportShim && prop === 'url' && format === 'es') {
-        return '""';
       }
       return null;
     },

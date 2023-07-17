@@ -55,7 +55,7 @@
   packageRules: [
     {
       matchPackageNames: ['@types/node'],
-      allowedVersions: '<21.0.0'
+      allowedVersions: '<21.0.0',
     },
     {
       // TODO: Increment this value as a part of updating TypeScript

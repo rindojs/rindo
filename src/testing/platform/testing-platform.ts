@@ -26,15 +26,8 @@ export const setPlatformHelpers = (helpers: {
   Object.assign(plt, helpers);
 };
 
-// TODO: Remove code implementing the CSS variable shim
-export const cssVarShim: d.CssVarShim = false as any;
 export const supportsListenerOptions = true;
 export const supportsConstructableStylesheets = false;
-/**
- * A mocked entity to represent Rindo's legacy Context API
- * @deprecated
- */
-export const Context: any = {};
 
 /**
  * Helper function to programmatically set shadow DOM support in testing scenarios.
@@ -64,7 +57,6 @@ export function resetPlatform(defaults: Partial<d.PlatformRuntime> = {}) {
   hostRefs.clear();
   styles.clear();
   plt.$flags$ = 0;
-  Object.keys(Context).forEach((key) => delete Context[key]);
   Object.assign(plt, defaults);
 
   if (plt.$orgLocNodes$ != null) {
@@ -106,17 +98,6 @@ export async function startAutoApplyChanges(): Promise<void> {
       }, 100);
     }
   });
-}
-
-/**
- * Helper function for registering context as a part of Rindo's legacy context API.
- * @param context an object-like value to assign to the {@link Context} entity
- * @deprecated
- */
-export function registerContext(context: any): void {
-  if (context) {
-    Object.assign(Context, context);
-  }
 }
 
 /**

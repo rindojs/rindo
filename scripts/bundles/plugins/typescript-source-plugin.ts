@@ -62,13 +62,13 @@ async function bundleTypeScriptSource(tsPath: string, opts: BuildOptions): Promi
 
   // remove the default ts.getDefaultLibFilePath because it uses some
   // node apis and we'll be replacing it with our own anyways
-  // TODO: remove in-browser compilation
+  // TODO(RINDO-816): remove in-browser compilation
   code = removeFromSource(code, `getDefaultLibFilePath: () => getDefaultLibFilePath,`);
 
   // remove the CPUProfiler since it uses node apis
-  // TODO: remove in-browser compilation
+  // TODO(RINDO-816): remove in-browser compilation
   code = removeFromSource(code, `enableCPUProfiler,`);
-  // TODO: remove in-browser compilation
+  // TODO(RINDO-816): remove in-browser compilation
   code = removeFromSource(code, `disableCPUProfiler,`);
 
   // As of 5.0, because typescript is now bundled with esbuild the structure of
@@ -139,13 +139,11 @@ async function bundleTypeScriptSource(tsPath: string, opts: BuildOptions): Promi
 
   const o: string[] = [];
   o.push(`// TypeScript ${opts.typescriptVersion}`);
-  o.push(`import { IS_NODE_ENV } from '@environment';`);
-  o.push(`process.browser = !IS_NODE_ENV;`);
   o.push(code);
   o.push(`export default ts;`);
   code = o.join('\n');
 
-  // TODO: investigate minification issue w/ typescript 5.0
+  // TODO(RINDO-839): investigate minification issue w/ typescript 5.0
   // const { minify } = await import('terser');
 
   // if (opts.isProd) {

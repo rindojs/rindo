@@ -149,18 +149,12 @@ export const updateBuildConditionals = (config: Config, b: BuildConditionals) =>
   b.appendChildSlotFix = config.extras.appendChildSlotFix;
   b.slotChildNodesFix = config.extras.slotChildNodesFix;
   b.cloneNodeFix = config.extras.cloneNodeFix;
-  // TODO: Remove code related to the dynamic import shim
-  b.dynamicImportShim = config.extras.__deprecated__dynamicImportShim;
   b.lifecycleDOMEvents = !!(b.isDebug || config._isTesting || config.extras.lifecycleDOMEvents);
-  // TODO: Remove code related to deprecated `safari10` field.
-  b.safari10 = config.extras.__deprecated__safari10;
   b.scopedSlotTextContentFix = !!config.extras.scopedSlotTextContentFix;
   b.scriptDataOpts = config.extras.scriptDataOpts;
-  // TODO: Remove code related to deprecated shadowDomShim field
-  b.shadowDomShim = config.extras.__deprecated__shadowDomShim;
   b.attachStyles = true;
   b.invisiblePrehydration = typeof config.invisiblePrehydration === 'undefined' ? true : config.invisiblePrehydration;
-  // TODO: Remove code related to deprecated shadowDomShim field
+  // TODO(RINDO-854): Remove code related to legacy shadowDomShim field
   if (b.shadowDomShim) {
     b.slotRelocation = b.slot;
   }

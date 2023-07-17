@@ -1,4 +1,3 @@
-import { rollupPluginUtils } from '@compiler-deps';
 import type {
   Config,
   TransformCssToEsmInput,
@@ -6,6 +5,7 @@ import type {
   TranspileOptions,
   TranspileResults,
 } from '@rindo/core/internal';
+import rollupPluginUtils from '@rollup/pluginutils';
 import { catchError, getInlineSourceMappingUrlLinker, isString } from '@utils';
 
 import { getTranspileConfig, getTranspileCssConfig, getTranspileResults } from './config/transpile-options';

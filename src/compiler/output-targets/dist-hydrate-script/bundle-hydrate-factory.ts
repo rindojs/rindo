@@ -37,7 +37,7 @@ export const bundleHydrateFactory = async (
     return rollupBuild;
   } catch (e: any) {
     if (!buildCtx.hasError) {
-      // TODO: Implement a type guard that balances using our own copy of Rollup types (which are
+      // TODO(RINDO-353): Implement a type guard that balances using our own copy of Rollup types (which are
       // breakable) and type safety (so that the error variable may be something other than `any`)
       loadRollupDiagnostics(config, compilerCtx, buildCtx, e);
     }

@@ -5,7 +5,6 @@ export const RINDO_APP_GLOBALS_ID = '@rindo/core/internal/app-globals';
 export const RINDO_HYDRATE_FACTORY_ID = '@rindo/core/hydrate-factory';
 export const RINDO_INTERNAL_CLIENT_ID = '@rindo/core/internal/client';
 export const RINDO_INTERNAL_CLIENT_PATCH_BROWSER_ID = '@rindo/core/internal/client/patch-browser';
-export const RINDO_INTERNAL_CLIENT_PATCH_ESM_ID = '@rindo/core/internal/client/patch-esm';
 export const RINDO_INTERNAL_HYDRATE_ID = '@rindo/core/internal/hydrate';
 export const RINDO_MOCK_DOC_ID = '@rindo/core/mock-doc';
 export const APP_DATA_CONDITIONAL = '?app-data=conditional';

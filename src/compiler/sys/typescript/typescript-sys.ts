@@ -3,12 +3,12 @@ import { basename, resolve } from 'path';
 import ts from 'typescript';
 
 import type * as d from '../../../declarations';
-import { getCurrentDirectory, IS_CASE_SENSITIVE_FILE_NAMES, IS_WEB_WORKER_ENV } from '../environment';
+import { IS_CASE_SENSITIVE_FILE_NAMES, IS_WEB_WORKER_ENV } from '../environment';
 import { fetchUrlSync } from '../fetch/fetch-module-sync';
 import { InMemoryFileSystem } from '../in-memory-fs';
 import { patchTypeScriptResolveModule } from './typescript-resolve-module';
 
-// TODO: fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
+// TODO(RINDO-728): fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
 export const patchTsSystemFileSystem = (
   config: d.Config,
   compilerSys: d.CompilerSystem,
@@ -56,7 +56,7 @@ export const patchTsSystemFileSystem = (
 
   tsSys.directoryExists = (p) => {
     // At present the typing for `inMemoryFs` in this function is not accurate
-    // TODO: fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
+    // TODO(RINDO-728): fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
     if (inMemoryFs) {
       const s = inMemoryFs.statSync(p);
       return s.isDirectory;
@@ -76,7 +76,7 @@ export const patchTsSystemFileSystem = (
     }
 
     // At present the typing for `inMemoryFs` in this function is not accurate
-    // TODO: fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
+    // TODO(RINDO-728): fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
     if (inMemoryFs) {
       const s = inMemoryFs.statSync(filePath);
       return !!(s && s.isFile);
@@ -94,7 +94,7 @@ export const patchTsSystemFileSystem = (
     const items = compilerSys.readDirSync(p);
     return items.filter((itemPath) => {
       // At present the typing for `inMemoryFs` in this function is not accurate
-      // TODO: fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
+      // TODO(RINDO-728): fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
       if (inMemoryFs) {
         const s = inMemoryFs.statSync(itemPath);
         return !!(s && s.exists && s.isDirectory);
@@ -107,7 +107,7 @@ export const patchTsSystemFileSystem = (
 
   tsSys.readDirectory = (path, extensions, exclude, include, depth) => {
     const cwd = compilerSys.getCurrentDirectory();
-    // TODO: Replace `matchFiles` with a function that is publicly exposed
+    // TODO(RINDO-344): Replace `matchFiles` with a function that is publicly exposed
     return (ts as any).matchFiles(
       path,
       extensions,
@@ -130,7 +130,7 @@ export const patchTsSystemFileSystem = (
     }
 
     // At present the typing for `inMemoryFs` in this function is not accurate
-    // TODO: fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
+    // TODO(RINDO-728): fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
     let content = inMemoryFs
       ? inMemoryFs.readFileSync(filePath, { useCache: isUrl })
       : compilerSys.readFileSync(filePath);
@@ -150,7 +150,7 @@ export const patchTsSystemFileSystem = (
   };
 
   // At present the typing for `inMemoryFs` in this function is not accurate
-  // TODO: fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
+  // TODO(RINDO-728): fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
   tsSys.writeFile = (p, data) => (inMemoryFs ? inMemoryFs.writeFile(p, data) : compilerSys.writeFile(p, data));
 
   return tsSys;
@@ -190,7 +190,7 @@ const patchTsSystemWatch = (compilerSystem: d.CompilerSystem, tsSys: ts.System) 
   };
 };
 
-// TODO: fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
+// TODO(RINDO-728): fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
 export const patchTypescript = (config: d.Config, inMemoryFs: InMemoryFileSystem) => {
   if (!(ts as any).__patched) {
     if (config.sys) {
@@ -214,7 +214,7 @@ const patchTypeScriptSysMinimum = () => {
       directoryExists: () => false,
       exit: noop,
       fileExists: () => false,
-      getCurrentDirectory,
+      getCurrentDirectory: process.cwd,
       getDirectories: () => [],
       getExecutingFilePath: () => './',
       readDirectory: () => [],

@@ -63,24 +63,18 @@ export const BUILD: BuildConditionals = {
   cloneNodeFix: false,
   hydratedAttribute: false,
   hydratedClass: true,
-  // TODO: Remove code related to deprecated `safari10` field.
-  safari10: false,
   scriptDataOpts: false,
   scopedSlotTextContentFix: false,
-  // TODO: Remove code related to deprecated shadowDomShim field
+  // TODO(RINDO-854): Remove code related to legacy shadowDomShim field
   shadowDomShim: false,
   slotChildNodesFix: false,
   invisiblePrehydration: true,
   propBoolean: true,
   propNumber: true,
   propString: true,
-  // TODO: Remove code implementing the CSS variable shim
-  cssVarShim: false,
   constructableCSS: true,
   cmpShouldUpdate: true,
   devTools: false,
-  // TODO: Remove code related to the dynamic import shim
-  dynamicImportShim: false,
   shadowDelegatesFocus: true,
   initializeNextTick: false,
   asyncLoading: false,

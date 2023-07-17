@@ -62,7 +62,7 @@ export const generateHydrateApp = async (
     await writeHydrateOutputs(config, compilerCtx, buildCtx, outputTargets, rollupOutput);
   } catch (e: any) {
     if (!buildCtx.hasError) {
-      // TODO: Implement a type guard that balances using our own copy of Rollup types (which are
+      // TODO(RINDO-353): Implement a type guard that balances using our own copy of Rollup types (which are
       // breakable) and type safety (so that the error variable may be something other than `any`)
       loadRollupDiagnostics(config, compilerCtx, buildCtx, e);
     }
@@ -133,9 +133,7 @@ const getHydrateBuildConditionals = (config: d.ValidatedConfig, cmps: d.Componen
   build.cloneNodeFix = false;
   build.appendChildSlotFix = false;
   build.slotChildNodesFix = false;
-  // TODO: Remove code related to deprecated `safari10` field.
-  build.safari10 = false;
-  // TODO: Remove code related to deprecated shadowDomShim field
+  // TODO(RINDO-854): Remove code related to legacy shadowDomShim field
   build.shadowDomShim = false;
 
   return build;

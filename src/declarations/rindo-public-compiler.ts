@@ -42,6 +42,36 @@ export interface RindoConfig {
    * To disable this feature, set enableCache to false.
    */
   enableCache?: boolean;
+  /**
+   * The directory where sub-directories will be created for caching when `enableCache` is set
+   * `true` or if using Rindo's Screenshot Connector.
+   *
+   * @default '.rindo'
+   *
+   * @example
+   *
+   * A Rindo config like the following:
+   * ```ts
+   * export const config = {
+   *  ...,
+   *  enableCache: true,
+   *  cacheDir: '.cache',
+   *  testing: {
+   *    screenshotConnector: 'connector.js'
+   *  }
+   * }
+   * ```
+   *
+   * Will result in the following file structure:
+   * ```tree
+   * rindo-project-root
+   * └── .cache
+   *     ├── .build <-- Where build related file caching is written
+   *     |
+   *     └── screenshot-cache.json <-- Where screenshot caching is written
+   * ```
+   */
+  cacheDir?: string;
 
   /**
    * Rindo is traditionally used to compile many components into an app,
@@ -109,7 +139,7 @@ export interface RindoConfig {
    * Sets whether or not Rindo should transform path aliases set in a project's
    * `tsconfig.json` from the assigned module aliases to resolved relative paths.
    *
-   * This behavior is opt-in and hence this flag defaults to `false`.
+   * This behavior defaults to `true`, but may be opted-out of by setting this flag to `false`.
    */
   transformAliasedImportPaths?: boolean;
   /**
@@ -244,10 +274,8 @@ export interface RindoConfig {
   entryComponentsHint?: string[];
   buildDist?: boolean;
   buildLogFilePath?: string;
-  cacheDir?: string;
   devInspector?: boolean;
   devServer?: RindoDevServerConfig;
-  enableCacheStats?: boolean;
   sys?: CompilerSystem;
   tsconfig?: string;
   validateTypes?: boolean;
@@ -283,25 +311,6 @@ export interface ConfigExtras {
    */
   cloneNodeFix?: boolean;
 
-  // TODO: Remove code implementing the CSS variable shim
-  /**
-   * Include the CSS Custom Property polyfill/shim for legacy browsers. ESM builds will
-   * not include the css vars shim. Defaults to `false`
-   *
-   * @deprecated Since Rindo v3.0.0. IE 11, Edge <= 18, and old Safari
-   * versions are no longer supported.
-   */
-  __deprecated__cssVarsShim?: boolean;
-
-  // TODO: Remove code related to the dynamic import shim
-  /**
-   * Dynamic `import()` shim. This is only needed for Edge 18 and below, and
-   * Firefox 67 and below. Defaults to `false`.
-   * @deprecated Since Rindo v3.0.0. IE 11, Edge <= 18, and old Safari
-   * versions are no longer supported.
-   */
-  __deprecated__dynamicImportShim?: boolean;
-
   /**
    * Experimental flag. Projects that use a Rindo library built using the `dist` output target may have trouble lazily
    * loading components when using a bundler such as Wite or Parcel. Setting this flag to `true` will change how Rindo
@@ -314,7 +323,7 @@ export interface ConfigExtras {
 
   /**
    * Projects that use a Rindo library built using the `dist` output target may have trouble lazily
-   * loading components when using a bundler such as Vite or Parcel. Setting this flag to `true` will change how Rindo
+   * loading components when using a bundler such as Wite or Parcel. Setting this flag to `true` will change how Rindo
    * lazily loads components in a way that works with additional bundlers. Setting this flag to `true` will increase
    * the size of the compiled output. Defaults to `false`.
    */
@@ -324,17 +333,6 @@ export interface ConfigExtras {
    * Dispatches component lifecycle events. Mainly used for testing. Defaults to `false`.
    */
   lifecycleDOMEvents?: boolean;
-
-  // TODO: Remove code related to deprecated `safari10` field.
-  /**
-   * Safari 10 supports ES modules with `<script type="module">`, however, it did not implement
-   * `<script nomodule>`. When set to `true`, the runtime will patch support for Safari 10
-   * due to its lack of `nomodule` support.
-   * Defaults to `false`.
-   *
-   * @deprecated Since Rindo v3.0.0, Safari 10 is no longer supported.
-   */
-  __deprecated__safari10?: boolean;
 
   /**
    * It is possible to assign data to the actual `<script>` element's `data-opts` property,
@@ -348,18 +346,6 @@ export interface ConfigExtras {
    * component that uses the shadow DOM. Defaults to `false`
    */
   scopedSlotTextContentFix?: boolean;
-
-  // TODO: Remove code related to deprecated shadowDomShim field
-  /**
-   * If enabled `true`, the runtime will check if the shadow dom shim is required. However,
-   * if it's determined that shadow dom is already natively supported by the browser then
-   * it does not request the shim. When set to `false` it will avoid all shadow dom tests.
-   * Defaults to `false`.
-   *
-   * @deprecated Since Rindo v3.0.0. IE 11, Edge <= 18, and old Safari versions
-   * are no longer supported.
-   */
-  __deprecated__shadowDomShim?: boolean;
 
   /**
    * When a component is first attached to the DOM, this setting will wait a single tick before
@@ -1954,7 +1940,7 @@ export interface OutputTargetDist extends OutputTargetValidationConfig {
    * a project's `tsconfig.json` to relative import paths in the compiled output's
    * `dist-collection` bundle if it is generated (i.e. `collectionDir` is set).
    *
-   * Paths will be left in aliased format if `false` or `undefined`.
+   * Paths will be left in aliased format if `false`.
    *
    * @example
    * // tsconfig.json
@@ -2107,6 +2093,19 @@ export interface OutputTargetDocsJson extends OutputTargetBase {
    */
   typesFile?: string | null;
   strict?: boolean;
+  /**
+   * An optional file path pointing to a public type library which should be
+   * included and documented in the same way as other types which are included
+   * in this output target.
+   *
+   * This could be useful if, for instance, there are some important interfaces
+   * used in a few places in a Rindo project which don't form part of the
+   * public API for any of the project's components. Such interfaces will not
+   * be included in the `docs-json` output by default, but if they're declared
+   * and exported from a 'supplemental' file designated with this property then
+   * they'll be included in the output, facilitating their documentation.
+   */
+  supplementalPublicTypes?: string;
 }
 
 export interface OutputTargetDocsCustom extends OutputTargetBase {

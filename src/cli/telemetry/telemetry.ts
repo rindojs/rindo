@@ -200,7 +200,7 @@ const CONFIG_PROPS_TO_ANONYMIZE: ReadonlyArray<ConfigStringKeys> = [
 
 // Props we delete entirely from the config for telemetry
 //
-// TODO: Investigate improving anonymization for tsCompilerOptions and devServer
+// TODO(RINDO-469): Investigate improving anonymization for tsCompilerOptions and devServer
 const CONFIG_PROPS_TO_DELETE: ReadonlyArray<keyof d.Config> = [
   'commonjs',
   'devServer',
@@ -258,7 +258,7 @@ export const anonymizeConfigForTelemetry = (config: d.ValidatedConfig): d.Config
     return anonymizedOT;
   });
 
-  // TODO: Investigate improving anonymization for tsCompilerOptions and devServer
+  // TODO(RINDO-469): Investigate improving anonymization for tsCompilerOptions and devServer
   for (const prop of CONFIG_PROPS_TO_DELETE) {
     delete anonymizedConfig[prop];
   }

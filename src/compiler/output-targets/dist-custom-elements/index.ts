@@ -205,7 +205,7 @@ export const addCustomElementInputs = (
 
     if (cmp.isPlain) {
       exp.push(`export { ${importName} as ${exportName} } from '${cmp.sourceFilePath}';`);
-      // TODO: Invalid syntax generation, note the unbalanced left curly brace
+      // TODO(RINDO-855): Invalid syntax generation, note the unbalanced left curly brace
       indexExports.push(`export { {${exportName} } from '${coreKey}';`);
     } else {
       // the `importName` may collide with the `exportName`, alias it just in case it does with `importAs`

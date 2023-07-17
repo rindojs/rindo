@@ -19,7 +19,7 @@ import {
 } from '../resolve/resolve-utils';
 import { patchTsSystemFileSystem } from './typescript-sys';
 
-// TODO: fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
+// TODO(RINDO-728): fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
 export const patchTypeScriptResolveModule = (config: d.Config, inMemoryFs: InMemoryFileSystem) => {
   let compilerExe: string;
   if (config.sys) {
@@ -117,7 +117,7 @@ export const patchedTsResolveModule = (
     // so in short the type for `inMemoryFs` here is not accurate, so we need
     // to add a runtime check here to avoid an error.
     //
-    // TODO: fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
+    // TODO(RINDO-728): fix typing of `inMemoryFs` parameter in `patchTypescript`, related functions
     const accessSync = inMemoryFs?.accessSync ?? config.sys.accessSync;
     if (isAbsolute(resolvedFileName) && !accessSync(resolvedFileName)) {
       return null;

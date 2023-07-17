@@ -7,7 +7,7 @@ import fs from 'fs';
 
 //// StrictNullChecks error checking ////
 /**
- * TODO: Remove this section once `strictNullChecks` is enabled
+ * TODO(RINDO-446): Remove this section once `strictNullChecks` is enabled
  */
 
 /**
@@ -116,7 +116,7 @@ const fileErrorCounts = countArrayEntries(prData.map((error) => error.value.path
 const errorCodeCounts = countArrayEntries(prData.map((error) => error.value.tsError.value.errorString));
 
 //// unused exports check ////
-// TODO: Remove or change up this report once we've eliminated unused exports
+// TODO(RINDO-454): Remove or change up this report once we've eliminated unused exports
 
 /**
  * ts-prune includes this string on lines in its output corresponding to items

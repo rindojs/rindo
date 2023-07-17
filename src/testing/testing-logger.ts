@@ -3,6 +3,10 @@ import type { Diagnostic, Logger, LoggerTimeSpan, LogLevel } from '@rindo/core/i
 export class TestingLogger implements Logger {
   private isEnabled = false;
 
+  enable() {
+    this.isEnabled = true;
+  }
+
   setLevel(_level: LogLevel) {}
   getLevel(): LogLevel {
     return 'info';

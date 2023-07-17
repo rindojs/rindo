@@ -133,10 +133,8 @@ export async function newSpecPage(opts: NewSpecPageOptions): Promise<SpecPage> {
     BUILD.hydrateClientSide = false;
   }
   BUILD.cloneNodeFix = false;
-  // TODO: Remove code related to deprecated shadowDomShim field
+  // TODO: Remove code related to legacy shadowDomShim field
   BUILD.shadowDomShim = false;
-  // TODO: Remove code related to deprecated `safari10` field.
-  BUILD.safari10 = false;
   BUILD.attachStyles = !!opts.attachStyles;
 
   if (typeof opts.url === 'string') {

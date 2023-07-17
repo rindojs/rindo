@@ -1,6 +1,6 @@
 import type * as d from '@rindo/core/internal';
 import { isOutputTargetDistLazy, isOutputTargetWww } from '@utils';
-import { join, relative } from 'path';
+import { join, relative, resolve } from 'path';
 
 import { InMemoryFileSystem } from '../compiler/sys/in-memory-fs';
 
@@ -118,12 +118,13 @@ function getAppUrl(config: d.ValidatedConfig, browserUrl: string, appFileName: s
  *
  * ```ts
  * describe("my-test-suite", () => {
- *   const setupConsoleMocks = setupConsoleMocker()
+ *   const { setupConsoleMocks, teardownConsoleMocks } = setupConsoleMocker()
  *
  *   it("should log a message", () => {
  *     const { logMock } = setupConsoleMocks();
  *     myFunctionWhichLogs(foo, bar);
  *     expect(logMock).toBeCalledWith('my log message');
+ *     teardownConsoleMocks();
  *   })
  * })
  * ```
@@ -135,10 +136,20 @@ export function setupConsoleMocker(): ConsoleMocker {
   const originalWarn = console.warn;
   const originalError = console.error;
 
-  afterAll(() => {
+  /**
+   * Function to tear down console mocks where you're done with them! Ideally
+   * this would be called right after the assertion you're looking to make in
+   * your test.
+   */
+  function teardownConsoleMocks() {
     console.log = originalLog;
     console.warn = originalWarn;
     console.error = originalError;
+  }
+
+  // this is insurance!
+  afterAll(() => {
+    teardownConsoleMocks();
   });
 
   function setupConsoleMocks() {
@@ -156,20 +167,21 @@ export function setupConsoleMocker(): ConsoleMocker {
       errorMock,
     };
   }
-  return setupConsoleMocks;
+  return { setupConsoleMocks, teardownConsoleMocks };
 }
 
 interface ConsoleMocker {
-  (): {
+  setupConsoleMocks: () => {
     logMock: jest.Mock<typeof console.log>;
     warnMock: jest.Mock<typeof console.warn>;
     errorMock: jest.Mock<typeof console.error>;
   };
+  teardownConsoleMocks: () => void;
 }
 
 /**
  * the callback that `withSilentWarn` expects to receive. Basically receives a mock
- * as its argument and returns a `Promise`, the value of which is returns by `withSilentWarn`
+ * as its argument and returns a `Promise`, the value of which is returned by `withSilentWarn`
  * as well.
  */
 type SilentWarnFunc<T> = (mock: jest.Mock<typeof console.warn>) => Promise<T>;
@@ -191,3 +203,31 @@ export async function withSilentWarn<T>(cb: SilentWarnFunc<T>): Promise<T> {
   console.warn = realWarn;
   return retVal;
 }
+
+/**
+ * This is a helper for using `mock-fs` in Jest.
+ *
+ * `mock-fs` replaces the node.js implementation of `fs` with a separate one
+ * which does filesystem operations against an in-memory filesystem instead of
+ * against the disk.
+ *
+ * This 'patch' consists of adding files to the in-memory filesystem from the
+ * disk (via `mock.load`) which are sometimes required by Jest between the
+ * `beforeEach` and `afterEach` calls in a test suite -- without adding these
+ * files to the in-memory filesystem the runtime require by Jest will fail.
+ *
+ * @param mock a `mock-fs` module, as imported in the particular test file
+ * where you want to mock the filesystem.
+ * @returns a filesystem manifest suitable for mocking out runtime
+ * dependencies of Jest
+ */
+export const getMockFSPatch = (mock: any) => ({
+  'node_modules/write-file-atomic': mock.load(resolve(process.cwd(), 'node_modules', 'write-file-atomic')),
+  'node_modules/imurmurhash': mock.load(resolve(process.cwd(), 'node_modules', 'imurmurhash')),
+  'node_modules/is-typedarray': mock.load(resolve(process.cwd(), 'node_modules', 'is-typedarray')),
+  'node_modules/typedarray-to-buffer': mock.load(resolve(process.cwd(), 'node_modules', 'typedarray-to-buffer')),
+  // we need to add this because sometimes after the fs mock has been applied,
+  // code called in a test will end up requiring one of the `@sys-node-api`
+  // functions (like `createNodeSys`, `createNodeLogger`)
+  [resolve(process.cwd(), 'sys')]: mock.load(resolve(process.cwd(), 'sys')),
+});

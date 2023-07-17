@@ -15,7 +15,6 @@ export function aliasPlugin(opts: BuildOptions): Plugin {
     ['@hydrate-factory', '@rindo/core/hydrate-factory'],
     ['@rindo/core/mock-doc', '@rindo/core/mock-doc'],
     ['@rindo/core/testing', '@rindo/core/testing'],
-    ['@sys-api-node', './index.js'],
     ['@dev-server-process', './server-process.js'],
   ]);
 
@@ -53,6 +52,9 @@ export function aliasPlugin(opts: BuildOptions): Plugin {
       }
       if (id === '@environment') {
         return join(opts.buildDir, 'compiler', 'sys', 'environment.js');
+      }
+      if (id === '@sys-api-node') {
+        return join(opts.buildDir, 'sys', 'node', 'index.js');
       }
       if (helperResolvers.has(id)) {
         return join(opts.bundleHelpersDir, `${id}.js`);
