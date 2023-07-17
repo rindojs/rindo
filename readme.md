@@ -9,10 +9,7 @@
 </h1>
 
 <p align="center">
-  A compiler for generating <a href="https://www.webcomponents.org/introduction" target="_blank" rel="noopener noref">Web Components</a>, built by the <a href="https://family-js.web.app/">Family team</a>.
-</p>
-<p align="center">
-  Rindo allows developers to use technologies like TypeScript and JSX to define components, then generate 100% standards-based Web Components that run on both <a href="https://rindojs.web.app/docs/browser-support" target="_blank" rel="noopener noref">modern browsers and legacy browsers</a>
+  A compiler for generating <a href="https://www.webcomponents.org/introduction" target="_blank" rel="noopener noref">Web Components</a> using technologies like TypeScript and JSX, built by the <a href="https://family-js.web.app/">Family team</a>.
 </p>
 
 <p align="center">
