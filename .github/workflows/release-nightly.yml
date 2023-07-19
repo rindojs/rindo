@@ -32,6 +32,9 @@ jobs:
           path: .
           filename: rindo-core-build.zip
 
+      - name: Grant execution permissions
+        run: chmod +x ./bin/rindo
+
       - name: Get Version
         id: get-nightly-version
         run: |
