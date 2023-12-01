@@ -1,6 +1,5 @@
 import type * as d from '../../declarations';
 
-export const ATTACH_SHADOW = '__rindo_attachShadow';
 export const CREATE_EVENT = '__rindo_createEvent';
 export const DEFINE_CUSTOM_ELEMENT = '__rindo_defineCustomElement';
 export const GET_ELEMENT = '__rindo_getElement';
@@ -12,7 +11,6 @@ export const REGISTER_HOST = '__rindo_registerHost';
 export const H = '__rindo_h';
 
 export const RUNTIME_APIS = {
-  attachShadow: `attachShadow as ${ATTACH_SHADOW}`,
   createEvent: `createEvent as ${CREATE_EVENT}`,
   defineCustomElement: `defineCustomElement as ${DEFINE_CUSTOM_ELEMENT}`,
   getElement: `getElement as ${GET_ELEMENT}`,
