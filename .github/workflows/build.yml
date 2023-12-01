@@ -30,4 +30,4 @@ jobs:
         with:
           name: rindo-core
           output: rindo-core-build.zip
-          paths: build cli compiler dev-server internal mock-doc scripts/build screenshot sys testing
+          paths: cli compiler dev-server internal mock-doc scripts/build screenshot sys testing
