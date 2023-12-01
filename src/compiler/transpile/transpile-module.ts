@@ -25,7 +25,7 @@ import { updateRindoCoreImports } from '../transformers/update-rindo-core-import
 export const transpileModule = (
   config: d.ValidatedConfig,
   input: string,
-  transformOpts: d.TransformOptions
+  transformOpts: d.TransformOptions,
 ): d.TranspileModuleResults => {
   if (!config.logger) {
     config = {

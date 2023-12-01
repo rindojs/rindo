@@ -1464,7 +1464,7 @@ export interface Plugin {
   transform?: (
     sourceText: string,
     id: string,
-    context: PluginCtx
+    context: PluginCtx,
   ) => Promise<PluginTransformResults> | PluginTransformResults | string;
 }
 
@@ -1604,7 +1604,7 @@ export type LazyBundlesRuntimeData = LazyBundleRuntimeData[];
 export type LazyBundleRuntimeData = [
   /** bundleIds */
   string,
-  ComponentRuntimeMetaCompact[]
+  ComponentRuntimeMetaCompact[],
 ];
 
 export type ComponentRuntimeMetaCompact = [
@@ -1618,7 +1618,7 @@ export type ComponentRuntimeMetaCompact = [
   { [memberName: string]: ComponentRuntimeMember }?,
 
   /** listeners */
-  ComponentRuntimeHostListener[]?
+  ComponentRuntimeHostListener[]?,
 ];
 
 /**
@@ -1747,13 +1747,13 @@ export interface PlatformRuntime {
     el: EventTarget,
     eventName: string,
     listener: EventListenerOrEventListenerObject,
-    options: boolean | AddEventListenerOptions
+    options: boolean | AddEventListenerOptions,
   ) => void;
   rel: (
     el: EventTarget,
     eventName: string,
     listener: EventListenerOrEventListenerObject,
-    options: boolean | AddEventListenerOptions
+    options: boolean | AddEventListenerOptions,
   ) => void;
   ce: (eventName: string, opts?: any) => CustomEvent;
 }
@@ -1777,7 +1777,7 @@ export interface ScreenshotConnector {
   getScreenshotCache(): Promise<ScreenshotCache>;
   updateScreenshotCache(
     screenshotCache: ScreenshotCache,
-    buildResults: ScreenshotBuildResults
+    buildResults: ScreenshotBuildResults,
   ): Promise<ScreenshotCache>;
   generateJsonpDataUris(build: ScreenshotBuild): Promise<void>;
   sortScreenshots(screenshots: Screenshot[]): Screenshot[];
@@ -2537,7 +2537,7 @@ export interface CompilerWorkerContext {
     input: string,
     minifyOpts: any,
     transpile: boolean,
-    inlineHelpers: boolean
+    inlineHelpers: boolean,
   ): Promise<{ output: string; diagnostics: Diagnostic[]; sourceMap?: SourceMap }>;
   prerenderWorker(prerenderRequest: PrerenderUrlRequest): Promise<PrerenderUrlResults>;
   transformCssToEsm(input: TransformCssToEsmInput): Promise<TransformCssToEsmOutput>;

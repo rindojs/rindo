@@ -19,7 +19,7 @@ export const coreResolvePlugin = (
   config: d.Config,
   compilerCtx: d.CompilerCtx,
   platform: 'client' | 'hydrate' | 'worker',
-  externalRuntime: boolean
+  externalRuntime: boolean,
 ): Plugin => {
   const compilerExe = config.sys.getCompilerExecutingPath();
   const internalClient = getRindoInternalModule(config, compilerExe, 'client/index.js');
@@ -129,7 +129,7 @@ export const getRindoInternalModule = (config: d.Config, compilerExe: string, in
         rootDir: config.rootDir,
         moduleId: '@rindo/core',
         path: 'internal/' + internalModule,
-      })
+      }),
     );
   }
 

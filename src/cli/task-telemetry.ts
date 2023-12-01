@@ -14,7 +14,7 @@ export const taskTelemetry = async (flags: ConfigFlags, sys: d.CompilerSystem, l
   const isEnabling = flags.args.includes('on');
   const isDisabling = flags.args.includes('off');
   const INFORMATION = `Opt in or out of telemetry. Information about the data we collect is available on our website: ${logger.bold(
-    'https://rindojs.web.app/docs/telemetry'
+    'https://rindojs.web.app/docs/telemetry',
   )}`;
   const THANK_YOU = `Thank you for helping to make Rindo better! 💖`;
   const ENABLED_MESSAGE = `${logger.green('Enabled')}. ${THANK_YOU}\n\n`;

@@ -21,7 +21,7 @@ export const generateAppTypes = async (
   config: d.ValidatedConfig,
   compilerCtx: d.CompilerCtx,
   buildCtx: d.BuildCtx,
-  destination: string
+  destination: string,
 ): Promise<boolean> => {
   // only gather components that are still root ts files we've found and have component metadata
   // the compilerCtx cache may still have files that may have been deleted/renamed
@@ -133,7 +133,7 @@ const generateComponentTypesFile = (config: d.Config, buildCtx: d.BuildCtx, areT
     ...modules.map((m) => {
       const docs = components.find((c) => c.tagName === m.tagName).docs;
       return addDocBlock(`  ${m.jsx}`, docs, 4);
-    })
+    }),
   );
 
   c.push(`        interface IntrinsicElements {`);
@@ -154,9 +154,9 @@ const generateComponentTypesFile = (config: d.Config, buildCtx: d.BuildCtx, areT
       return addDocBlock(
         `                        "${m.tagName}": LocalJSX.${m.tagNameAsPascal} & JSXBase.HTMLAttributes<${m.htmlElementName}>;`,
         docs,
-        12
+        12,
       );
-    })
+    }),
   );
   c.push(`                }`);
   c.push(`        }`);

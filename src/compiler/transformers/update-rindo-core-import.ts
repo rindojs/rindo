@@ -34,12 +34,12 @@ export const updateRindoCoreImports = (updatedCoreImportPath: string): ts.Transf
                       undefined,
                       ts.factory.createNamedImports(
                         keepImports.map((name) =>
-                          ts.factory.createImportSpecifier(false, undefined, ts.factory.createIdentifier(name))
-                        )
-                      )
+                          ts.factory.createImportSpecifier(false, undefined, ts.factory.createIdentifier(name)),
+                        ),
+                      ),
                     ),
                     ts.factory.createStringLiteral(updatedCoreImportPath),
-                    undefined
+                    undefined,
                   );
                   newStatements.push(newImport);
                 }
@@ -60,7 +60,7 @@ export const updateRindoCoreImports = (updatedCoreImportPath: string): ts.Transf
           tsSourceFile.referencedFiles,
           tsSourceFile.typeReferenceDirectives,
           tsSourceFile.hasNoDefaultLib,
-          tsSourceFile.libReferenceDirectives
+          tsSourceFile.libReferenceDirectives,
         );
       }
 
