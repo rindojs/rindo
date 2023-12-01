@@ -46,44 +46,6 @@ export const getRindoModuleUrl = (compilerExe: string, path: string): string => 
   return new URL('./' + path, rindoRootUrl).href;
 };
 
-export const getCommonDirUrl = (
-  sys: d.CompilerSystem,
-  pkgVersions: Map<string, string>,
-  dirPath: string,
-  fileName: string
-) => getNodeModuleFetchUrl(sys, pkgVersions, dirPath) + '/' + fileName;
-
-export const getNodeModuleFetchUrl = (sys: d.CompilerSystem, pkgVersions: Map<string, string>, filePath: string) => {
-  // /node_modules/lodash/package.json
-  filePath = normalizePath(filePath);
-
-  // ["node_modules", "lodash", "package.json"]
-  let pathParts = filePath.split('/').filter((p) => p.length);
-
-  const nmIndex = pathParts.lastIndexOf('node_modules');
-  if (nmIndex > -1 && nmIndex < pathParts.length - 1) {
-    pathParts = pathParts.slice(nmIndex + 1);
-  }
-
-  let moduleId = pathParts.shift();
-
-  if (moduleId.startsWith('@')) {
-    moduleId += '/' + pathParts.shift();
-  }
-
-  const path = pathParts.join('/');
-  if (moduleId === '@rindo/core') {
-    const compilerExe = sys.getCompilerExecutingPath();
-    return getRindoModuleUrl(compilerExe, path);
-  }
-
-  return sys.getRemoteModuleUrl({
-    moduleId,
-    version: pkgVersions.get(moduleId),
-    path,
-  });
-};
-
 export const skipFilePathFetch = (filePath: string) => {
   if (isTsFile(filePath) || isTsxFile(filePath)) {
     // don't bother trying to resolve  node_module packages w/ typescript files
