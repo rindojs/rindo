@@ -23,7 +23,7 @@ import { updateRindoCoreImports } from '../transformers/update-rindo-core-import
  * @returns the results of compiling the provided input string
  */
 export const transpileModule = (
-  config: d.Config,
+  config: d.ValidatedConfig,
   input: string,
   transformOpts: d.TransformOptions
 ): d.TranspileModuleResults => {
