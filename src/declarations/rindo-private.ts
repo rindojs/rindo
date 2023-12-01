@@ -2635,7 +2635,6 @@ export interface TrackableData {
   cpu_model: string | undefined;
   duration_ms: number | undefined;
   has_app_pwa_config: boolean;
-  is_browser_env: boolean;
   os_name: string | undefined;
   os_version: string | undefined;
   packages: string[];
