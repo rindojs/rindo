@@ -96,7 +96,7 @@ export async function runReleaseTasks(opts: BuildOptions, args: ReadonlyArray<st
             throw new Error('Not on `main` branch. Use --any-branch to publish anyway.');
           }
         }),
-      skip: () => isDryRun,
+      skip: () => isDryRun || opts.isCI, // in CI, we may be publishing from another branch
     },
     {
       title: 'Check local working tree',
@@ -106,7 +106,7 @@ export async function runReleaseTasks(opts: BuildOptions, args: ReadonlyArray<st
             throw new Error('Unclean working tree. Commit or stash changes first.');
           }
         }),
-      skip: () => isDryRun,
+      skip: () => opts.isCI, // don't check the tree in CI, we may have a temp file we need for publish
     },
     {
       title: 'Check remote history',
@@ -164,7 +164,9 @@ export async function runReleaseTasks(opts: BuildOptions, args: ReadonlyArray<st
         title: 'Publish @rindo/core to npm',
         task: () => {
           const cmd = 'npm';
-          const cmdArgs = ['publish', '--otp', opts.otp].concat(opts.tag ? ['--tag', opts.tag] : []);
+          const cmdArgs = ['publish']
+            .concat(opts.tag ? ['--tag', opts.tag] : [])
+            .concat(opts.isCI ? ['--provenance'] : ['--otp', opts.otp]);
 
           if (isDryRun) {
             return console.log(`[dry-run] ${cmd} ${cmdArgs.join(' ')}`);
@@ -216,32 +218,31 @@ export async function runReleaseTasks(opts: BuildOptions, args: ReadonlyArray<st
           }
           return postGithubRelease(opts);
         },
+        skip: () => opts.isCI,
       },
     );
   }
 
   const listr = new Listr(tasks);
 
-  listr
-    .run()
-    .then(() => {
-      if (opts.isPublishRelease) {
-        console.log(
-          `\n ${opts.vermoji}  ${color.bold.magenta(pkg.name)} ${color.bold.yellow(newVersion)} published!! ${
-            opts.vermoji
-          }\n`,
-        );
-      } else {
-        console.log(
-          `\n ${opts.vermoji}  ${color.bold.magenta(pkg.name)} ${color.bold.yellow(
-            newVersion,
-          )} prepared, check the diffs and commit ${opts.vermoji}\n`,
-        );
-      }
-    })
-    .catch((err) => {
-      console.log(`\n🤒  ${color.red(err)}\n`);
-      console.log(err);
-      process.exit(1);
-    });
+  try {
+    await listr.run();
+  } catch (err: any) {
+    console.log(`\n🤒  ${color.red(err)}\n`);
+    console.log(err);
+    process.exit(1);
+  }
+  if (opts.isPublishRelease) {
+    console.log(
+      `\n ${opts.vermoji}  ${color.bold.magenta(pkg.name)} ${color.bold.yellow(newVersion)} published!! ${
+        opts.vermoji
+      }\n`,
+    );
+  } else {
+    console.log(
+      `\n ${opts.vermoji}  ${color.bold.magenta(pkg.name)} ${color.bold.yellow(
+        newVersion,
+      )} prepared, check the diffs and commit ${opts.vermoji}\n`,
+    );
+  }
 }

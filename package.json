@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "build": "npm run tsc.scripts && npm run tsc.prod && npm run rollup.prod.ci",
-    "changelog": "conventional-changelog -p angular -o -i CHANGELOG.md -s",
+    "// changelog": "conventional-changelog -p angular -o -i CHANGELOG.md -s",
     "clean": "rm -rf build/ cli/ compiler/ dev-server/ internal/ mock-doc/ sys/ testing/ && npm run clean-scripts",
     "clean-scripts": "rm -rf scripts/build",
     "license": "node scripts/build --license",
@@ -33,6 +33,8 @@
     "prettier.base": "prettier --cache \"./({bin,scripts,src}/**/*.{ts,tsx,js,jsx})|bin/rindo|.github/(**/)?*.(yml|yaml)|*.js\"",
     "prettier.dry-run": "npm run prettier.base -- --list-different",
     "release": "npm run tsc.scripts && node scripts/build --release --publish",
+    "release.ci.prepare": "npm run tsc.scripts && NODE_OPTIONS=--max-old-space-size=4096 node scripts/build --release --ci-prepare",
+    "release.ci": "npm run tsc.scripts && node scripts/build --release --ci-publish",
     "release.prepare": "npm run tsc.scripts && node scripts/build --release --prepare",
     "rollup": "rollup --config",
     "rollup.prod": "rollup --config --config-prod",
