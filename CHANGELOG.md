@@ -1,3 +1,21 @@
+## 🍪 [4.0.2](https://github.com/familyjs/rindo/compare/v4.0.1...v4.0.2) (2023-12-03)
+
+
+### Bug Fixes
+
+* **compiler:** ensures transformed paths are relative paths for `dist-collection` ([ef14ded](https://github.com/familyjs/rindo/commit/ef14ded3e995e3ea1cf0d641302c4424169e8bf4))
+* **compiler:** handle `[@supports](https://github.com/supports)` blocks when scoping css ([092d870](https://github.com/familyjs/rindo/commit/092d8707a2047c3678002fc1279ba754382d7ffc))
+* **compiler:** only create one class member when transforming `@Element()` decorators ([c70c5a1](https://github.com/familyjs/rindo/commit/c70c5a16f715b1a3f468b8e70ebdaaa4e8e878f5))
+* **compiler:** sourcemap errors for dist-custom-elements + dist-hydrate-script ([d0db3a7](https://github.com/familyjs/rindo/commit/d0db3a7de603f3b81cb4c94bc3949c5f213e0dea))
+* **compiler:** sourcemap generation without ext runtime ([8a506bc](https://github.com/familyjs/rindo/commit/8a506bc9c4f38962adb2d9aaa2cba693696923e9))
+* **lazy:** adjust the type of `defineCustomElements` ([3e2e12a](https://github.com/familyjs/rindo/commit/3e2e12a993b4a4f5c5879b64b2d9e6c6fb74051b))
+* **mock-doc:** adjust matchMedia mock return ([9059bc0](https://github.com/familyjs/rindo/commit/9059bc0b5f5f5d5a33af40b1d1fb8d7ac22cc180))
+* **output-targets:** fix path normalization logic ([ff46ece](https://github.com/familyjs/rindo/commit/ff46eceebece6775ec023e649b6346958ff0b5d7))
+* **rollup-config:** deprecate BundlingConfig#namedExports ([60c1bbf](https://github.com/familyjs/rindo/commit/60c1bbf23d16b63a155f637955be99d120d088fc))
+* **runtime:** properly type color-interpolation-filter ([e4ff49d](https://github.com/familyjs/rindo/commit/e4ff49d3e82f62f483745aef63fda55717404de2))
+
+
+
 ## 🏑 [4.0.1](https://github.com/familyjs/rindo/compare/v4.0.0...v4.0.1) (2023-07-17)
 
 
