@@ -1,5 +1,27 @@
 import type { BuildConditionals } from '@rindo/core/internal';
 
+/**
+ * A collection of default build flags for a Rindo project.
+ *
+ * This collection can be found throughout the Rindo codebase, often imported from the `@app-data` module like so:
+ * ```ts
+ * import { BUILD } from '@app-data';
+ * ```
+ * and is used to determine if a portion of the output of a Rindo _project_'s compilation step can be eliminated.
+ *
+ * e.g. When `BUILD.allRenderFn` evaluates to `false`, the compiler will eliminate conditional statements like:
+ * ```ts
+ * if (BUILD.allRenderFn) {
+ *   // some code that will be eliminated if BUILD.allRenderFn is false
+ * }
+ * ```
+ *
+ * `@app-data`, the module that `BUILD` is imported from, is an alias for the `@rindo/core/internal/app-data`, and is
+ * partially referenced by {@link RINDO_APP_DATA_ID}. The `src/compiler/bundle/app-data-plugin.ts` references
+ * `RINDO_APP_DATA_ID` uses it to replace these defaults with {@link BuildConditionals} that are derived from a
+ * Rindo project's contents (i.e. metadata from the components). This replacement happens at a Rindo project's
+ * compile time. Such code can be found at `src/compiler/app-core/app-data.ts`.
+ */
 export const BUILD: BuildConditionals = {
   allRenderFn: false,
   cmpDidLoad: true,
