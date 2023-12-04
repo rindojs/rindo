@@ -1,3 +1,17 @@
+## 🐖 [4.0.3](https://github.com/familyjs/rindo/compare/v4.0.2...v4.0.3) (2023-12-04)
+
+
+### Bug Fixes
+
+* **compiler:** custom elements relative typedef import paths ([055678b](https://github.com/familyjs/rindo/commit/055678b23735e23c82e4f188899a555338dd9a8b))
+* **docs-json:** use dts-bundle-generator to bundle types for docs-json ([9404cb6](https://github.com/familyjs/rindo/commit/9404cb65dc51e27cc87af66ef6a098824f88f17a))
+* **runtime:** add onSelect to textarea and input ([e35899f](https://github.com/familyjs/rindo/commit/e35899f38b83fef5a5741755425d10fdb000aaff))
+* **runtime:** handle lazy-instance promises for connected & disconnected callbacks ([f9cf35f](https://github.com/familyjs/rindo/commit/f9cf35f3c05da10ab896ac897915782d33954249))
+* **runtime:** override attrs set on Host with values from host element ([ec95b4f](https://github.com/familyjs/rindo/commit/ec95b4f9bd40847bb905528ea1edefa8c883ce7c))
+* **testing:** remove use of `emulate` field in `E2EPage()` ([8c10e8b](https://github.com/familyjs/rindo/commit/8c10e8b0061f991313af05d1d2ff0b41d37f2dd4))
+
+
+
 ## 🍪 [4.0.2](https://github.com/familyjs/rindo/compare/v4.0.1...v4.0.2) (2023-12-03)
 
 
