@@ -14,7 +14,7 @@ Manual releases should only be performed when there are extenuating circumstance
   2. Rindo follows semantic versioning. Select the appropriate version from the dropdown for this release.
   3. Rindo should be published under the `latest` tag, _unless_ the release is for a previous major version of
      Rindo.
-2. Proceed to the [Follow-Up section](#follow-up) of this document to run manual follow-up tasks.
+2. Proceed to the [Follow-Up section](#follow-up-steps) of this document to run manual follow-up tasks.
 
 ## Manual Releases
 
@@ -29,13 +29,19 @@ Manual releases should only be performed when there are extenuating circumstance
 4. Commit the changes - use the commit message '<emoji> v<VERSION>'. e.g. `git commit -m '🤦‍ v2.7.0'` (note the emoji is
    used literally, as opposed to ':facepalm:').
 5. Run `npm run release`, which will push the commit/tag to GitHub and publish to NPM.
-6. Proceed to the [Follow-Up section](#follow-up) of this document to run manual follow-up tasks.
+6. Proceed to the [Follow-Up section](#follow-up-steps) of this document to run manual follow-up tasks.
 
 # Follow-Up Steps
 
 The following steps should be always run, regardless of whether an automated or manual release was performed.
 
 1. Publish the release notes in GitHub using GitHub's [release notes form](https://github.com/familyjs/rindo/releases/new).
+  1. If anyone from the community contributed commit(s) to this release, append the following to the end of the GitHub release notes:
+```md
+## Thanks
+
+🎉 Thanks <GitHub_Usernames> for their contributions! 🎉
+```
 2. Navigate to the [Rindo Site](https://github.com/familyjs/rindo-site/pulls) repository and merge PRs
    containing documentation that has been approved, but not merged that is related to the release. Such PRs should be
    labelled as `do not merge: waiting for next rindo release`. It's a good idea to review _all_ PRs though, just in
