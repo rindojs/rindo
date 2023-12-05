@@ -1,3 +1,13 @@
+## 🛥 [4.0.4](https://github.com/familyjs/rindo/compare/v4.0.3...v4.0.4) (2023-12-05)
+
+
+### Bug Fixes
+
+* **runtime:** `forceUpdate` calls only execute when in a browser env ([e1005b4](https://github.com/familyjs/rindo/commit/e1005b431541dd7d58cd691b755af98ad5eb477f))
+* **typings:** add additional transition events to DOMAttributes ([8c21dd4](https://github.com/familyjs/rindo/commit/8c21dd4cc5eabc4c09585e398499a25457e8ee81))
+
+
+
 ## 🐖 [4.0.3](https://github.com/familyjs/rindo/compare/v4.0.2...v4.0.3) (2023-12-04)
 
 
