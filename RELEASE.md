@@ -24,12 +24,12 @@ Manual releases should only be performed when there are extenuating circumstance
 
 ⚠️ Manual releases should only be performed when there are extenuating circumstances that prevent an automated one from occurring ⚠️
 
-✍️ Authoring permissions are needed for an individual to perform a manual release. If needed, please ping Ionic leadership. ✍️
+✍️ Authoring permissions are needed for an individual to perform a manual release. If needed, please ping FamilyJS leadership. ✍️
 
 1. Call a `code-freeze` in the Rindo team channel
 1. Run `npm run clean` locally to clear out any cached build artifacts.
 1. Run `npm run release.prepare`. This will install dependencies, bundle Rindo, run tests, etc.
-1. Check the [CHANGELOG.md](../CHANGELOG.md) and make sure it includes all the changes that have landed since the last
+1. Check the [CHANGELOG.md](./CHANGELOG.md) and make sure it includes all the changes that have landed since the last
    release.
 1. Commit the changes - use the commit message '<emoji> v<VERSION>'. e.g. `git commit -m '🤦‍ v2.7.0'` (note the emoji is
    used literally, as opposed to ':facepalm:').
@@ -69,6 +69,9 @@ manual release was performed.
      The fix for this issue has been released as a part of today's [Rindo
      vNUMBER release](https://github.com/familyjs/rindo/releases/tag/TAG). 
      ```
-1. Let folks in Ionic know about the release in the #whathappened Slack channel
+1. Let folks in FamilyJS know about the release in the #whathappened Slack channel
    with a link to the changelog.
+  1. Let the CS team know by 'at-ing' them  about any enterprise reported issues or feature requests that were included in the release in a thread on your #whathappened post. Jira
+     tickets related to enterprise requests should be marked with the "jira_escalated" label and/or the "Enterprise Support"
+     or "Enterprise Feature Requests" epic.
 1. End the code freeze in the Rindo team Slack channel.
