@@ -1,3 +1,17 @@
+## 😋 [4.0.5](https://github.com/familyjs/rindo/compare/v4.0.4...v4.0.5) (2023-12-05)
+
+
+### Bug Fixes
+
+* **compiler:** match tsconfig include paths properly ([b51cec4](https://github.com/familyjs/rindo/commit/b51cec4ea97b0a9564e5ecd693827854ddc9d007))
+
+
+### Reverts
+
+* chore(deps): update dependency puppeteer to v21 ([8587f7a](https://github.com/familyjs/rindo/commit/8587f7a4514735f6a5f941bb09e7a363d2905b17))
+
+
+
 ## 🛥 [4.0.4](https://github.com/familyjs/rindo/compare/v4.0.3...v4.0.4) (2023-12-05)
 
 
