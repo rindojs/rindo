@@ -1,3 +1,19 @@
+# 🦀 [4.1.0](https://github.com/familyjs/rindo/compare/v4.0.5...v4.1.0) (2023-12-05)
+
+
+### Bug Fixes
+
+* **runtime:** adds a testing check to the forceUpdate method ([6c40192](https://github.com/familyjs/rindo/commit/6c401924e26c297250923c228db68c6f37cb6e2b))
+* **typings:** add crossorigin html attr to img ([6a62cd8](https://github.com/familyjs/rindo/commit/6a62cd812035e14309fa032140e6017a3c8e5c6f))
+
+
+### Features
+
+* **compiler:** include `getAssetPath` in generated export statement ([6751fd9](https://github.com/familyjs/rindo/commit/6751fd9324887f57f293d12d7bfc816e5b9a55c3))
+* **config:** add experimentalSlotFixes config value ([3f3f876](https://github.com/familyjs/rindo/commit/3f3f8767b1db42d77f1b2adf8720b7143dfaf830))
+
+
+
 ## 😋 [4.0.5](https://github.com/familyjs/rindo/compare/v4.0.4...v4.0.5) (2023-12-05)
 
 
