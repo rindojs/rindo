@@ -2,7 +2,7 @@ import type * as d from '@rindo/core/internal';
 
 export const Build: d.UserBuildConditionals = {
   isDev: true,
-  isBrowser: true,
-  isServer: false,
+  isBrowser: false,
+  isServer: true,
   isTesting: true,
 };
