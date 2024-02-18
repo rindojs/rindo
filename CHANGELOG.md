@@ -1,3 +1,7 @@
+# 🏕 [4.2.0](https://github.com/familyjs/rindo/compare/v4.2.0-0...v4.2.0) (2024-02-18)
+
+
+
 # 🐕 [4.2.0-0](https://github.com/familyjs/rindo/compare/v4.1.0...v4.2.0-0) (2024-02-18)
 
 
