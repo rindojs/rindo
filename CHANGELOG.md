@@ -1,3 +1,17 @@
+# 🏕 [4.2.0](https://github.com/familyjs/rindo/compare/v4.2.0-0...v4.2.0) (2024-02-18)
+
+
+### Bug Fixes
+
+* **compiler:** resolve implicit enum types ([f22fae7](https://github.com/familyjs/rindo/commit/f22fae73737862eec14e2e2260486e0823eb2321))
+* **runtime:** patch methods for scoped slot `append`, `prepend`, and `insertAdjacent` ([c14a31e](https://github.com/familyjs/rindo/commit/c14a31ecb2cedb9f112722196ddb96e98c7b3a48))
+
+
+### Features
+* **typescript:** upgrade to TypeScript 5.1 ([4582471](https://github.com/familyjs/rindo/commit/4582471fecf8beff423a7f73809ce3a8becb9833))
+
+
+
 # 🐕 [4.2.0-0](https://github.com/familyjs/rindo/compare/v4.1.0...v4.2.0-0) (2024-02-18)
 
 
