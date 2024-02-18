@@ -81,14 +81,18 @@ export const BUILD: BuildConditionals = {
   lazyLoad: false,
   profile: false,
   slotRelocation: true,
+  // TODO(RINDO-914): remove this option when `experimentalSlotFixes` is the default behavior
   appendChildSlotFix: false,
+  // TODO(RINDO-914): remove this option when `experimentalSlotFixes` is the default behavior
   cloneNodeFix: false,
   hydratedAttribute: false,
   hydratedClass: true,
   scriptDataOpts: false,
+  // TODO(RINDO-914): remove this option when `experimentalSlotFixes` is the default behavior
   scopedSlotTextContentFix: false,
   // TODO(RINDO-854): Remove code related to legacy shadowDomShim field
   shadowDomShim: false,
+  // TODO(RINDO-914): remove this option when `experimentalSlotFixes` is the default behavior
   slotChildNodesFix: false,
   invisiblePrehydration: true,
   propBoolean: true,
@@ -103,6 +107,8 @@ export const BUILD: BuildConditionals = {
   asyncQueue: false,
   transformTagName: false,
   attachStyles: true,
+  // TODO(RINDO-914): remove this option when `experimentalSlotFixes` is the default behavior
+  patchPseudoShadowDom: false,
 };
 
 export const Env = {};
