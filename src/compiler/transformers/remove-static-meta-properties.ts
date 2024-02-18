@@ -38,7 +38,6 @@ const REMOVE_STATIC_GETTERS = new Set([
   'methods',
   'states',
   'originalStyleUrls',
-  'rindoHasStaticMembersWithInit',
   'styleMode',
   'style',
   'styles',
