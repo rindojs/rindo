@@ -7,6 +7,10 @@
 * **runtime:** patch methods for scoped slot `append`, `prepend`, and `insertAdjacent` ([c14a31e](https://github.com/familyjs/rindo/commit/c14a31ecb2cedb9f112722196ddb96e98c7b3a48))
 
 
+### Features
+* **typescript:** upgrade to TypeScript 5.1 ([4582471](https://github.com/familyjs/rindo/commit/4582471fecf8beff423a7f73809ce3a8becb9833))
+
+
 
 # 🦀 [4.1.0](https://github.com/familyjs/rindo/compare/v4.0.5...v4.1.0) (2023-12-05)
 
