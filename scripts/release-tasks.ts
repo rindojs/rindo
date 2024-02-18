@@ -114,6 +114,7 @@ export async function runReleaseTasks(opts: BuildOptions, args: ReadonlyArray<st
             throw new Error('Unclean working tree. Commit or stash changes first.');
           }
         }),
+      skip: () => opts.isCI, // skip in CI, as we may have files staged needed to publish
     },
     {
       title: 'Check remote history',
@@ -127,23 +128,32 @@ export async function runReleaseTasks(opts: BuildOptions, args: ReadonlyArray<st
     },
   );
 
+  tasks.push(
+    {
+      title: `Install npm dependencies ${color.dim('(npm ci)')}`,
+      task: () => execa('npm', ['ci'], { cwd: rootDir }),
+      // for pre-releases, this step will occur in GitHub after the PR has been created.
+      // for actual releases, we'll need to build + bundle rindo in order to publish it to npm.
+      skip: () => !opts.isPublishRelease && opts.isCI,
+    },
+    {
+      title: `Transpile Rindo ${color.dim('(tsc.prod)')}`,
+      task: () => execa('npm', ['run', 'tsc.prod'], { cwd: rootDir }),
+      // for pre-releases, this step will occur in GitHub after the PR has been created.
+      // for actual releases, we'll need to build + bundle rindo in order to publish it to npm.
+      skip: () => !opts.isPublishRelease && opts.isCI,
+    },
+    {
+      title: `Bundle @rindo/core ${color.dim('(' + opts.buildId + ')')}`,
+      task: () => bundleBuild(opts),
+      // for pre-releases, this step will occur in GitHub after the PR has been created.
+      // for actual releases, we'll need to build + bundle rindo in order to publish it to npm.
+      skip: () => !opts.isPublishRelease && opts.isCI,
+    },
+  );
+
   if (!opts.isPublishRelease) {
     tasks.push(
-      {
-        title: `Install npm dependencies ${color.dim('(npm ci)')}`,
-        task: () => execa('npm', ['ci'], { cwd: rootDir }),
-        skip: () => opts.isCI, // this step will occur in GitHub after the PR has been created
-      },
-      {
-        title: `Transpile Rindo ${color.dim('(tsc.prod)')}`,
-        task: () => execa('npm', ['run', 'tsc.prod'], { cwd: rootDir }),
-        skip: () => opts.isCI, // this step will occur in GitHub after the PR has been created
-      },
-      {
-        title: `Bundle @rindo/core ${color.dim('(' + opts.buildId + ')')}`,
-        task: () => bundleBuild(opts),
-        skip: () => opts.isCI, // this step will occur in GitHub after the PR has been created
-      },
       {
         title: 'Build license',
         task: () => createLicense(rootDir),
@@ -198,18 +208,6 @@ export async function runReleaseTasks(opts: BuildOptions, args: ReadonlyArray<st
         },
       },
       {
-        title: 'Pushing git commits',
-        task: () => {
-          const cmd = 'git';
-          const cmdArgs = ['push'];
-
-          if (isDryRun) {
-            return console.log(`[dry-run] ${cmd} ${cmdArgs.join(' ')}`);
-          }
-          return execa(cmd, cmdArgs, { cwd: rootDir });
-        },
-      },
-      {
         title: 'Pushing git tags',
         task: () => {
           const cmd = 'git';
@@ -220,6 +218,19 @@ export async function runReleaseTasks(opts: BuildOptions, args: ReadonlyArray<st
           }
           return execa(cmd, cmdArgs, { cwd: rootDir });
         },
+      },
+      {
+        title: 'Pushing git commits',
+        task: () => {
+          const cmd = 'git';
+          const cmdArgs = ['push'];
+
+          if (isDryRun) {
+            return console.log(`[dry-run] ${cmd} ${cmdArgs.join(' ')}`);
+          }
+          return execa(cmd, cmdArgs, { cwd: rootDir });
+        },
+        skip: () => opts.isCI, // The commit will have been pushed in CI already
       },
       {
         title: 'Create Github Release',

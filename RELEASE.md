@@ -10,14 +10,25 @@ Manual releases should only be performed when there are extenuating circumstance
 1. Check that [Rindo's Merge
    Queue](https://github.com/familyjs/rindo/queue/) is empty (nothing is
    queued for merge).
-1. Run the [Rindo Production Release](https://github.com/familyjs/rindo/actions/workflows/release-production.yml)
+1. Run the [Rindo Production Release PR Creation Workflow](https://github.com/familyjs/rindo/actions/workflows/create-production-pr.yml)
    in GitHub
-  1. Run the workflow from the `main` branch, _unless_ the release is for a previous major version of Rindo.
-     In that scenario, select the `v#-maintenance` branch corresponding to the version of Rindo being released.
-     For example, `v3-maintenance` to release a new version of Rindo v3.
-  1. Rindo follows semantic versioning. Select the appropriate version from the dropdown for this release.
-  1. Rindo should be published under the `latest` tag, _unless_ the release is for a previous major version of
+    1. Run the workflow from the `main` branch, _unless_ the release is for a previous major version of Rindo.
+       In that scenario, select the `v#-maintenance` branch corresponding to the version of Rindo being released.
+       For example, `v3-maintenance` to release a new version of Rindo v3.
+    1. Rindo follows semantic versioning. Select the appropriate version from the dropdown for this release.
+    1. Hit "Run Workflow" and wait for a new pull request to be created.
+1. Open the pull request that was opened as a result of running the Rindo Production Release PR Creation Workflow.
+1. Complete the following (temporary) steps:
+    1. Close the pull request and reopen it. This allows actions that the team gates pull requests on to run.
+    1. Mark the pull request as ready for review.
+1. Ask the Rindo team for an approval on the PR
+1. Once approved, add it to the merge queue.
+1. ⚠️ Wait for the pull request to land before continuing to the next step. ⚠️
+1. Run the [Rindo Production Release Workflow](https://github.com/familyjs/rindo/actions/workflows/release-production.yml)
+    1. Rindo should be published under the `latest` tag, _unless_ the release is for a previous major version of
      Rindo.
+    1. The base branch should be set to `main`, _unless_ the release is for a previous major version of Rindo.
+    1. Tail the logs to verify everything runs successfully.
 1. Proceed to the [Follow-Up section](#follow-up-steps) of this document to run manual follow-up tasks.
 
 ## Manual Releases
