@@ -8,12 +8,12 @@ on:
         description: Which version should be published?
         options:
           - prerelease # e.g: 1.0.0 -> 1.0.1-0
-          - prepatch   # e.g: 1.0.0 -> 1.0.1-0
-          - preminor   # e.g: 1.0.0 -> 1.1.0-0
-          - premajor   # e.g: 1.0.0 -> 2.0.0-0
-          - patch      # e.g: 1.0.0 -> 1.0.1
-          - minor      # e.g: 1.0.0 -> 1.1.0
-          - major      # e.g: 1.0.0 -> 2.0.0
+          - prepatch # e.g: 1.0.0 -> 1.0.1-0
+          - preminor # e.g: 1.0.0 -> 1.1.0-0
+          - premajor # e.g: 1.0.0 -> 2.0.0-0
+          - patch # e.g: 1.0.0 -> 1.0.1
+          - minor # e.g: 1.0.0 -> 1.1.0
+          - major # e.g: 1.0.0 -> 2.0.0
       base:
         required: true
         type: choice
