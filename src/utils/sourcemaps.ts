@@ -7,7 +7,10 @@ import type * as d from '../declarations';
  * @param rollupSourceMap the sourcemap to transform
  * @returns the transformed sourcemap
  */
-export const rollupToRindoSourceMap = (rollupSourceMap: RollupSourceMap | undefined): d.SourceMap => {
+export function rollupToRindoSourceMap(rollupSourceMap: null): null;
+export function rollupToRindoSourceMap(rollupSourceMap: undefined): null;
+export function rollupToRindoSourceMap(rollupSourceMap: RollupSourceMap): d.SourceMap;
+export function rollupToRindoSourceMap(rollupSourceMap: RollupSourceMap | undefined | null): d.SourceMap | null {
   if (!rollupSourceMap) {
     return null;
   }
@@ -19,8 +22,8 @@ export const rollupToRindoSourceMap = (rollupSourceMap: RollupSourceMap | undefi
     sources: rollupSourceMap.sources,
     sourcesContent: rollupSourceMap.sourcesContent,
     version: rollupSourceMap.version,
-  };
-};
+  } satisfies d.SourceMap;
+}
 
 /**
  * A JavaScript formatted string used to link generated code back to the original. This string follows the guidelines
