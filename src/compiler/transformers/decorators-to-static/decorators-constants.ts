@@ -39,3 +39,31 @@ export const MEMBER_DECORATORS_TO_REMOVE = [
  * class fields to instead initialize them in a constructor.
  */
 export const CONSTRUCTOR_DEFINED_MEMBER_DECORATORS = ['State', 'Prop'] as const satisfies readonly RindoDecorator[];
+
+/**
+ * The names used for the static getters added to Rindo components when they
+ * are transformed to remove decorated properties.
+ */
+export const STATIC_GETTER_NAMES = [
+  'COMPILER_META',
+  'assetsDirs',
+  'cmpMeta',
+  'delegatesFocus',
+  'elementRef',
+  'encapsulation',
+  'events',
+  'is',
+  'listeners',
+  'methods',
+  'originalStyleUrls',
+  'properties',
+  'states',
+  'style',
+  'styleMode',
+  'styleUrl',
+  'styleUrls',
+  'styles',
+  'watchers',
+] as const;
+
+export type RindoStaticGetter = (typeof STATIC_GETTER_NAMES)[number];
