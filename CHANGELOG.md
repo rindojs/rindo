@@ -1,3 +1,12 @@
+## 💯 [4.2.1](https://github.com/familyjs/rindo/compare/v4.2.0...v4.2.1) (2024-04-21)
+
+
+### Bug Fixes
+
+* **compiler:** add heritage clauses earlier in native transform ([6ed0665](https://github.com/familyjs/rindo/commit/6ed066506a4fab6f166654ac190d87cb17e3e95b))
+
+
+
 # 🏕 [4.2.0](https://github.com/familyjs/rindo/compare/v4.2.0-0...v4.2.0) (2024-02-18)
 
 
