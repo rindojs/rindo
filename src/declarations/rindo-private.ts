@@ -1,6 +1,7 @@
 import { result } from '@utils';
 
 import type { InMemoryFileSystem } from '../compiler/sys/in-memory-fs';
+import type { CPSerializable } from './child_process';
 import type {
   BuildEvents,
   BuildLog,
@@ -25,7 +26,9 @@ import type {
   PrerenderConfig,
   StyleDoc,
   TaskCommand,
+  ValidatedConfig,
 } from './rindo-public-compiler';
+import type { JsonDocMethodParameter } from './rindo-public-docs';
 import type { ComponentInterface, ListenTargetOptions, VNode } from './rindo-public-runtime';
 
 export interface SourceMap {
@@ -41,7 +44,7 @@ export interface SourceMap {
 export interface PrintLine {
   lineIndex: number;
   lineNumber: number;
-  text?: string;
+  text: string;
   errorCharStart: number;
   errorLength?: number;
 }
@@ -74,6 +77,7 @@ export interface BuildFeatures {
   // encapsulation
   style: boolean;
   mode: boolean;
+  formAssociated: boolean;
 
   // dom
   shadowDom: boolean;
@@ -178,14 +182,16 @@ export interface BuildConditionals extends Partial<BuildFeatures> {
   hydratedClass?: boolean;
   initializeNextTick?: boolean;
   scriptDataOpts?: boolean;
-  // TODO: Remove code related to legacy shadowDomShim field
+  // TODO(RINDO-854): Remove code related to legacy shadowDomShim field
   shadowDomShim?: boolean;
   asyncQueue?: boolean;
   transformTagName?: boolean;
   attachStyles?: boolean;
 
   // TODO(RINDO-914): remove this option when `experimentalSlotFixes` is the default behavior
-  patchPseudoShadowDom?: boolean;
+  experimentalSlotFixes?: boolean;
+  // TODO(RINDO-1086): remove this option when it's the default behavior
+  experimentalScopedSlotChanges?: boolean;
 }
 
 export type ModuleFormat =
@@ -218,7 +224,7 @@ export interface BuildCtx {
   buildStats?: result.Result<CompilerBuildStats, { diagnostics: Diagnostic[] }>;
   buildMessages: string[];
   bundleBuildCount: number;
-  collections: Collection[];
+  collections: CollectionCompilerMeta[];
   compilerCtx: CompilerCtx;
   esmBrowserComponentBundle: ReadonlyArray<BundleModule>;
   esmComponentBundle: ReadonlyArray<BundleModule>;
@@ -227,7 +233,7 @@ export interface BuildCtx {
   commonJsComponentBundle: ReadonlyArray<BundleModule>;
   components: ComponentCompilerMeta[];
   componentGraph: Map<string, string[]>;
-  config: Config;
+  config: ValidatedConfig;
   createTimeSpan(msg: string, debug?: boolean): LoggerTimeSpan;
   data: any;
   debug: (msg: string) => void;
@@ -318,11 +324,13 @@ export interface CompilerBuildStats {
   rollupResults: RollupResults;
   sourceGraph?: BuildSourceGraph;
   componentGraph: BuildResultsComponentGraph;
-  collections: {
-    name: string;
-    source: string;
-    tags: string[];
-  }[];
+  collections: CompilerBuildStatCollection[];
+}
+
+export interface CompilerBuildStatCollection {
+  name: string;
+  source: string;
+  tags: string[][];
 }
 
 export interface CompilerBuildStatBundle {
@@ -410,7 +418,7 @@ export interface BundleModuleOutput {
 }
 
 export interface Cache {
-  get(key: string): Promise<string>;
+  get(key: string): Promise<string | null>;
   put(key: string, value: string): Promise<boolean>;
   has(key: string): Promise<boolean>;
   createKey(domain: string, ...args: any[]): Promise<string>;
@@ -422,10 +430,10 @@ export interface Cache {
 }
 
 export interface CollectionCompilerMeta {
-  collectionName?: string;
+  collectionName: string;
   moduleId?: string;
-  moduleDir?: string;
-  moduleFiles?: Module[];
+  moduleDir: string;
+  moduleFiles: Module[];
   global?: Module;
   compiler?: CollectionCompilerVersion;
   isInitialized?: boolean;
@@ -459,21 +467,6 @@ export interface CollectionBundleManifest {
 export interface CollectionDependencyManifest {
   name: string;
   tags: string[];
-}
-
-/** OLD WAY */
-export interface Collection {
-  collectionName?: string;
-  moduleDir?: string;
-  moduleFiles?: any[];
-  global?: any;
-  compiler?: CollectionCompiler;
-  isInitialized?: boolean;
-  hasExports?: boolean;
-  dependencies?: string[];
-  bundles?: {
-    components: string[];
-  }[];
 }
 
 export interface CollectionCompiler {
@@ -528,7 +521,12 @@ export interface CompilerCtx {
 
 export type NodeMap = WeakMap<any, ComponentCompilerMeta>;
 
-/** Must be serializable to JSON!! */
+/**
+ * Record, for a specific component, whether or not it has various features
+ * which need to be handled correctly in the compilation pipeline.
+ *
+ * Note: this must be serializable to JSON.
+ */
 export interface ComponentCompilerFeatures {
   hasAttribute: boolean;
   hasAttributeChangedCallbackFn: boolean;
@@ -596,50 +594,64 @@ export interface ComponentCompilerFeatures {
   potentialCmpRefs: string[];
 }
 
-/** Must be serializable to JSON!! */
+/**
+ * Metadata about a given component
+ *
+ * Note: must be serializable to JSON!
+ */
 export interface ComponentCompilerMeta extends ComponentCompilerFeatures {
   assetsDirs: CompilerAssetDir[];
+  /**
+   * The name to which an `ElementInternals` object (the return value of
+   * `HTMLElement.attachInternals`) should be attached at runtime. If this is
+   * `null` then `attachInternals` should not be called.
+   */
+  attachInternalsMemberName: string | null;
   componentClassName: string;
-  elementRef: string;
-  encapsulation: Encapsulation;
-  shadowDelegatesFocus: boolean;
-  excludeFromCollection: boolean;
-  isCollectionDependency: boolean;
-  docs: CompilerJsDoc;
-  jsFilePath: string;
-  sourceMapPath: string;
-  listeners: ComponentCompilerListener[];
-  events: ComponentCompilerEvent[];
-  methods: ComponentCompilerMethod[];
-  virtualProperties: ComponentCompilerVirtualProperty[];
-  properties: ComponentCompilerProperty[];
-  watchers: ComponentCompilerWatch[];
-  sourceFilePath: string;
-  states: ComponentCompilerState[];
-  styleDocs: CompilerStyleDoc[];
-  styles: StyleCompiler[];
-  tagName: string;
-  internal: boolean;
   /**
    * A list of web component tag names that are either:
    * - directly referenced in a Rindo component's JSX/h() function
    * - are referenced by a web component that is directly referenced in a Rindo component's JSX/h() function
    */
-  dependencies?: string[];
+  dependencies: string[];
   /**
    * A list of web component tag names that either:
    * - directly reference the current component directly in their JSX/h() function
    * - indirectly/transitively reference the current component directly in their JSX/h() function
    */
-  dependents?: string[];
+  dependents: string[];
   /**
    * A list of web component tag names that are directly referenced in a Rindo component's JSX/h() function
    */
-  directDependencies?: string[];
+  directDependencies: string[];
   /**
    * A list of web component tag names that the current component directly in their JSX/h() function
    */
-  directDependents?: string[];
+  directDependents: string[];
+  docs: CompilerJsDoc;
+  elementRef: string;
+  encapsulation: Encapsulation;
+  events: ComponentCompilerEvent[];
+  excludeFromCollection: boolean;
+  /**
+   * Whether or not the component is form-associated
+   */
+  formAssociated: boolean;
+  internal: boolean;
+  isCollectionDependency: boolean;
+  jsFilePath: string;
+  listeners: ComponentCompilerListener[];
+  methods: ComponentCompilerMethod[];
+  properties: ComponentCompilerProperty[];
+  shadowDelegatesFocus: boolean;
+  sourceFilePath: string;
+  sourceMapPath: string;
+  states: ComponentCompilerState[];
+  styleDocs: CompilerStyleDoc[];
+  styles: StyleCompiler[];
+  tagName: string;
+  virtualProperties: ComponentCompilerVirtualProperty[];
+  watchers: ComponentCompilerWatch[];
 }
 
 /**
@@ -790,7 +802,7 @@ export interface ComponentCompilerStaticMethod {
 
 export interface ComponentCompilerMethodComplexType {
   signature: string;
-  parameters: CompilerJsDoc[];
+  parameters: JsonDocMethodParameter[];
   references: ComponentCompilerTypeReferences;
   return: string;
 }
@@ -1065,6 +1077,16 @@ export interface HostElement extends HTMLElement {
   ['s-lr']?: boolean;
 
   /**
+   * A reference to the `ElementInternals` object for the current host
+   *
+   * This is used for maintaining a reference to the object between HMR
+   * refreshes in the lazy build.
+   *
+   * "rindo-element-internals"
+   */
+  ['s-ei']?: ElementInternals;
+
+  /**
    * On Render Callbacks:
    * Array of callbacks to fire off after it has rendered.
    */
@@ -1079,13 +1101,11 @@ export interface HostElement extends HTMLElement {
 
   /**
    * Hot Module Replacement, dev mode only
+   *
+   * This function should be defined by the HMR-supporting runtime and should
+   * do the work of actually updating the component in-place.
    */
   ['s-hmr']?: (versionId: string) => void;
-
-  /**
-   * Callback method for when HMR finishes
-   */
-  ['s-hmr-load']?: () => void;
 
   ['s-p']?: Promise<void>[];
 
@@ -1312,6 +1332,14 @@ export interface RenderNode extends HostElement {
   host?: Element;
 
   /**
+   * Is initially hidden
+   * Whether this node was originally rendered with the `hidden` attribute.
+   *
+   * Used to reset the `hidden` state of a node during slot relocation.
+   */
+  ['s-ih']?: boolean;
+
+  /**
    * Is Content Reference Node:
    * This node is a content reference node.
    */
@@ -1335,6 +1363,19 @@ export interface RenderNode extends HostElement {
    * node was created in.
    */
   ['s-hn']?: string;
+
+  /**
+   * Slot host tag name:
+   * This is the tag name of the element where this node
+   * has been moved to during slot relocation.
+   *
+   * This allows us to check if the node has been moved and prevent
+   * us from thinking a node _should_ be moved when it may already be in
+   * its final destination.
+   *
+   * This value is set to `undefined` whenever the node is put back into its original location.
+   */
+  ['s-sh']?: string;
 
   /**
    * Original Location Reference:
@@ -1393,6 +1434,9 @@ export type ComponentRuntimeMetaCompact = [
 
   /** listeners */
   ComponentRuntimeHostListener[]?,
+
+  /** watchers */
+  ComponentConstructorWatchers?,
 ];
 
 /**
@@ -1476,6 +1520,12 @@ export type ComponentRuntimeHostListener = [number, string, string];
  */
 export type ComponentRuntimeReflectingAttr = [string, string | undefined];
 
+/**
+ * A runtime component reference, consistent of either a host element _or_ an
+ * empty object. This is used in particular in a few different places as the
+ * keys in a `WeakMap` which maps {@link HostElement} instances to their
+ * associated {@link HostRef} instance.
+ */
 export type RuntimeRef = HostElement | {};
 
 /**
@@ -1488,10 +1538,31 @@ export interface HostRef {
   $hostElement$: HostElement;
   $instanceValues$?: Map<string, any>;
   $lazyInstance$?: ComponentInterface;
-  $onReadyPromise$?: Promise<any>;
-  $onReadyResolve$?: (elm: any) => void;
-  $onInstancePromise$?: Promise<any>;
-  $onInstanceResolve$?: (elm: any) => void;
+  /**
+   * A promise that gets resolved if `BUILD.asyncLoading` is enabled and after the `componentDidLoad`
+   * and before the `componentDidUpdate` lifecycle events are triggered.
+   */
+  $onReadyPromise$?: Promise<HostElement>;
+  /**
+   * A callback which resolves {@link HostRef.$onReadyPromise$}
+   * @param elm host element
+   */
+  $onReadyResolve$?: (elm: HostElement) => void;
+  /**
+   * A promise which resolves with the host component once it has finished rendering
+   * for the first time. This is primarily used to wait for the first `update` to be
+   * called on a component.
+   */
+  $onInstancePromise$?: Promise<HostElement>;
+  /**
+   * A callback which resolves {@link HostRef.$onInstancePromise$}
+   * @param elm host element
+   */
+  $onInstanceResolve$?: (elm: HostElement) => void;
+  /**
+   * A promise which resolves when the component has finished rendering for the first time.
+   * It is called after {@link HostRef.$onInstancePromise$} resolves.
+   */
   $onRenderResolve$?: () => void;
   $vnode$?: VNode;
   $queuedListeners$?: [string, any][];
@@ -1501,18 +1572,36 @@ export interface HostRef {
 }
 
 export interface PlatformRuntime {
+  /**
+   * This number is used to hold a series of bitflags for various features we
+   * support within the runtime. The flags which this value is intended to store are
+   * documented in the {@link PLATFORM_FLAGS} enum.
+   */
   $flags$: number;
+  /**
+   * Holds a map of nodes to be hydrated.
+   */
   $orgLocNodes$?: Map<string, RenderNode>;
+  /**
+   * Holds the resource url for given platform environment.
+   */
   $resourcesUrl$: string;
   /**
    * The nonce value to be applied to all script/style tags at runtime.
    * If `null`, the nonce attribute will not be applied.
    */
   $nonce$?: string | null;
+  /**
+   * A utility function that executes a given function and returns the result.
+   * @param c The callback function to execute
+   */
   jmp: (c: Function) => any;
+  /**
+   * A wrapper for {@link https://developer.mozilla.org/en-US/docs/Web/API/Window/requestAnimationFrame `requestAnimationFrame`}
+   */
   raf: (c: FrameRequestCallback) => number;
   /**
-   * A wrapper for AddEventListener
+   * A wrapper for {@link https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener `addEventListener`}
    */
   ael: (
     el: EventTarget,
@@ -1521,7 +1610,7 @@ export interface PlatformRuntime {
     options: boolean | AddEventListenerOptions,
   ) => void;
   /**
-   * A wrapper for `RemoveEventListener`
+   * A wrapper for {@link https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/removeEventListener `removeEventListener`}
    */
   rel: (
     el: EventTarget,
@@ -1529,6 +1618,9 @@ export interface PlatformRuntime {
     listener: EventListenerOrEventListenerObject,
     options: boolean | AddEventListenerOptions,
   ) => void;
+  /**
+   * A wrapper for creating a {@link https://developer.mozilla.org/docs/Web/API/CustomEvent `CustomEvent`}
+   */
   ce: (eventName: string, opts?: any) => CustomEvent;
 }
 
@@ -1868,7 +1960,7 @@ declare global {
       toEqualHtml(expectHtml: string): void;
 
       /**
-       * Compares HTML light DOKM only, but first normalizes the HTML so all
+       * Compares HTML light DOM only, but first normalizes the HTML so all
        * whitespace, attribute order and css class order are
        * the same. When given an element, it will compare
        * the element's `outerHTML`. When given a Document Fragment,
@@ -2029,10 +2121,10 @@ export interface JestEnvironmentGlobal {
   h: any;
   resourcesUrl: string;
   currentSpec?: {
-    id: string;
+    id?: string;
     description: string;
     fullName: string;
-    testPath: string;
+    testPath: string | null;
   };
   env: { [prop: string]: string };
   screenshotDescriptions: Set<string>;
@@ -2162,7 +2254,7 @@ export interface NewSpecPageOptions {
    */
   supportsShadowDom?: boolean;
   /**
-   * When a component is pre-rendered it includes HTML annotations, such as `s-id` attributes and `<!-t.0->` comments. This information is used by clientside hydrating. Default is `false`.
+   * When a component is pre-rendered it includes HTML annotations, such as `s-id` attributes and `<!-t.0->` comments. This information is used by client-side hydrating. Default is `false`.
    */
   includeAnnotations?: boolean;
   /**
@@ -2174,7 +2266,7 @@ export interface NewSpecPageOptions {
    */
   userAgent?: string;
   /**
-   * By default, any changes to component properties and attributes must `page.waitForChanges()` in order to test the updates. As an option, `autoAppluChanges` continuously flushes the queue on the background. Default is `false`.
+   * By default, any changes to component properties and attributes must `page.waitForChanges()` in order to test the updates. As an option, `autoApplyChanges` continuously flushes the queue on the background. Default is `false`.
    */
   autoApplyChanges?: boolean;
   /**
@@ -2253,6 +2345,13 @@ export interface VNodeProdData {
   [key: string]: any;
 }
 
+/**
+ * An abstraction to bundle up four methods which _may_ be handled by
+ * dispatching work to workers running in other OS threads or may be called
+ * synchronously. Environment and `CompilerSystem` related setup code will
+ * determine which one, but in either case the call sites for these methods can
+ * dispatch to this shared interface.
+ */
 export interface CompilerWorkerContext {
   optimizeCss(inputOpts: OptimizeCssInput): Promise<OptimizeCssOutput>;
   prepareModule(
@@ -2265,26 +2364,72 @@ export interface CompilerWorkerContext {
   transformCssToEsm(input: TransformCssToEsmInput): Promise<TransformCssToEsmOutput>;
 }
 
-export interface MsgToWorker {
+/**
+ * The methods that are supported on a {@link d.CompilerWorkerContext}
+ */
+export type WorkerContextMethod = keyof CompilerWorkerContext;
+
+/**
+ * A little type guard which will cause a type error if the parameter `T` does
+ * not satisfy {@link CPSerializable} (i.e. if it's not possible to cleanly
+ * serialize it for message passing via an IPC channel).
+ */
+type IPCSerializable<T extends CPSerializable> = T;
+
+/**
+ * A manifest for a job that a worker thread should carry out, as determined by
+ * and dispatched from the main thread. This includes the name of the task to do
+ * and any arguments necessary to carry it out properly.
+ *
+ * This message must satisfy {@link CPSerializable} so it can be sent from the
+ * main thread to a worker thread via an IPC channel
+ */
+export type MsgToWorker<T extends WorkerContextMethod> = IPCSerializable<{
   rindoId: number;
-  args: any[];
-}
+  method: T;
+  args: Parameters<CompilerWorkerContext[T]>;
+}>;
 
-export interface MsgFromWorker {
+/**
+ * A manifest for a job that a worker thread should carry out, as determined by
+ * and dispatched from the main thread. This includes the name of the task to do
+ * and any arguments necessary to carry it out properly.
+ *
+ * This message must satisfy {@link CPSerializable} so it can be sent from the
+ * main thread to a worker thread via an IPC channel
+ */
+export type MsgFromWorker<T extends WorkerContextMethod> = IPCSerializable<{
   rindoId?: number;
-  rindoRtnValue: any;
-  rindoRtnError: string;
-}
+  rindoRtnValue: ReturnType<CompilerWorkerContext[T]>;
+  rindoRtnError: string | null;
+}>;
 
+/**
+ * A description of a task which should be passed to a worker in another
+ * thread. This interface differs from {@link MsgToWorker} in that it doesn't
+ * have to be serializable for transmission through an IPC channel, so we can
+ * hold things like a `resolve` and `reject` callback to use when the task
+ * completes.
+ */
 export interface CompilerWorkerTask {
-  rindoId?: number;
-  inputArgs?: any[];
+  rindoId: number;
+  inputArgs: any[];
   resolve: (val: any) => any;
   reject: (msg: string) => any;
-  retries?: number;
+  retries: number;
 }
 
-export type WorkerMsgHandler = (msgToWorker: MsgToWorker) => Promise<any>;
+/**
+ * A handler for IPC messages from the main thread to a worker thread. This
+ * involves dispatching an action specified by a {@link MsgToWorker} object to a
+ * {@link CompilerWorkerContext}.
+ *
+ * @param msgToWorker the message to handle
+ * @returns the return value of the specified function
+ */
+export type WorkerMsgHandler = <T extends WorkerContextMethod>(
+  msgToWorker: MsgToWorker<T>,
+) => ReturnType<CompilerWorkerContext[T]>;
 
 export interface TranspileModuleResults {
   sourceFilePath: string;

@@ -176,7 +176,7 @@ export const createStaticGetter = (
  * @param staticName the name of the static getter to pull a value from
  * @returns a TypeScript value, converted from its TypeScript syntax tree representation
  */
-export const getStaticValue = (staticMembers: ts.ClassElement[], staticName: string): any => {
+export const getStaticValue = (staticMembers: ts.ClassElement[], staticName: RindoStaticGetter): any => {
   const staticMember: ts.GetAccessorDeclaration = staticMembers.find(
     (member) => (member.name as any).escapedText === staticName,
   ) as any;
@@ -745,7 +745,7 @@ export const getComponentMeta = (
 /**
  * Retrieves the tag name associated with a Rindo component, based on the 'is' static getter assigned to the class at compile time
  * @param staticMembers the static getters belonging to the Rindo component class
- * @returns the tage name, or null if one cannot be found
+ * @returns the tag name, or null if one cannot be found
  */
 export const getComponentTagName = (staticMembers: ts.ClassElement[]): string | null => {
   if (staticMembers.length > 0) {
@@ -825,8 +825,15 @@ export const serializeDocsSymbol = (checker: ts.TypeChecker, symbol: ts.Symbol) 
   }
 };
 
-export const isInternal = (jsDocs: d.CompilerJsDoc | undefined) => {
-  return jsDocs && jsDocs.tags.some((s) => s.name === 'internal');
+/**
+ * Given the JSDoc for a given bit of code, determine whether or not it is
+ * marked 'internal'
+ *
+ * @param jsDocs the JSDoc to examine
+ * @returns whether the JSDoc is marked 'internal' or not
+ */
+export const isInternal = (jsDocs: d.CompilerJsDoc | undefined): boolean => {
+  return !!(jsDocs && jsDocs.tags.some((s) => s.name === 'internal'));
 };
 
 export const isMethod = (member: ts.ClassElement, methodName: string): member is ts.MethodDeclaration => {
@@ -1053,9 +1060,10 @@ const createConstructorBodyWithSuper = (): ts.ExpressionStatement => {
  * Given a {@link ts.PropertyDeclaration} node get its name as a string
  *
  * @param node a property decl node
+ * @param typeChecker a reference to the {@link ts.TypeChecker}
  * @returns the name of the property in string form
  */
-export const tsPropDeclNameAsString = (node: ts.PropertyDeclaration): string => {
+export const tsPropDeclNameAsString = (node: ts.PropertyDeclaration, typeChecker: ts.TypeChecker): string => {
   const declarationName: ts.DeclarationName = ts.getNameOfDeclaration(node);
 
   // The name of a class field declaration can be a computed property name,
@@ -1069,9 +1077,8 @@ export const tsPropDeclNameAsString = (node: ts.PropertyDeclaration): string => 
   // }
   // ```
   //
-  // In this case we need to get the expression which evaluates to some
-  // valid property name and call `.getText` on it. In the case that it's
-  // _not_ a computed property name, like
+  // In this case we need to evaluate the expression via the typechecker to get the literal
+  // value of the property. In the case that it's _not_ a computed property name, like
   //
   // ```ts
   // class MyClass {
@@ -1080,9 +1087,45 @@ export const tsPropDeclNameAsString = (node: ts.PropertyDeclaration): string => 
   // ```
   //
   // we can just call `.getText` on the name itself.
-  const memberName =
-    declarationName.kind === ts.SyntaxKind.ComputedPropertyName
-      ? declarationName.expression.getText()
-      : declarationName.getText();
+  let memberName = declarationName.getText();
+  if (ts.isComputedPropertyName(declarationName)) {
+    const type = typeChecker.getTypeAtLocation(declarationName.expression);
+    if (type != null && type.isLiteral()) {
+      memberName = type.value.toString();
+    }
+  }
+
   return memberName;
 };
+
+/**
+ * Reverse order and reduce to remove duplicates. This will make sure that duplicate
+ * styles applied to the same component will be applied in the order they are
+ * defined in the component, e.g.
+ * ```
+ * @Component({
+ *  styleUrls: ['cmp-a.css', 'cmp-b.css', 'cmp-a.css']
+ * })
+ * ```
+ * will be applied in the order `cmp-b.css`, `cmp-a.css`.
+ *
+ * @param style style meta data
+ * @returns a list of external styles sorted in order
+ */
+export function getExternalStyles(style: d.StyleCompiler) {
+  return (
+    style.externalStyles
+      .map((s) => s.absolutePath)
+      .reverse()
+      .reduce((extStyles, styleUrl) => {
+        if (!extStyles.includes(styleUrl)) {
+          extStyles.push(styleUrl);
+        }
+        return extStyles;
+      }, [] as string[])
+      /**
+       * Reverse back to the original order
+       */
+      .reverse()
+  );
+}

@@ -4,20 +4,18 @@ import { createConfigFlags } from '../../cli/config-flags';
 import type * as d from '../../declarations';
 import { validateConfig } from '../config/validate-config';
 
+/**
+ * Given a user-supplied config, get a validated config which can be used to
+ * start building a Rindo project.
+ *
+ * @param userConfig a configuration object
+ * @returns a validated config object with stricter typing
+ */
 export const getConfig = (userConfig: d.Config): d.ValidatedConfig => {
   userConfig.logger = userConfig.logger ?? createNodeLogger();
   const flags = createConfigFlags(userConfig.flags ?? {});
   userConfig.flags = flags;
   const config: d.ValidatedConfig = validateConfig(userConfig, {}).config;
-
-  if (config.flags.debug || config.flags.verbose) {
-    config.logLevel = 'debug';
-  } else if (config.flags.logLevel) {
-    config.logLevel = config.flags.logLevel;
-  } else if (typeof config.logLevel !== 'string') {
-    config.logLevel = 'info';
-  }
-  config.logger.setLevel(config.logLevel);
 
   return config;
 };

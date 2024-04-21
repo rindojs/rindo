@@ -1,5 +1,4 @@
-import { normalizePath } from '@utils';
-import { join } from 'path';
+import { join, normalizePath } from '@utils';
 
 import type * as d from '../../../declarations';
 import { parseCollectionComponents, transpileCollectionModule } from './parse-collection-components';
@@ -19,6 +18,7 @@ export const parseCollectionManifest = (
   const collection: d.CollectionCompilerMeta = {
     collectionName: collectionName,
     moduleId: collectionName,
+    moduleDir: collectionDir,
     moduleFiles: [],
     dependencies: parseCollectionDependencies(collectionManifest),
     compiler: {

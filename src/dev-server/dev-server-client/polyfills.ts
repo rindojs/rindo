@@ -1,5 +1,5 @@
 /* eslint-disable no-var -- shims will continue to use var while we support older browsers */
-// TODO: Investigate whether we can delete this file
+// TODO(RINDO-465): Investigate whether we can delete this file
 export const applyPolyfills = (win: any) => {
   applyObjectAssign();
   applyCustomEvent(win);

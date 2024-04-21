@@ -203,7 +203,7 @@ export function createNodeSys(c: { process?: any; logger?: Logger } = {}): Compi
       return Buffer.from(str).toString('base64');
     },
     async ensureDependencies() {
-      // TODO: Remove this from the sys interface
+      // TODO(RINDO-727): Remove this from the sys interface
       console.warn(`ensureDependencies will be removed in a future version of Rindo.`);
       console.warn(`To get the rindoPath, please use getCompilerExecutingPath().`);
 
@@ -213,7 +213,7 @@ export function createNodeSys(c: { process?: any; logger?: Logger } = {}): Compi
       };
     },
     async ensureResources() {
-      // TODO: Remove this from the sys interface
+      // TODO(RINDO-727): Remove this from the sys interface
       console.warn(`ensureResources is a no-op, and will be removed in a future version of Rindo`);
     },
     exit: async (exitCode) => {
@@ -534,7 +534,7 @@ export function createNodeSys(c: { process?: any; logger?: Logger } = {}): Compi
            *
            * Ref: {@link https://www.typescriptlang.org/docs/handbook/release-notes/typescript-4-9.html#file-watching-now-uses-file-system-events|TS 4.9 Release Note}
            *
-           * TODO: Revisit using file system events for watch mode
+           * TODO(RINDO-744): Revisit using file system events for watch mode
            */
           {
             // TS 4.8 and under defaulted to this type of polling interval for polling-based watchers
@@ -664,9 +664,9 @@ export function createNodeSys(c: { process?: any; logger?: Logger } = {}): Compi
   const nodeResolve = new NodeResolveModule();
 
   sys.lazyRequire = new NodeLazyRequire(nodeResolve, {
-    '@types/jest': { minVersion: '24.9.1', recommendedVersion: '27.0.3', maxVersion: '27.0.0' },
-    jest: { minVersion: '24.9.1', recommendedVersion: '27.0.3', maxVersion: '27.0.0' },
-    'jest-cli': { minVersion: '24.9.0', recommendedVersion: '27.4.5', maxVersion: '27.0.0' },
+    '@types/jest': { minVersion: '24.9.1', recommendedVersion: '29', maxVersion: '29.0.0' },
+    jest: { minVersion: '24.9.0', recommendedVersion: '29', maxVersion: '29.0.0' },
+    'jest-cli': { minVersion: '24.9.0', recommendedVersion: '29', maxVersion: '29.0.0' },
     puppeteer: { minVersion: '10.0.0', recommendedVersion: '20' },
     'puppeteer-core': { minVersion: '10.0.0', recommendedVersion: '20' },
     'workbox-build': { minVersion: '4.3.1', recommendedVersion: '4.3.1' },

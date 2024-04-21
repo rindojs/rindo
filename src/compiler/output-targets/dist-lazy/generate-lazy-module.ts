@@ -2,10 +2,10 @@ import {
   formatComponentRuntimeMeta,
   getSourceMappingUrlForEndOfFile,
   hasDependency,
+  join,
   rollupToRindoSourceMap,
   stringifyRuntimeData,
 } from '@utils';
-import { join } from 'path';
 import type { SourceMap as RollupSourceMap } from 'rollup';
 
 import type * as d from '../../../declarations';
@@ -26,7 +26,7 @@ export const generateLazyModules = async (
   if (!Array.isArray(destinations) || destinations.length === 0) {
     return [];
   }
-  const shouldMinify = config.minifyJs && isBrowserBuild;
+  const shouldMinify = !!(config.minifyJs && isBrowserBuild);
   const rollupResults = results.filter((r): r is d.RollupChunkResult => r.type === 'chunk');
   const entryComponentsResults = rollupResults.filter((rollupResult) => rollupResult.isComponent);
   const chunkResults = rollupResults.filter((rollupResult) => !rollupResult.isComponent && !rollupResult.isEntry);
@@ -48,7 +48,7 @@ export const generateLazyModules = async (
     }),
   );
 
-  if ((!!config.extras?.experimentalImportInjection || !!config.extras?.enableImportInjection) && !isBrowserBuild) {
+  if ((!!config.extras.experimentalImportInjection || !!config.extras.enableImportInjection) && !isBrowserBuild) {
     addStaticImports(rollupResults, bundleModules);
   }
 
@@ -304,18 +304,43 @@ const writeLazyEntry = async (
   );
 };
 
+/**
+ * Sorts, formats, and stringifies the bundles for a lazy build of a Rindo project.
+ *
+ * @param bundleModules The modules for the Rindo lazy build emitted from Rollup.
+ * @returns A stringified representation of the lazy bundles.
+ */
 const formatLazyBundlesRuntimeMeta = (bundleModules: d.BundleModule[]): string => {
   const sortedBundles = bundleModules.slice().sort(sortBundleModules);
   const lazyBundles = sortedBundles.map(formatLazyRuntimeBundle);
   return stringifyRuntimeData(lazyBundles);
 };
 
+/**
+ * Formats a bundle module into a tuple of bundle ID and component metadata for use at runtime.
+ *
+ * @param bundleModule The bundle module to format.
+ * @returns A tuple of bundle ID and component metadata.
+ */
 const formatLazyRuntimeBundle = (bundleModule: d.BundleModule): d.LazyBundleRuntimeData => {
   const bundleId = bundleModule.output.bundleId;
   const bundleCmps = bundleModule.cmps.slice().sort(sortBundleComponents);
   return [bundleId, bundleCmps.map((cmp) => formatComponentRuntimeMeta(cmp, true))];
 };
 
+/**
+ * Sorts bundle modules by the number of dependents, dependencies, and containing component tags.
+ * Dependencies/dependents may also include components that are statically slotted into other components.
+ * The order of the bundle modules is important because it determines the order in which the bundles are loaded
+ * and subsequently the order that their respective components are defined and connected (i.e. via the `connectedCallback`)
+ * at runtime.
+ *
+ * This must be a valid {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#comparefn | compareFn}
+ *
+ * @param a The first argument to compare.
+ * @param b The second argument to compare.
+ * @returns A number indicating whether the first argument is less than/greater than/equal to the second argument.
+ */
 export const sortBundleModules = (a: d.BundleModule, b: d.BundleModule): -1 | 1 | 0 => {
   const aDependents = a.cmps.reduce((dependents, cmp) => {
     dependents.push(...cmp.dependents);

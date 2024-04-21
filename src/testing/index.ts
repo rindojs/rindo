@@ -1,7 +1,10 @@
-export { createJestPuppeteerEnvironment } from './jest/jest-environment';
-export { jestPreprocessor } from './jest/jest-preprocessor';
-export { createTestRunner } from './jest/jest-runner';
-export { jestSetupTestFramework } from './jest/jest-setup-test-framework';
+export {
+  getCreateJestPuppeteerEnvironment,
+  getCreateJestTestRunner,
+  getJestPreprocessor,
+  getJestPreset,
+  getJestSetupTestFramework,
+} from './jest/jest-rindo-connector';
 export {
   mockFetch,
   MockHeaders,
@@ -27,5 +30,5 @@ export { E2EElement, E2EPage, newE2EPage } from './puppeteer';
 export { newSpecPage } from './spec-page';
 export { transpile } from './test-transpile';
 export { createTesting } from './testing';
-export { getMockFSPatch, setupConsoleMocker, shuffleArray } from './testing-utils';
+export { setupConsoleMocker, shuffleArray } from './testing-utils';
 export type { EventSpy, SpecPage, Testing } from '@rindo/core/internal';

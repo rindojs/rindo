@@ -12,10 +12,11 @@ import {
   retrieveTsDecorators,
   retrieveTsModifiers,
   serializeSymbol,
+  tsPropDeclNameAsString,
   typeToString,
   validateReferences,
 } from '../transform-utils';
-import { getDeclarationParameters, isDecoratorNamed } from './decorator-utils';
+import { getDecoratorParameters, isDecoratorNamed } from './decorator-utils';
 
 /**
  * Parse a collection of class members decorated with `@Prop()`
@@ -26,21 +27,20 @@ import { getDeclarationParameters, isDecoratorNamed } from './decorator-utils';
  * Only those decorated with `@Prop()` will be parsed.
  * @param typeChecker a reference to the TypeScript type checker
  * @param program a {@link ts.Program} object
- * @param watchable a collection of class members that can be watched for changes using Rindo's `@Watch` decorator
- * @param newMembers a collection that parsed `@Prop` annotated class members should be pushed to as a side effect of
- * calling this function
+ * @param newMembers a collection that parsed `@Prop` annotated class members should be pushed to as a side effect of calling this function
+ * @param decoratorName the name of the decorator to look for
  */
 export const propDecoratorsToStatic = (
   diagnostics: d.Diagnostic[],
   decoratedProps: ts.ClassElement[],
   typeChecker: ts.TypeChecker,
   program: ts.Program,
-  watchable: Set<string>,
   newMembers: ts.ClassElement[],
+  decoratorName: string,
 ): void => {
   const properties = decoratedProps
     .filter(ts.isPropertyDeclaration)
-    .map((prop) => parsePropDecorator(diagnostics, typeChecker, program, prop, watchable))
+    .map((prop) => parsePropDecorator(diagnostics, typeChecker, program, prop, decoratorName))
     .filter((prop): prop is ts.PropertyAssignment => prop != null);
 
   if (properties.length > 0) {
@@ -55,7 +55,7 @@ export const propDecoratorsToStatic = (
  * @param typeChecker a reference to the TypeScript type checker
  * @param program a {@link ts.Program} object
  * @param prop the TypeScript `PropertyDeclaration` to parse
- * @param watchable a collection of class members that can be watched for changes using Rindo's `@Watch` decorator
+ * @param decoratorName the name of the decorator to look for
  * @returns a property assignment expression to be added to the Rindo component's class
  */
 const parsePropDecorator = (
@@ -63,17 +63,17 @@ const parsePropDecorator = (
   typeChecker: ts.TypeChecker,
   program: ts.Program,
   prop: ts.PropertyDeclaration,
-  watchable: Set<string>,
+  decoratorName: string,
 ): ts.PropertyAssignment | null => {
-  const propDecorator = retrieveTsDecorators(prop)?.find(isDecoratorNamed('Prop'));
+  const propDecorator = retrieveTsDecorators(prop)?.find(isDecoratorNamed(decoratorName));
   if (propDecorator == null) {
     return null;
   }
 
-  const decoratorParams = getDeclarationParameters<d.PropOptions>(propDecorator);
+  const decoratorParams = getDecoratorParameters<d.PropOptions>(propDecorator, typeChecker);
   const propOptions: d.PropOptions = decoratorParams[0] || {};
 
-  const propName = prop.name.getText();
+  const propName = tsPropDeclNameAsString(prop, typeChecker);
 
   if (isMemberPrivate(prop)) {
     const err = buildError(diagnostics);
@@ -120,7 +120,7 @@ const parsePropDecorator = (
     ts.factory.createStringLiteral(propName),
     convertValueToLiteral(propMeta),
   );
-  watchable.add(propName);
+
   return staticProp;
 };
 

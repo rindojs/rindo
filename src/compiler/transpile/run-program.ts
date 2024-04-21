@@ -12,6 +12,7 @@ import ts from 'typescript';
 import type * as d from '../../declarations';
 import { updateComponentBuildConditionals } from '../app-core/app-data';
 import { resolveComponentDependencies } from '../entries/resolve-component-dependencies';
+import { performAutomaticKeyInsertion } from '../transformers/automatic-key-insertion';
 import { convertDecoratorsToStatic } from '../transformers/decorators-to-static/convert-decorators';
 import { rewriteAliasedDTSImportPaths } from '../transformers/rewrite-aliased-paths';
 import { updateModule } from '../transformers/static-to-meta/parse-static';
@@ -66,7 +67,10 @@ export const runTsProgram = async (
   };
 
   const transformers: ts.CustomTransformers = {
-    before: [convertDecoratorsToStatic(config, buildCtx.diagnostics, tsTypeChecker, tsProgram)],
+    before: [
+      convertDecoratorsToStatic(config, buildCtx.diagnostics, tsTypeChecker, tsProgram),
+      performAutomaticKeyInsertion,
+    ],
     afterDeclarations: [],
   };
 
@@ -109,10 +113,6 @@ export const runTsProgram = async (
 
   // create the components.d.ts file and write to disk
   const hasTypesChanged = await generateAppTypes(config, compilerCtx, buildCtx, 'src');
-  if (hasTypesChanged) {
-    return true;
-  }
-
   if (typesOutputTarget.length > 0) {
     // copy src dts files that do not get emitted by the compiler
     // but we still want to ship them in the dist directory
@@ -136,7 +136,10 @@ export const runTsProgram = async (
     await Promise.all(srcRootDtsFiles);
   }
 
-  if (config.validateTypes) {
+  // TODO(RINDO-540): remove `hasTypesChanged` check and figure out how to generate types before
+  // executing the TS build program so we don't get semantic diagnostic errors about referencing the
+  // auto-generated `components.d.ts` file.
+  if (config.validateTypes && !hasTypesChanged) {
     const tsSemantic = loadTypeScriptDiagnostics(tsBuilder.getSemanticDiagnostics());
     if (config.devMode) {
       tsSemantic.forEach((semanticDiagnostic) => {
@@ -149,7 +152,7 @@ export const runTsProgram = async (
     buildCtx.diagnostics.push(...tsSemantic);
   }
 
-  return false;
+  return hasTypesChanged;
 };
 
 /**
@@ -175,7 +178,7 @@ export const runTsProgram = async (
  * @returns a relative path to a suitable location where the typedef file can be
  * written
  */
-export const getRelativeDts = (config: d.Config, srcPath: string, emitDtsPath: string): string => {
+export const getRelativeDts = (config: d.ValidatedConfig, srcPath: string, emitDtsPath: string): string => {
   const parts: string[] = [];
   for (let i = 0; i < 30; i++) {
     if (normalizePath(config.srcDir) === srcPath) {

@@ -2,9 +2,8 @@ import rollupCommonjs from '@rollup/plugin-commonjs';
 import rollupJson from '@rollup/plugin-json';
 import rollupNodeResolve from '@rollup/plugin-node-resolve';
 import fs from 'fs-extra';
-import MagicString from 'magic-string';
 import { join } from 'path';
-import type { OutputChunk, RollupOptions, RollupWarning, TransformResult } from 'rollup';
+import type { OutputChunk, RollupOptions, RollupWarning } from 'rollup';
 import sourcemaps from 'rollup-plugin-sourcemaps';
 
 import { getBanner } from '../utils/banner';
@@ -14,7 +13,6 @@ import { writePkgJson } from '../utils/write-pkg-json';
 import { aliasPlugin } from './plugins/alias-plugin';
 import { parse5Plugin } from './plugins/parse5-plugin';
 import { replacePlugin } from './plugins/replace-plugin';
-import { sizzlePlugin } from './plugins/sizzle-plugin';
 import { terserPlugin } from './plugins/terser-plugin';
 import { typescriptSourcePlugin } from './plugins/typescript-source-plugin';
 
@@ -130,32 +128,7 @@ export async function compiler(opts: BuildOptions) {
         },
       },
       replacePlugin(opts),
-      {
-        name: 'hackReplaceNodeProcessBinding',
-        /**
-         * Removes instances of calls to deprecated `process.binding()` calls
-         * @param code the code to modify
-         * @param id module's identifier
-         * @returns the modified code
-         */
-        transform(code: string, id: string): TransformResult {
-          code = code.replace(` || Object.keys(process.binding('natives'))`, '');
-          return {
-            code: code,
-            map: new MagicString(code)
-              .generateMap({
-                source: id,
-                // this is the name of the sourcemap, not to be confused with the `file` field in a generated sourcemap
-                file: id + '.map',
-                includeContent: false,
-                hires: true,
-              })
-              .toString(),
-          };
-        },
-      },
       parse5Plugin(opts),
-      sizzlePlugin(opts),
       aliasPlugin(opts),
       rollupNodeResolve({
         mainFields: ['module', 'main'],
@@ -222,6 +195,7 @@ async function minifyRindoCompiler(code: string, opts: BuildOptions) {
   // importing esm for `terser`, but unfortunately we could not work out a way
   // to also import the type while doing a dynamic import, hence the `any`
   // here.
+  //
   const results = await minify(code, minifyOpts as any);
 
   code = getBanner(opts, `Rindo Compiler`, true) + '\n' + results.code;

@@ -23,6 +23,7 @@ export type {
   VNodeData,
 } from '../rindo-public-runtime';
 export {
+  AttachInternals,
   Build,
   Component,
   Element,

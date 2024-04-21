@@ -60,6 +60,7 @@ export function getOptions(rootDir: string, inputOpts: BuildOptions = {}): Build
     buildId: null,
     isProd: false,
     isCI: false,
+    isWatch: false,
     isPublishRelease: false,
     vermoji: null,
     tag: 'dev',
@@ -93,7 +94,12 @@ export function getOptions(rootDir: string, inputOpts: BuildOptions = {}): Build
 }
 
 /**
- * Generates an object containing versioning information of various packages installed at build time
+ * Generates an object containing versioning information of various packages
+ * installed at build time
+ *
+ * **NOTE** this will mutate the `opts` parameter, adding information about
+ * the versions used for various dependencies
+ *
  * @param opts the options being used during a build
  * @returns an object that contains package names/versions installed at the time a build was invoked
  */
@@ -119,10 +125,10 @@ export function createReplaceData(opts: BuildOptions): Record<string, any> {
     autoprefixerPkg.name + autoprefixerPkg.version + '_' + postcssPkg.name + postcssPkg.version + '_' + CACHE_BUSTER;
 
   const parse5Pkg = getPkg(opts, 'parse5');
-  opts.parse5Verion = parse5Pkg.version;
+  opts.parse5Version = parse5Pkg.version;
 
-  const sizzlePkg = getPkg(opts, 'sizzle');
-  opts.sizzleVersion = sizzlePkg.version;
+  const jqueryPkg = getPkg(opts, 'jquery');
+  opts.jqueryVersion = jqueryPkg.version;
 
   return {
     __BUILDID__: opts.buildId,
@@ -134,7 +140,7 @@ export function createReplaceData(opts: BuildOptions): Record<string, any> {
     '__VERSION:RINDO__': opts.version,
     '__VERSION:PARSE5__': parse5Pkg.version,
     '__VERSION:ROLLUP__': rollupPkg.version,
-    '__VERSION:SIZZLE__': rollupPkg.version,
+    '__VERSION:JQUERY__': jqueryPkg.version,
     '__VERSION:TERSER__': terserPkg.version,
     '__VERSION:TYPESCRIPT__': typescriptPkg.version,
 
@@ -153,18 +159,18 @@ function getPkg(opts: BuildOptions, pkgName: string): PackageData {
 }
 
 export interface BuildOptions {
-  ghRepoOrg?: string;
+  buildDir?: string;
+  bundleHelpersDir?: string;
   ghRepoName?: string;
-  rootDir?: string;
-  srcDir?: string;
+  ghRepoOrg?: string;
   nodeModulesDir?: string;
+  rootDir?: string;
+  scriptsBuildDir?: string;
+  scriptsBundlesDir?: string;
+  scriptsDir?: string;
+  srcDir?: string;
   typescriptDir?: string;
   typescriptLibDir?: string;
-  buildDir?: string;
-  scriptsDir?: string;
-  scriptsBundlesDir?: string;
-  scriptsBuildDir?: string;
-  bundleHelpersDir?: string;
 
   output?: {
     cliDir: string;
@@ -177,23 +183,24 @@ export interface BuildOptions {
     testingDir: string;
   };
 
-  version?: string;
   buildId?: string;
+  changelogPath?: string;
+  isCI?: boolean;
   isProd?: boolean;
   isPublishRelease?: boolean;
-  isCI?: boolean;
-  vermoji?: string;
+  isWatch?: boolean;
+  otp?: string;
+  packageJson?: PackageData;
   packageJsonPath?: string;
   packageLockJsonPath?: string;
-  packageJson?: PackageData;
-  changelogPath?: string;
-  tag?: string;
-  typescriptVersion?: string;
+  parse5Version?: string;
   rollupVersion?: string;
-  parse5Verion?: string;
-  sizzleVersion?: string;
+  jqueryVersion?: string;
+  tag?: string;
   terserVersion?: string;
-  otp?: string;
+  typescriptVersion?: string;
+  vermoji?: string;
+  version?: string;
 }
 
 /**

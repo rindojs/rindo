@@ -3,7 +3,7 @@ import rollupJsonPlugin from '@rollup/plugin-json';
 import rollupNodeResolvePlugin from '@rollup/plugin-node-resolve';
 import rollupReplacePlugin from '@rollup/plugin-replace';
 import { createOnWarnFn, isString, loadRollupDiagnostics } from '@utils';
-import { rollup, RollupOptions, TreeshakingOptions } from 'rollup';
+import { PluginContext, rollup, RollupOptions, TreeshakingOptions } from 'rollup';
 
 import type * as d from '../../declarations';
 import { lazyComponentPlugin } from '../output-targets/dist-lazy/lazy-component-plugin';
@@ -73,10 +73,16 @@ export const getRollupOptions = (
     rootDir: config.rootDir,
     ...(config.nodeResolve as any),
   });
+
   const orgNodeResolveId = nodeResolvePlugin.resolveId;
   const orgNodeResolveId2 = (nodeResolvePlugin.resolveId = async function (importee: string, importer: string) {
     const [realImportee, query] = importee.split('?');
-    const resolved = await orgNodeResolveId.call(nodeResolvePlugin, realImportee, importer);
+    const resolved = await orgNodeResolveId.call(
+      nodeResolvePlugin as unknown as PluginContext,
+      realImportee,
+      importer,
+      {},
+    );
     if (resolved) {
       if (isString(resolved)) {
         return query ? resolved + '?' + query : resolved;
@@ -90,7 +96,11 @@ export const getRollupOptions = (
   });
   if (config.devServer?.experimentalDevModules) {
     nodeResolvePlugin.resolveId = async function (importee: string, importer: string) {
-      const resolvedId = await orgNodeResolveId2.call(nodeResolvePlugin, importee, importer);
+      const resolvedId = await orgNodeResolveId2.call(
+        nodeResolvePlugin as unknown as PluginContext,
+        importee,
+        importer,
+      );
       return devNodeModuleResolveId(config, compilerCtx.fs, resolvedId, importee);
     };
   }
@@ -104,7 +114,7 @@ export const getRollupOptions = (
     },
 
     plugins: [
-      coreResolvePlugin(config, compilerCtx, bundleOpts.platform, bundleOpts.externalRuntime),
+      coreResolvePlugin(config, compilerCtx, bundleOpts.platform, !!bundleOpts.externalRuntime),
       appDataPlugin(config, compilerCtx, buildCtx, bundleOpts.conditionals, bundleOpts.platform),
       lazyComponentPlugin(buildCtx),
       loaderPlugin(bundleOpts.loader),
@@ -130,6 +140,7 @@ export const getRollupOptions = (
       }),
       rollupReplacePlugin({
         'process.env.NODE_ENV': config.devMode ? '"development"' : '"production"',
+        preventAssignment: true,
       }),
       fileLoadPlugin(compilerCtx.fs),
     ],

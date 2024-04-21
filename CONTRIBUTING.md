@@ -8,18 +8,30 @@ Thanks for your interest in contributing to Rindo! :tada:
 Please see our [Contributor Code of Conduct](https://github.com/familyjs/rindo/blob/main/CODE_OF_CONDUCT.md) for information on our rules of conduct.
 
 
-## Creating an Issue
+## Reporting a Bug
 
 * It is required that you clearly describe the steps necessary to reproduce the issue you are running into. Although we would love to help our users as much as possible, diagnosing issues without clear reproduction steps is extremely time-consuming and simply not sustainable.
 
 * The issue list of this repository is exclusively for bug reports and feature requests. Non-conforming issues will be closed immediately.
 
-* Issues with no clear steps to reproduce will not be triaged. If an issue is labeled with "Awaiting Reply" and receives no further replies from the author of the issue for more than 5 days, it will be closed.
+* Issues with no clear steps to reproduce will not be triaged.
 
-* If you think you have found a bug, or have a new feature idea, please start by making sure it hasn't already been [reported](https://github.com/familyjs/rindo/issues?utf8=%E2%9C%93&q=is%3Aissue). You can search through existing issues to see if there is a similar one reported. Include closed issues as it may have been closed with a solution.
+* If you think you have found a bug, please start by making sure it hasn't already been [reported](https://github.com/familyjs/rindo/issues?utf8=%E2%9C%93&q=is%3Aissue). You can search through existing issues to see if there is a similar one reported. Include closed issues as it may have been closed with a solution.
+    * If a bug report already exists, please upvote it using the :+1: reaction on the GitHub Issue summary. The team is currently unable to track "+1" style comments on the issue.
 
-* Next, [create a new issue](https://github.com/familyjs/rindo/issues/new) that thoroughly explains the problem. Please fill out the populated issue form before submitting the issue.
+* Next, [create a new issue](https://github.com/familyjs/rindo/issues/new) that thoroughly explains the problem.
+    * Please fill out the issue form in full before submitting.
+    * Please only include one bug per issue.
 
+
+## Requesting a Feature
+
+* Before requesting a feature, please start by making sure it hasn't already been [proposed](https://github.com/familyjs/rindo/issues?utf8=%E2%9C%93&q=is%3Aissue). You can search through existing GitHub issues to see if there is a similar feature request has been reported. Include closed feature requests, as it may have been closed already.
+    * If a feature request already exists, please upvote it using the :+1: reaction on the GitHub Issue summary. The team is currently unable to track "+1" style comments on the issue.
+
+* Next, [create a new feature request]([https://github.com/familyjs/rindo/issues/new](https://github.com/familyjs/rindo/issues/new?assignees=&labels=&projects=&template=feature_request.yml&title=feat%3A+)) that thoroughly explains the feature request.
+    * Please fill out the feature request form in full before submitting.
+    * Please only include one feature request per report.
 
 ## Creating a Pull Request
 
@@ -30,12 +42,118 @@ Please see our [Contributor Code of Conduct](https://github.com/familyjs/rindo/b
 1. Fork the repo.
 2. Clone your fork.
 3. Make a branch for your change.
-4. Rindo uses [volta](https://volta.sh) to manage its npm and Node versions.
+4. Rindo uses [volta](https://volta.sh) to manage its npm and Node versions. 
    [Install it](https://docs.volta.sh/guide/getting-started) before proceeding.
-  1. There's no need to install a specific version of npm or Node right now, it shall be done automatically for you in
-     the next step
-5. Run `npm install`
+   1. There's no need to install a specific version of npm or Node right now, it shall be done automatically for you in
+      the next step
+5. Run `npm ci`
+6. (Optional) If you are working on [Jest support](./src/testing/jest), [see the installation steps in that directory's README](./src/testing/jest/README.md#installing-dependencies).
 
+
+### Updates
+
+1. Unit test. Unit test. Unit test. Please take a look at how other unit tests are written, and you can't write too many tests.
+2. If there is a `*.spec.ts` file located in the `test/` folder, update it to include a test for your change, if needed. If this file doesn't exist, please notify us.
+3. First run `npm run build`. Then run `npm run test` or `npm run test.watch` to make sure all tests are working, regardless if a test was added.
+
+### Testing Changes Against a Project Locally
+
+#### Testing with `npm link`:
+
+Using `npm link` is beneficial to the development cycle in that consecutive builds of Rindo are immediately available in your project, without any additional `npm install` steps needed:
+
+1. In the directory of _rindo core_:
+    1. Run `npm run build`
+    2. Run `npm link`
+2. In the directory of _your rindo project_:
+    1. Run `npm link @rindo/core`
+    2. Add the following to your `tsconfig.json`, to ensures that typescript can resolve all modules correctly:
+
+```json
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@rindo/core/internal": ["node_modules/@rindo/core/internal"],
+      "@rindo/core/internal/*": ["node_modules/@rindo/core/internal/*"]
+    }
+  }
+}
+```
+
+You can then test your changes against your own rindo project.
+
+Afterwards, to clean up:
+
+1. In the directory of _your rindo project_:
+    1. Run `npm unlink @rindo/core`
+    2. Remove the modifications to your tsconfig.json
+2. In the directory of _rindo core_, run `npm unlink`
+
+#### Testing with `npm pack`:
+
+There are some cases where `npm link` may fall short. For instance, when upgrading a minimum/recommended package version where the package in question has changed its typings. Rather than updating `paths` in your project's `tsconfig.json` file, it may be easier to create a tarball of the project and install in manually.
+
+1. In the directory of _rindo core_:
+    1. Run `npm run build`
+    2. Run `npm pack`. This will create a tarball with the name `rindo-core-<VERSION>.tgz`
+2. In the directory of _your rindo project_:
+    1. Run `npm install --save-dev <PATH_TO_RINDO_REPO_ON_DISK>/rindo-core-<VERSION>.tgz`. 
+       * e.g. If you cloned the rindo repo to `~/workspaces` and built v.2.6.0, you would run `npm install ~/workspaces/rindo/rindo-2.6.0.tgz`
+  
+Note that this method of testing is far more laborious than using `npm link`, and requires every step to be repeated following a change to the Rindo core source.
+
+Afterwards, to clean up:
+
+1. In the directory of your rindo project, run `npm install --save-dev rindo@<VERSION>` for the `<VERSION>` of Rindo core that was installed in your project prior to testing. 
+
+### Debugging the Rindo Compiler
+
+The Rindo compiler itself can be run through a debugger, as opposed to running a Rindo project through a debugger.
+This allows individuals working on the compiler itself to inspect fields, trace execution, and more during the
+execution of a Rindo task (`build`, `test`, etc.).
+
+Support for this style of debugging is currently a work in progress and may not work for every aspect of the compiler.
+It is considered experimental and should not be relied on for any production means.
+
+At this time, it's recommended that the compiler be debugged by opening this project in your editor of choice. Please
+keep in mind that due to the number of possible development environment's that exist today, this guide may not include
+directions for every possible debugging environment.
+
+It is required that Rindo be built to run it through the debugger.
+
+Note that Rindo transpiles source code using multiple worker processes. If your debugger appears to 'hang' or get
+stuck, your debugger may not have switched to a worker process that has halted on a breakpoint. You may be able to
+avoid this altogether by setting `--max-workers=1` when you launch Rindo (with the possibility of not being able to
+reproduce timing issues between workers as a side effect).
+
+#### Debugging the Compiler in VSCode
+
+Two launch configurations for debugging the compiler can be found in the `.vscode/launch.json` configuration found in
+this repository:
+
+1. `debug rindo compiler (default config)` will run the compiler with the default Rindo configuration file
+(generated at runtime).
+2. `debug rindo compiler with rindo.config.ts` will run the compiler with a specific Rindo configuration file. 
+You will be prompted for the location of the Rindo project containing the configuration file to debug with before the
+debugger starts.
+
+#### Debugging the Compiler in JetBrains IDEs
+
+JetBrains does not provide means to store and reuse configuration templates at this time. By default, templates are
+created of a specific 'type', such as 'NodeJS'. JetBrains does not allow for greater than one template of a specific
+type to co-exist. In other words, creating a Rindo-debugger template would override other NodeJS templates in the IDE
+for the project.
+
+As a workaround, it is suggested that individuals create their own Run/Debug configurations. The following settings
+are recommended:
+
+Working directory: `~/workspaces/rindo`
+JavaScript file: `bin/rindo`
+Application parameters: `build --config=PATH_TO_RINDO_PROJECT_TO_DEBUG`
+
+The `build` application parameter can be swapped with any of the supported Rindo CLI commands. If `--config` is
+omitted, Rindo will generate a default configuration file for you.
 
 ### Commit Message Format
 
@@ -76,12 +194,25 @@ The subject contains succinct description of the change:
 
 #### Footer
 
+If a pull request fixes an open GitHub issue, `fixes: #` + the issue number should be included in the footer.
+
 Members of the Rindo engineering team should take care to add the JIRA ticket associated with a PR in the footer of
 the git commit. Community members need not worry about adding a footer.
 
 If your pull request contains a *breaking change*, please add the text 'BREAKING CHANGE:' followed by a brief
 description. This description will be used in Rindo's auto-generated changelog under the `BREAKING CHANGES` section.
 This syntax must be used over the 'exclamation' syntax that other projects using conventional commits may follow.
+
+Note the newline separating the body from the footer, as well as between the JIRA ticket & 'BREAKING CHANGE:' notice:
+```
+<BODY>
+
+fixes: #123
+
+RINDO-147: Watchers Not Firing as Expected when using the Custom Elements Build
+
+BREAKING CHANGE: Watchers may appear to not fire in existing applications, when this is the expected behavior.
+```
 
 #### Example
 
@@ -94,6 +225,8 @@ Wait for the CustomElementRegistry to mark the component as ready
 before setting `isWatchReady`. Otherwise, watchers may fire prematurely
 if `customElements.get()` or `customElements.whenDefined()` resolve
 _before_ Rindo has completed instantiating a component
+
+fixes: #123
 
 RINDO-147: Watchers Not Firing as Expected when using the Custom Elements Build
 

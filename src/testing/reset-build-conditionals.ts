@@ -56,5 +56,7 @@ export function resetBuildConditionals(b: d.BuildConditionals) {
   // TODO(RINDO-914): remove this option when `experimentalSlotFixes` is the default behavior
   b.slotChildNodesFix = false;
   // TODO(RINDO-914): remove this option when `experimentalSlotFixes` is the default behavior
-  b.patchPseudoShadowDom = false;
+  b.experimentalSlotFixes = false;
+  // TODO(RINDO-1086): remove this option when it's the default behavior
+  b.experimentalScopedSlotChanges = false;
 }

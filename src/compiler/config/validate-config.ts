@@ -1,15 +1,22 @@
 import { createNodeLogger, createNodeSys } from '@sys-api-node';
-import { buildError, isBoolean, isNumber, isString, sortBy } from '@utils';
+import { buildError, buildWarn, isBoolean, isNumber, isString, sortBy } from '@utils';
 
 import {
   ConfigBundle,
   ConfigExtras,
   Diagnostic,
   LoadConfigInit,
+  LogLevel,
   UnvalidatedConfig,
   ValidatedConfig,
 } from '../../declarations';
 import { setBooleanConfig } from './config-utils';
+import {
+  DEFAULT_DEV_MODE,
+  DEFAULT_HASHED_FILENAME_LENGTH,
+  MAX_HASHED_FILENAME_LENGTH,
+  MIN_HASHED_FILENAME_LENGTH,
+} from './constants';
 import { validateOutputTargets } from './outputs';
 import { validateDevServer } from './validate-dev-server';
 import { validateHydrated } from './validate-hydrated';
@@ -83,13 +90,47 @@ export const validateConfig = (
 
   const logger = bootstrapConfig.logger || config.logger || createNodeLogger();
 
+  // flags _should_ be JSON safe here
+  //
+  // we access `'flags'` on validated config to avoid having to introduce an
+  // import of the CLI module
+  const flags: ValidatedConfig['flags'] = JSON.parse(JSON.stringify(config.flags || {}));
+
+  // default level is 'info'
+  let logLevel: LogLevel = 'info';
+  if (flags.debug || flags.verbose) {
+    logLevel = 'debug';
+  } else if (flags.logLevel) {
+    logLevel = flags.logLevel;
+  }
+
+  logger.setLevel(logLevel);
+
+  let devMode = config.devMode ?? DEFAULT_DEV_MODE;
+  if (flags.prod) {
+    devMode = false;
+  } else if (flags.dev) {
+    devMode = true;
+  } else if (!isBoolean(config.devMode)) {
+    devMode = DEFAULT_DEV_MODE;
+  }
+
+  const hashFileNames = config.hashFileNames ?? !devMode;
+
   const validatedConfig: ValidatedConfig = {
     devServer: {}, // assign `devServer` before spreading `config`, in the event 'devServer' is not a key on `config`
     ...config,
-    // flags _should_ be JSON safe
-    flags: JSON.parse(JSON.stringify(config.flags || {})),
+    buildEs5: config.buildEs5 === true || (!devMode && config.buildEs5 === 'prod'),
+    devMode,
+    extras: config.extras || {},
+    flags,
+    hashFileNames,
+    hashedFileNameLength: config.hashedFileNameLength ?? DEFAULT_HASHED_FILENAME_LENGTH,
     hydratedFlag: validateHydrated(config),
+    logLevel,
     logger,
+    minifyCss: config.minifyCss ?? !devMode,
+    minifyJs: config.minifyJs ?? !devMode,
     outputTargets: config.outputTargets ?? [],
     rollupConfig: validateRollupConfig(config),
     sys: config.sys ?? bootstrapConfig.sys ?? createNodeSys({ logger }),
@@ -98,19 +139,10 @@ export const validateConfig = (
       ? userConfig.transformAliasedImportPaths
       : true,
     validatePrimaryPackageOutputTarget: userConfig.validatePrimaryPackageOutputTarget ?? false,
+    ...validateNamespace(config.namespace, config.fsNamespace, diagnostics),
     ...validatePaths(config),
   };
 
-  // default devMode false
-  if (validatedConfig.flags.prod) {
-    validatedConfig.devMode = false;
-  } else if (validatedConfig.flags.dev) {
-    validatedConfig.devMode = true;
-  } else if (!isBoolean(validatedConfig.devMode)) {
-    validatedConfig.devMode = DEFAULT_DEV_MODE;
-  }
-
-  validatedConfig.extras = validatedConfig.extras || {};
   validatedConfig.extras.lifecycleDOMEvents = !!validatedConfig.extras.lifecycleDOMEvents;
   validatedConfig.extras.scriptDataOpts = !!validatedConfig.extras.scriptDataOpts;
   validatedConfig.extras.initializeNextTick = !!validatedConfig.extras.initializeNextTick;
@@ -136,7 +168,7 @@ export const validateConfig = (
     }
   }
 
-  // TODO: remove `experimentalSlotFixes` when it's the default behavior
+  // TODO(RINDO-914): remove `experimentalSlotFixes` when it's the default behavior
   validatedConfig.extras.experimentalSlotFixes = !!validatedConfig.extras.experimentalSlotFixes;
   if (validatedConfig.extras.experimentalSlotFixes === true) {
     validatedConfig.extras.appendChildSlotFix = true;
@@ -150,11 +182,9 @@ export const validateConfig = (
     validatedConfig.extras.scopedSlotTextContentFix = !!validatedConfig.extras.scopedSlotTextContentFix;
   }
 
-  validatedConfig.buildEs5 =
-    validatedConfig.buildEs5 === true || (!validatedConfig.devMode && validatedConfig.buildEs5 === 'prod');
+  // TODO(RINDO-1086): remove this option when it's the default behavior
+  validatedConfig.extras.experimentalScopedSlotChanges = !!validatedConfig.extras.experimentalScopedSlotChanges;
 
-  setBooleanConfig(validatedConfig, 'minifyCss', null, !validatedConfig.devMode);
-  setBooleanConfig(validatedConfig, 'minifyJs', null, !validatedConfig.devMode);
   setBooleanConfig(
     validatedConfig,
     'sourceMap',
@@ -163,7 +193,7 @@ export const validateConfig = (
   );
   setBooleanConfig(validatedConfig, 'watch', 'watch', false);
   setBooleanConfig(validatedConfig, 'buildDocs', 'docs', !validatedConfig.devMode);
-  setBooleanConfig(validatedConfig, 'buildDist', 'esm', !validatedConfig.devMode || validatedConfig.buildEs5);
+  setBooleanConfig(validatedConfig, 'buildDist', 'esm', !validatedConfig.devMode || !!validatedConfig.buildEs5);
   setBooleanConfig(validatedConfig, 'profile', 'profile', validatedConfig.devMode);
   setBooleanConfig(validatedConfig, 'writeLog', 'log', false);
   setBooleanConfig(validatedConfig, 'buildAppCore', null, true);
@@ -180,22 +210,19 @@ export const validateConfig = (
     validatedConfig.hashFileNames = !validatedConfig.devMode;
   }
   if (!isNumber(validatedConfig.hashedFileNameLength)) {
-    validatedConfig.hashedFileNameLength = DEFAULT_HASHED_FILENAME_LENTH;
+    validatedConfig.hashedFileNameLength = DEFAULT_HASHED_FILENAME_LENGTH;
   }
-  if (validatedConfig.hashedFileNameLength < MIN_HASHED_FILENAME_LENTH) {
+  if (validatedConfig.hashedFileNameLength < MIN_HASHED_FILENAME_LENGTH) {
     const err = buildError(diagnostics);
-    err.messageText = `validatedConfig.hashedFileNameLength must be at least ${MIN_HASHED_FILENAME_LENTH} characters`;
+    err.messageText = `validatedConfig.hashedFileNameLength must be at least ${MIN_HASHED_FILENAME_LENGTH} characters`;
   }
-  if (validatedConfig.hashedFileNameLength > MAX_HASHED_FILENAME_LENTH) {
+  if (validatedConfig.hashedFileNameLength > MAX_HASHED_FILENAME_LENGTH) {
     const err = buildError(diagnostics);
-    err.messageText = `validatedConfig.hashedFileNameLength cannot be more than ${MAX_HASHED_FILENAME_LENTH} characters`;
+    err.messageText = `validatedConfig.hashedFileNameLength cannot be more than ${MAX_HASHED_FILENAME_LENGTH} characters`;
   }
   if (!validatedConfig.env) {
     validatedConfig.env = {};
   }
-
-  // get a good namespace
-  validateNamespace(validatedConfig, diagnostics);
 
   // outputTargets
   validateOutputTargets(validatedConfig, diagnostics);
@@ -238,6 +265,15 @@ export const validateConfig = (
     return arr;
   }, [] as RegExp[]);
 
+  // TODO(RINDO-1107): Remove this check. It'll be unneeded (and raise a compilation error when we build Rindo) once
+  // this property is removed.
+  if (validatedConfig.nodeResolve?.customResolveOptions) {
+    const warn = buildWarn(diagnostics);
+    // this message is particularly long - let the underlying logger implementation take responsibility for breaking it
+    // up to fit in a terminal window
+    warn.messageText = `nodeResolve.customResolveOptions is a deprecated option in a Rindo Configuration file. If you need this option, please open a new issue in the Rindo repository (https://github.com/familyjs/rindo/issues/new/choose)`;
+  }
+
   CACHED_VALIDATED_CONFIG = validatedConfig;
 
   return {
@@ -245,8 +281,3 @@ export const validateConfig = (
     diagnostics,
   };
 };
-
-const DEFAULT_DEV_MODE = false;
-const DEFAULT_HASHED_FILENAME_LENTH = 8;
-const MIN_HASHED_FILENAME_LENTH = 4;
-const MAX_HASHED_FILENAME_LENTH = 32;

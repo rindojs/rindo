@@ -1,0 +1,15 @@
+{
+  "name": "@rindo/jest-27-and-under",
+  "version": "1.0.0",
+  "description": "Internal package for supporting Jest 27 and under with Rindo",
+  "license": "MIT",
+  "author": "Family Team",
+  "homepage": "https://rindojs.web.app/",
+  "volta": {
+    "extends": "../../../../package.json"
+  },
+  "devDependencies": {
+    "@types/jest": "^27.5.2",
+    "jest": "^27.5.1"
+  }
+}

@@ -3,7 +3,6 @@ import type {
   BuildCtx,
   Cache,
   CompilerCtx,
-  Config,
   LoadConfigInit,
   Module,
   UnvalidatedConfig,
@@ -34,16 +33,26 @@ export function mockValidatedConfig(overrides: Partial<ValidatedConfig> = {}): V
 
   return {
     ...baseConfig,
+    buildEs5: false,
+    cacheDir: '.rindo',
+    devMode: true,
     devServer: {},
+    extras: {},
     flags: createConfigFlags(),
+    fsNamespace: 'testing',
+    hashFileNames: false,
+    hashedFileNameLength: 8,
     hydratedFlag: null,
+    logLevel: 'info',
     logger: mockLogger(),
+    minifyCss: false,
+    minifyJs: false,
+    namespace: 'Testing',
     outputTargets: baseConfig.outputTargets ?? [],
     packageJsonFilePath: path.join(rootDir, 'package.json'),
     rootDir,
-    cacheDir: '.rindo',
-    srcIndexHtml: 'src/index.html',
     srcDir: '/src',
+    srcIndexHtml: 'src/index.html',
     sys: createTestingSystem(),
     testing: {},
     transformAliasedImportPaths: true,
@@ -90,6 +99,8 @@ export function mockConfig(overrides: Partial<UnvalidatedConfig> = {}): Unvalida
     minifyJs: false,
     namespace: 'Testing',
     nodeResolve: {
+      // TODO(RINDO-1107): Remove this field - it's currently overriding Rindo's default options to pass into
+      // the `@rollup/plugin-node-resolve` plugin.
       customResolveOptions: {},
     },
     outputTargets: null,
@@ -128,10 +139,8 @@ export const mockLoadConfigInit = (overrides?: Partial<LoadConfigInit>): LoadCon
   return { ...defaults, ...overrides };
 };
 
-export function mockCompilerCtx(config?: Config) {
-  if (!config) {
-    config = mockConfig();
-  }
+export function mockCompilerCtx(config?: ValidatedConfig) {
+  const innerConfig = config || mockValidatedConfig();
   const compilerCtx: CompilerCtx = {
     version: 1,
     activeBuildId: 0,
@@ -163,13 +172,13 @@ export function mockCompilerCtx(config?: Config) {
     rollupCacheLazy: null,
     rollupCacheNative: null,
     styleModeNames: new Set(),
-    worker: createWorkerContext(config.sys),
+    worker: createWorkerContext(innerConfig.sys),
   };
 
   Object.defineProperty(compilerCtx, 'fs', {
     get() {
       if (this._fs == null) {
-        this._fs = createInMemoryFs(config.sys);
+        this._fs = createInMemoryFs(innerConfig.sys);
       }
       return this._fs;
     },
@@ -178,7 +187,7 @@ export function mockCompilerCtx(config?: Config) {
   Object.defineProperty(compilerCtx, 'cache', {
     get() {
       if (this._cache == null) {
-        this._cache = mockCache(config, compilerCtx);
+        this._cache = mockCache(innerConfig, compilerCtx);
       }
       return this._cache;
     },
@@ -187,25 +196,15 @@ export function mockCompilerCtx(config?: Config) {
   return compilerCtx;
 }
 
-export function mockBuildCtx(config?: Config, compilerCtx?: CompilerCtx): BuildCtx {
-  if (!config) {
-    config = mockConfig();
-  }
-  if (!compilerCtx) {
-    compilerCtx = mockCompilerCtx(config);
-  }
-  const buildCtx = new BuildContext(config, compilerCtx);
+export function mockBuildCtx(config?: ValidatedConfig, compilerCtx?: CompilerCtx): BuildCtx {
+  const validatedConfig = config || mockValidatedConfig();
+  const validatedCompilerCtx = compilerCtx || mockCompilerCtx(validatedConfig);
 
+  const buildCtx = new BuildContext(validatedConfig, validatedCompilerCtx);
   return buildCtx as BuildCtx;
 }
 
-export function mockCache(config?: Config, compilerCtx?: CompilerCtx) {
-  if (!config) {
-    config = mockConfig();
-  }
-  if (!compilerCtx) {
-    compilerCtx = mockCompilerCtx(config);
-  }
+function mockCache(config: ValidatedConfig, compilerCtx: CompilerCtx) {
   config.enableCache = true;
   const cache = new CompilerCache(config, compilerCtx.fs);
   cache.initCacheDir();
@@ -230,12 +229,12 @@ export function mockCompilerSystem(): TestingSystem {
   return createTestingSystem();
 }
 
-export function mockDocument(html: string = null) {
+export function mockDocument(html: string | null = null) {
   const win = new MockWindow(html);
   return win.document as Document;
 }
 
-export function mockWindow(html: string = null) {
+export function mockWindow(html?: string) {
   const win = new MockWindow(html);
   return win as any as Window;
 }

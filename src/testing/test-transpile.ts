@@ -35,6 +35,6 @@ export function transpile(input: string, opts: TranspileOptions = {}): Transpile
  * @param rindoTranspilePaths a value to 'parse'
  * @returns a boolean
  */
-function parseRindoTranspilePaths(rindoTranspilePaths: string): boolean {
+function parseRindoTranspilePaths(rindoTranspilePaths: string | undefined): boolean {
   return rindoTranspilePaths === 'true' ? true : false;
 }

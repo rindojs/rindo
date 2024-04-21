@@ -1,6 +1,6 @@
 import type * as d from '../../declarations';
 import { initDevClient } from './init-dev-client';
-// TODO: Investigate whether we can delete these polyfills
+// TODO(RINDO-465): Investigate whether we can delete these polyfills
 import { applyPolyfills } from './polyfills';
 
 declare const iframeWindow: Window;
@@ -16,7 +16,7 @@ const defaultConfig: d.DevClientConfig = {
   }/`,
 };
 
-// TODO: Investigate whether we can delete these polyfills
+// TODO(RINDO-465): Investigate whether we can delete these polyfills
 applyPolyfills(iframeWindow);
 
 initDevClient(appWindow, Object.assign({}, defaultConfig, appWindow.devServerConfig, config));

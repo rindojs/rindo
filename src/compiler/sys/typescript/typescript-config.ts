@@ -1,5 +1,14 @@
-import { buildError, buildWarn, catchError, isString, loadTypeScriptDiagnostic, normalizePath } from '@utils';
-import { isAbsolute, join, relative } from 'path';
+import {
+  buildError,
+  buildWarn,
+  catchError,
+  isString,
+  join,
+  loadTypeScriptDiagnostic,
+  normalizePath,
+  relative,
+} from '@utils';
+import { isAbsolute } from 'path';
 import ts from 'typescript';
 
 import type * as d from '../../../declarations';
@@ -110,10 +119,17 @@ export const validateTsConfig = async (config: d.ValidatedConfig, sys: d.Compile
   return tsconfig;
 };
 
-const getTsConfigPath = async (config: d.Config, sys: d.CompilerSystem, init: d.LoadConfigInit) => {
+const getTsConfigPath = async (
+  config: d.ValidatedConfig,
+  sys: d.CompilerSystem,
+  init: d.LoadConfigInit,
+): Promise<{
+  path: string;
+  content: string;
+} | null> => {
   const tsconfig = {
-    path: null as string,
-    content: null as string,
+    path: '',
+    content: '',
   };
 
   if (isString(config.tsconfig)) {
@@ -144,7 +160,7 @@ const getTsConfigPath = async (config: d.Config, sys: d.CompilerSystem, init: d.
   return tsconfig;
 };
 
-const createDefaultTsConfig = (config: d.Config) =>
+const createDefaultTsConfig = (config: d.ValidatedConfig) =>
   JSON.stringify(
     {
       compilerOptions: {

@@ -79,7 +79,7 @@ export interface RindoConfig {
    * However, it's still common to have styles which should be "global" across all components and the website.
    * A global CSS file is often useful to set CSS Variables.
    *
-   * Additionally, the globalStyle config can be used to precompile styles with Sass, PostCss, etc.
+   * Additionally, the globalStyle config can be used to precompile styles with Sass, PostCSS, etc.
    * Below is an example folder structure containing a webapp's global sass file, named app.css.
    */
   globalStyle?: string;
@@ -119,7 +119,7 @@ export interface RindoConfig {
 
   /**
    * The plugins config can be used to add your own rollup plugins.
-   * By default, Rindo does not come with Sass or PostCss support.
+   * By default, Rindo does not come with Sass or PostCSS support.
    * However, either can be added using the plugin array.
    */
   plugins?: any[];
@@ -223,7 +223,7 @@ export interface RindoConfig {
    * to the head of the document containing some `visibility: hidden;` css rules.
    *
    * Disabling this will remove the style tag that sets `visibility: hidden;` on all
-   * unhydrated web components. This more closely follows the HTML spec, and allows
+   * un-hydrated web components. This more closely follows the HTML spec, and allows
    * you to set your own fallback content.
    *
    */
@@ -272,6 +272,13 @@ export interface RindoConfig {
   rollupPlugins?: { before?: any[]; after?: any[] };
 
   entryComponentsHint?: string[];
+  /**
+   * Sets whether Rindo will write files to `dist/` during the build or not.
+   *
+   * By default this value is set to the opposite value of {@link devMode},
+   * i.e. it will be `true` when building for production and `false` when
+   * building for development.
+   */
   buildDist?: boolean;
   buildLogFilePath?: string;
   devInspector?: boolean;
@@ -336,6 +343,16 @@ interface ConfigExtrasBase {
    * can be customized at runtime. Defaults to `false`.
    */
   tagNameTransform?: boolean;
+
+  // TODO(RINDO-1086): remove this option when it's the default behavior
+  /**
+   * Experimental flag.
+   * Updates the behavior of scoped components to align more closely with the behavior of the native
+   * Shadow DOM when using `slot`s.
+   *
+   * Defaults to `false`.
+   */
+  experimentalScopedSlotChanges?: boolean;
 }
 
 // TODO(RINDO-914): delete this interface when `experimentalSlotFixes` is the default behavior
@@ -376,7 +393,7 @@ type ConfigExtrasSlotFixes<ExperimentalFixesEnabled extends boolean, IndividualF
    */
   slotChildNodesFix?: IndividualFlags;
 
-  // TODO: remove `experimentalSlotFixes` when it's the default behavior
+  // TODO(RINDO-914): remove `experimentalSlotFixes` when it's the default behavior
   /**
    * Enables all slot-related fixes such as {@link slotChildNodesFix}, and
    * {@link scopedSlotTextContentFix}.
@@ -453,12 +470,23 @@ type RequireFields<T, K extends keyof T> = T & { [P in K]-?: T[P] };
 /**
  * Fields in {@link Config} to make required for {@link ValidatedConfig}
  */
-type StrictConfigFields =
+type StrictConfigFields = keyof Pick<
+  Config,
+  | 'buildEs5'
   | 'cacheDir'
+  | 'devMode'
   | 'devServer'
+  | 'extras'
   | 'flags'
+  | 'fsNamespace'
+  | 'hashFileNames'
+  | 'hashedFileNameLength'
   | 'hydratedFlag'
+  | 'logLevel'
   | 'logger'
+  | 'minifyCss'
+  | 'minifyJs'
+  | 'namespace'
   | 'outputTargets'
   | 'packageJsonFilePath'
   | 'rollupConfig'
@@ -468,7 +496,8 @@ type StrictConfigFields =
   | 'sys'
   | 'testing'
   | 'transformAliasedImportPaths'
-  | 'validatePrimaryPackageOutputTarget';
+  | 'validatePrimaryPackageOutputTarget'
+>;
 
 /**
  * A version of {@link Config} that makes certain fields required. This type represents a valid configuration entity.
@@ -749,12 +778,12 @@ export interface PrerenderConfig {
   robotsTxt?(opts: RobotsTxtOpts): string | RobotsTxtResults;
   sitemapXml?(opts: SitemapXmpOpts): string | SitemapXmpResults;
   /**
-   * Static Site Generated (SSG). Does not include Rindo's clientside
+   * Static Site Generated (SSG). Does not include Rindo's client-side
    * JavaScript, custom elements or preload modules.
    */
   staticSite?: boolean;
   /**
-   * If the prerenndered URLs should have a trailing "/"" or not. Defaults to `false`.
+   * If the prerendered URLs should have a trailing "/"" or not. Defaults to `false`.
    */
   trailingSlash?: boolean;
 }
@@ -772,7 +801,7 @@ export interface HydrateDocumentOptions {
    */
   canonicalUrl?: string;
   /**
-   * Include the HTML comments and attributes used by the clientside
+   * Include the HTML comments and attributes used by the client-side
    * JavaScript to read the structure of the HTML and rebuild each
    * component. Defaults to `true`.
    */
@@ -793,7 +822,7 @@ export interface HydrateDocumentOptions {
   direction?: string;
   /**
    * Component tag names listed here will not be prerendered, nor will
-   * hydrated on the clientside. Components listed here will be ignored
+   * hydrated on the client-side. Components listed here will be ignored
    * as custom elements and treated no differently than a `<div>`.
    */
   excludeComponents?: string[];
@@ -826,11 +855,11 @@ export interface HydrateDocumentOptions {
    */
   runtimeLogging?: boolean;
   /**
-   * Component tags listed here will only be prerendered or serverside-rendered
-   * and will not be clientside hydrated. This is useful for components that
+   * Component tags listed here will only be prerendered or server-side-rendered
+   * and will not be client-side hydrated. This is useful for components that
    * are not dynamic and do not need to be defined as a custom element within the
    * browser. For example, a header or footer component would be a good example that
-   * may not require any clientside JavaScript.
+   * may not require any client-side JavaScript.
    */
   staticComponents?: string[];
   /**
@@ -991,7 +1020,7 @@ export interface CompilerSystem {
   applyGlobalPatch?(fromDir: string): Promise<void>;
   applyPrerenderGlobalPatch?(opts: { devServerHostUrl: string; window: any }): void;
   cacheStorage?: CacheStorage;
-  // TODO: Make this property non-optional, check for unnecessary null checks on it
+  // TODO(RINDO-898): Make this property non-optional, check for unnecessary null checks on it
   checkVersion?: (logger: Logger, currentVersion: string) => Promise<() => void>;
   copy?(copyTasks: Required<CopyTask>[], srcDir: string): Promise<CopyResults>;
   /**
@@ -1016,16 +1045,20 @@ export interface CompilerSystem {
    */
   isTTY(): boolean;
   /**
-   * Each platform as a different way to dynamically import modules.
+   * Each platform has a different way to dynamically import modules.
    */
   dynamicImport?(p: string): Promise<any>;
   /**
    * Creates the worker controller for the current system.
+   *
+   * @param maxConcurrentWorkers the max number of concurrent workers to
+   * support
+   * @returns a worker controller appropriate for the current platform (node.js)
    */
   createWorkerController?(maxConcurrentWorkers: number): WorkerMainController;
   encodeToBase64(str: string): string;
 
-  // TODO: Remove this from the sys interface
+  // TODO(RINDO-727): Remove this from the sys interface
   /**
    * @deprecated
    */
@@ -1034,7 +1067,7 @@ export interface CompilerSystem {
     logger: Logger;
     dependencies: CompilerDependency[];
   }): Promise<{ rindoPath: string; diagnostics: Diagnostic[] }>;
-  // TODO: Remove this from the sys interface
+  // TODO(RINDO-727): Remove this from the sys interface
   /**
    * @deprecated
    */
@@ -1079,7 +1112,7 @@ export interface CompilerSystem {
    */
   getRemoteModuleUrl(opts: { moduleId: string; path?: string; version?: string }): string;
   /**
-   * Aync glob task. Only available in NodeJS compiler system.
+   * Async glob task. Only available in NodeJS compiler system.
    */
   glob?(pattern: string, options: { cwd?: string; nodir?: boolean; [key: string]: any }): Promise<string[]>;
   /**
@@ -1249,10 +1282,31 @@ export interface ResolveModuleIdResults {
   pkgDirPath: string;
 }
 
+// TODO(RINDO-1005): improve the typing for this interface
+/**
+ * A controller which provides for communication and coordination between
+ * threaded workers.
+ */
 export interface WorkerMainController {
+  /**
+   * Send a given set of arguments to a worker
+   */
   send(...args: any[]): Promise<any>;
+  /**
+   * Handle a particular method
+   *
+   * @param name of the method to be passed to a worker
+   * @returns a Promise wrapping the results
+   */
   handler(name: string): (...args: any[]) => Promise<any>;
+  /**
+   * Destroy the worker represented by this instance, rejecting all outstanding
+   * tasks and killing the child process.
+   */
   destroy(): void;
+  /**
+   * The current setting for the max number of workers
+   */
   maxWorkers: number;
 }
 
@@ -1544,7 +1598,7 @@ export interface CopyTask {
   keepDirStructure?: boolean;
 }
 
-// TODO: Remove this interface [BREAKING_CHANGE]
+// TODO(RINDO-882): Remove this interface [BREAKING_CHANGE]
 export interface BundlingConfig {
   /**
    * @deprecated the `namedExports` field is no longer honored by `@rollup/plugin-commonjs` and is not used by Rindo.
@@ -1566,8 +1620,12 @@ export interface NodeResolveConfig {
   only?: Array<string | RegExp>;
   modulesOnly?: boolean;
 
+  // TODO(RINDO-1107): Remove this field [BREAKING_CHANGE]
   /**
    * @see https://github.com/browserify/resolve#resolveid-opts-cb
+   * @deprecated the `customResolveOptions` field is no longer honored in future versions of
+   * `@rollup/plugin-node-resolve`. If you are currently using it, please open a new issue in the Rindo repo to
+   * describe your use case & provide input (https://github.com/familyjs/rindo/issues/new/choose)
    */
   customResolveOptions?: {
     basedir?: string;
@@ -1604,10 +1662,25 @@ export interface Testing {
   destroy(): Promise<void>;
 }
 
+/**
+ * Options for initiating a run of Rindo tests (spec and/or end-to-end)
+ */
 export interface TestingRunOptions {
+  /**
+   * If true, run end-to-end tests
+   */
   e2e?: boolean;
+  /**
+   * If true, run screenshot tests
+   */
   screenshot?: boolean;
+  /**
+   * If true, run spec tests
+   */
   spec?: boolean;
+  /**
+   * If true, update 'golden' screenshots. Otherwise, compare against priori.
+   */
   updateScreenshot?: boolean;
 }
 
@@ -1666,7 +1739,7 @@ export interface JestConfig {
 
   /**
    * A list of reporter names that Jest uses when writing coverage reports. Any istanbul reporter can be used.
-   * Default: ["json", "lcov", "text"]
+   * Default: `["json", "lcov", "text"]`
    */
   coverageReporters?: any[];
 
@@ -2315,9 +2388,9 @@ export interface OutputTargetWww extends OutputTargetBase {
 
   /**
    * Service worker config for production builds. During development builds
-   * service worker script will be injected to automatically unregister existing
+   * service worker script will be injected to automatically deregister existing
    * service workers. When set to `false` neither a service worker registration
-   * or unregistration will be added to the index.html.
+   * or deregistration will be added to the index.html.
    */
   serviceWorker?: ServiceWorkerConfig | null | false;
   appDir?: string;
@@ -2530,7 +2603,7 @@ export interface LazyRequire {
 
 /**
  * @deprecated This interface is no longer used by Rindo
- * TODO: Remove this interface
+ * TODO(RINDO-743): Remove this interface
  */
 export interface FsWatcherItem {
   close(): void;
@@ -2538,7 +2611,7 @@ export interface FsWatcherItem {
 
 /**
  * @deprecated This interface is no longer used by Rindo
- * TODO: Remove this interface
+ * TODO(RINDO-743): Remove this interface
  */
 export interface MakeDirectoryOptions {
   /**
@@ -2555,7 +2628,7 @@ export interface MakeDirectoryOptions {
 
 /**
  * @deprecated This interface is no longer used by Rindo
- * TODO: Remove this interface
+ * TODO(RINDO-743): Remove this interface
  */
 export interface FsStats {
   isFile(): boolean;

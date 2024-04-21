@@ -104,15 +104,11 @@ export async function compareScreenshot(
       // compare the two images pixel by pixel to
       // figure out a mismatch value
 
-      // figure out the actual width and height of the screenshot
-      const naturalWidth = Math.round(emulateConfig.viewport.width * emulateConfig.viewport.deviceScaleFactor);
-      const naturalHeight = Math.round(emulateConfig.viewport.height * emulateConfig.viewport.deviceScaleFactor);
-
       const pixelMatchInput: d.PixelMatchInput = {
         imageAPath: join(screenshotBuildData.imagesDir, screenshot.diff.imageA),
         imageBPath: join(screenshotBuildData.imagesDir, screenshot.diff.imageB),
-        width: naturalWidth,
-        height: naturalHeight,
+        width: Math.round(width),
+        height: Math.round(height),
         pixelmatchThreshold: pixelmatchThreshold,
       };
 
@@ -130,12 +126,23 @@ export async function compareScreenshot(
 
 async function getMismatchedPixels(pixelmatchModulePath: string, pixelMatchInput: d.PixelMatchInput) {
   return new Promise<number>((resolve, reject) => {
-    const timeout = jasmine.DEFAULT_TIMEOUT_INTERVAL * 0.5;
+    /**
+     * When using screenshot functionality in a runner that is not Jasmine (e.g. Jest Circus), we need to set a default
+     * value for timeouts. There are runtime errors that occur if we attempt to use optional chaining + nullish
+     * coalescing with the `jasmine` global stating it's not defined. As a result, we use a ternary here.
+     *
+     * The '2500' value that we default to is the value of `jasmine.DEFAULT_TIMEOUT_INTERVAL` (5000) divided by 2.
+     */
+    const timeout =
+      typeof jasmine !== 'undefined' && jasmine.DEFAULT_TIMEOUT_INTERVAL
+        ? jasmine.DEFAULT_TIMEOUT_INTERVAL * 0.5
+        : 2500;
     const tmr = setTimeout(() => {
       reject(`getMismatchedPixels timeout: ${timeout}ms`);
     }, timeout);
 
     try {
+      let error: string | undefined;
       const filteredExecArgs = process.execArgv.filter((v) => !/^--(debug|inspect)/.test(v));
 
       const options = {
@@ -156,6 +163,25 @@ async function getMismatchedPixels(pixelmatchModulePath: string, pixelMatchInput
       pixelMatchProcess.on('error', (err) => {
         clearTimeout(tmr);
         reject(err);
+      });
+
+      pixelMatchProcess.stderr.on('data', (data) => {
+        error = data.toString();
+      });
+
+      /**
+       * Make sure we reject the promise if the process exits due to an error
+       * or prematurely for some other reason. Note that in order to resolve
+       * the promise we expect a message to be sent containing information about
+       * the mismatched pixels.
+       */
+      pixelMatchProcess.on('exit', (code) => {
+        clearTimeout(tmr);
+        const exitError =
+          code === 0
+            ? new Error('Pixelmatch process exited unexpectedly')
+            : new Error(`Pixelmatch process exited with code ${code}: ${error || 'unknown error'}`);
+        return reject(exitError);
       });
 
       pixelMatchProcess.send(pixelMatchInput);

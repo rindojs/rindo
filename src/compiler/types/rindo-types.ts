@@ -1,5 +1,5 @@
-import { isOutputTargetDistTypes, normalizePath } from '@utils';
-import { dirname, join, relative, resolve } from 'path';
+import { isOutputTargetDistTypes, join, normalizePath, relative, resolve } from '@utils';
+import { dirname } from 'path';
 
 import type * as d from '../../declarations';
 import { FsWriteResults } from '../sys/in-memory-fs';
@@ -53,6 +53,10 @@ export const updateTypeIdentifierNames = (
   for (const typeReference of Object.values(typeReferences)) {
     const importResolvedFile = getTypeImportPath(typeReference.path, sourceFilePath);
 
+    if (typeof importResolvedFile !== 'string') {
+      continue;
+    }
+
     if (!typeImportData.hasOwnProperty(importResolvedFile)) {
       continue;
     }
@@ -70,9 +74,9 @@ export const updateTypeIdentifierNames = (
  * @param sourceFilePath the component source file path to resolve against
  * @returns the path of the type import
  */
-const getTypeImportPath = (importResolvedFile: string | undefined, sourceFilePath: string): string => {
-  const isPathRelative = importResolvedFile && importResolvedFile.startsWith('.');
-  if (isPathRelative) {
+const getTypeImportPath = (importResolvedFile: string | undefined, sourceFilePath: string): string | undefined => {
+  if (importResolvedFile && importResolvedFile.startsWith('.')) {
+    // the path to the type reference is relative, resolve it relative to the provided source path
     importResolvedFile = resolve(dirname(sourceFilePath), importResolvedFile);
   }
 
@@ -90,7 +94,7 @@ const updateTypeName = (currentTypeName: string, typeAlias: d.TypesMemberNameDat
     return currentTypeName;
   }
 
-  // TODO: Update this functionality to no longer use a regex
+  // TODO(RINDO-419): Update this functionality to no longer use a regex
   // negative lookahead specifying that quotes that designate a string in JavaScript cannot follow some expression
   const endingStrChar = '(?!("|\'|`))';
   /**
@@ -100,7 +104,7 @@ const updateTypeName = (currentTypeName: string, typeAlias: d.TypesMemberNameDat
    *
    * This regex should be expected to capture types that are found in generics, unions, intersections, etc., but not
    * those in string literals. We do not check for a starting quote (" | ' | `) here as some browsers do not support
-   * negative lookbehind.
+   * negative lookbehind. This works "well enough" until RINDO-419 is completed.
    */
   const typeNameRegex = new RegExp(`${typeAlias.localName}\\b${endingStrChar}`, 'g');
   return currentTypeName.replace(typeNameRegex, typeAlias.importName);

@@ -232,7 +232,7 @@ let renderingRef: any = null;
  * @returns an empty promise
  */
 const callRender = (hostRef: d.HostRef, instance: any, elm: HTMLElement, isInitialLoad: boolean) => {
-  // in order for bundlers to correctly treeshake the BUILD object
+  // in order for bundlers to correctly tree-shake the BUILD object
   // we need to ensure BUILD is not deoptimized within a try/catch
   // https://rollupjs.org/guide/en/#treeshake tryCatchDeoptimization
   const allRenderFn = BUILD.allRenderFn ? true : false;
@@ -242,6 +242,10 @@ const callRender = (hostRef: d.HostRef, instance: any, elm: HTMLElement, isIniti
 
   try {
     renderingRef = instance;
+    /**
+     * minification optimization: `allRenderFn` is `true` if all components have a `render`
+     * method, so we can call the method immediately. If not, check before calling it.
+     */
     instance = allRenderFn ? instance.render() : instance.render && instance.render();
 
     if (updatable && taskQueue) {
@@ -262,7 +266,12 @@ const callRender = (hostRef: d.HostRef, instance: any, elm: HTMLElement, isIniti
           renderVdom(hostRef, instance, isInitialLoad);
         }
       } else {
-        elm.textContent = instance;
+        const shadowRoot = elm.shadowRoot;
+        if (hostRef.$cmpMeta$.$flags$ & CMP_FLAGS.shadowDomEncapsulation) {
+          shadowRoot.textContent = instance;
+        } else {
+          elm.textContent = instance;
+        }
       }
     }
   } catch (e) {
@@ -337,10 +346,6 @@ export const postUpdateComponent = (hostRef: d.HostRef) => {
     endPostUpdate();
   }
 
-  if (BUILD.hotModuleReplacement) {
-    elm['s-hmr-load'] && elm['s-hmr-load']();
-  }
-
   if (BUILD.method && BUILD.lazyLoad) {
     hostRef.$onInstanceResolve$(elm);
   }
@@ -393,6 +398,16 @@ export const appDidLoad = (who: string) => {
   }
 };
 
+/**
+ * Allows to safely call a method, e.g. `componentDidLoad`, on an instance,
+ * e.g. custom element node. If a build figures out that e.g. no component
+ * has a `componentDidLoad` method, the instance method gets removed from the
+ * output bundle and this function returns `undefined`.
+ * @param instance any object that may or may not contain methods
+ * @param method method name
+ * @param arg single arbitrary argument
+ * @returns result of method call if it exists, otherwise `undefined`
+ */
 export const safeCall = (instance: any, method: string, arg?: any) => {
   if (instance && instance[method]) {
     try {
@@ -404,6 +419,12 @@ export const safeCall = (instance: any, method: string, arg?: any) => {
   return undefined;
 };
 
+/**
+ * For debugging purposes as `BUILD.lifecycleDOMEvents` is `false` by default and will
+ * get removed by the compiler. Used for timing events to see how long they take.
+ * @param elm the target of the Event
+ * @param lifecycleName name of the event
+ */
 const emitLifecycleEvent = (elm: EventTarget, lifecycleName: string) => {
   if (BUILD.lifecycleDOMEvents) {
     emitEvent(elm, 'rindo_' + lifecycleName, {

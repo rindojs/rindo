@@ -1,5 +1,4 @@
-import { catchError, flatOne, isString, unique } from '@utils';
-import { join } from 'path';
+import { catchError, flatOne, isString, join, unique } from '@utils';
 
 import type * as d from '../../declarations';
 import { injectModulePreloads } from '../html/inject-module-preloads';
@@ -39,7 +38,7 @@ export const inlineExternalStyleSheets = async (sys: d.CompilerSystem, appDir: s
         link.parentNode.insertBefore(inlinedStyles, link);
         link.remove();
 
-        // mark inlinedStyle as treeshakable
+        // mark inlinedStyle as tree-shakable
         inlinedStyles.setAttribute('data-styles', '');
 
         // since it's no longer a critical resource

@@ -47,7 +47,7 @@ test/**/hydrate/*
 .rindo
 coverage/**
 
-# TODO: Remove these once `strictNullChecks` is enabled
+# TODO(RINDO-446): Remove these once `strictNullChecks` is enabled
 null_errors*.json
-# TODO: Remove or change this up once we've eliminated unused exports
+# TODO(RINDO-454): Remove or change this up once we've eliminated unused exports
 unused-exports*.txt

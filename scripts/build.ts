@@ -11,7 +11,6 @@ import { screenshot } from './bundles/screenshot';
 import { sysNode, sysNodeExternalBundles } from './bundles/sys-node';
 import { testing } from './bundles/testing';
 import { utils } from './bundles/utils';
-import { createLicense } from './license';
 import { release } from './release';
 import { validateBuild } from './test/validate-build';
 import { BuildOptions } from './utils/options';
@@ -19,16 +18,12 @@ import { BuildOptions } from './utils/options';
 /**
  * Runner for releasing a new version of Rindo
  * @param rootDir the root directory of the Rindo repository
- * @param args stringifed arguments that influence the release process
+ * @param args stringified arguments that influence the release process
  */
 export async function run(rootDir: string, args: ReadonlyArray<string>): Promise<void> {
   try {
     if (args.includes('--release')) {
       await release(rootDir, args);
-    }
-
-    if (args.includes('--license')) {
-      createLicense(rootDir);
     }
 
     if (args.includes('--validate-build')) {

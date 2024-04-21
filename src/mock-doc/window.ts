@@ -828,7 +828,7 @@ export function cloneWindow(srcWin: Window, opts: { customElementProxy?: boolean
 
   const clonedWin = new MockWindow(false);
   if (!opts.customElementProxy) {
-    // TODO - Evaluate reconciling MockWindow, Window differences
+    // TODO(RINDO-345) - Evaluate reconciling MockWindow, Window differences
     // @ts-ignore
     srcWin.customElements = null;
   }
@@ -852,7 +852,7 @@ export function cloneDocument(srcDoc: Document) {
   return dstWin.document;
 }
 
-// TODO - Evaluate reconciling MockWindow, Window differences
+// TODO(RINDO-345) - Evaluate reconciling MockWindow, Window differences
 /**
  * Constrain setTimeout() to 1ms, but still async. Also
  * only allow setInterval() to fire once, also constrained to 1ms.

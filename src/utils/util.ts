@@ -60,7 +60,7 @@ export const isDtsFile = (filePath: string): boolean => {
  * @param config the Rindo configuration file
  * @returns the generated preamble
  */
-export const generatePreamble = (config: d.Config): string => {
+export const generatePreamble = (config: d.ValidatedConfig): string => {
   const { preamble } = config;
 
   if (!preamble) {

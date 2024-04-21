@@ -11,7 +11,7 @@ import {
 } from './prerender-optimize';
 
 export const generateTemplateHtml = async (
-  config: d.Config,
+  config: d.ValidatedConfig,
   prerenderConfig: d.PrerenderConfig,
   diagnostics: d.Diagnostic[],
   isDebug: boolean,
@@ -42,7 +42,7 @@ export const generateTemplateHtml = async (
     let staticSite = false;
 
     if (prerenderConfig.staticSite) {
-      // purposely do not want any clientside JS
+      // purposely do not want any client-side JS
       // go through the document and remove only rindo's scripts
       removeRindoScripts(doc);
       staticSite = true;

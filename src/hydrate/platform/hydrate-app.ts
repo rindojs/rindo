@@ -143,11 +143,11 @@ export function hydrateApp(
 
     win.document.createElementNS = function patchedCreateElement(namespaceURI: string, tagName: string) {
       const elm = orgDocumentCreateElementNS.call(win.document, namespaceURI, tagName);
-      patchElement(elm);
+      patchElement(elm as d.HostElement);
       return elm;
-    };
+    } as (typeof window)['document']['createElementNS'];
 
-    // ensure we use nodejs's native setTimeout, not the mocked hydrate app scoped one
+    // ensure we use NodeJS's native setTimeout, not the mocked hydrate app scoped one
     tmrId = global.setTimeout(timeoutExceeded, opts.timeout);
 
     plt.$resourcesUrl$ = new URL(opts.resourcesUrl || './', doc.baseURI).href;

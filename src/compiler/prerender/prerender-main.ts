@@ -1,5 +1,5 @@
-import { buildError, catchError, hasError, isOutputTargetWww, isString } from '@utils';
-import { isAbsolute, join } from 'path';
+import { buildError, catchError, hasError, isOutputTargetWww, isString, join } from '@utils';
+import { isAbsolute } from 'path';
 
 import type * as d from '../../declarations';
 import { createHydrateBuildId } from '../../hydrate/runner/render-utils';
@@ -70,8 +70,15 @@ const runPrerender = async (
     let workerCtrl: d.WorkerMainController;
 
     if (config.sys.createWorkerController == null || config.maxConcurrentWorkers < 1) {
+      // we don't have a `maxConcurrentWorkers` setting which makes it
+      // necessary to actually use threaded workers, so we create a
+      // single-threaded worker context here
       workerCtx = createWorkerContext(config.sys);
     } else {
+      // we want to stand up the full threaded worker setup, so we first need
+      // to build a worker controller and then we create an appropriate worker
+      // context for it (this will mean that when methods are called on
+      // `workerCtx` they're dispatched to workers in other threads)
       workerCtrl = config.sys.createWorkerController(config.maxConcurrentWorkers);
       workerCtx = createWorkerMainContext(workerCtrl);
     }
@@ -252,7 +259,7 @@ const runPrerenderOutputTarget = async (
   }
 };
 
-const createPrerenderTemplate = async (config: d.Config, templateHtml: string) => {
+const createPrerenderTemplate = async (config: d.ValidatedConfig, templateHtml: string) => {
   const hash = await config.sys.generateContentHash(templateHtml, 12);
   const templateFileName = `prerender-${hash}.html`;
   const templateId = join(config.sys.tmpDirSync(), templateFileName);
@@ -262,7 +269,7 @@ const createPrerenderTemplate = async (config: d.Config, templateHtml: string) =
 };
 
 const createComponentGraphPath = async (
-  config: d.Config,
+  config: d.ValidatedConfig,
   componentGraph: d.BuildResultsComponentGraph,
   outputTarget: d.OutputTargetWww,
 ) => {

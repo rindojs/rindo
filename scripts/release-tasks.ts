@@ -2,7 +2,6 @@ import color from 'ansi-colors';
 import Listr, { ListrTask } from 'listr';
 
 import { bundleBuild } from './build';
-import { createLicense } from './license';
 import { validateBuild } from './test/validate-build';
 import { BuildOptions } from './utils/options';
 import {
@@ -154,10 +153,6 @@ export async function runReleaseTasks(opts: BuildOptions, args: ReadonlyArray<st
 
   if (!opts.isPublishRelease) {
     tasks.push(
-      {
-        title: 'Build license',
-        task: () => createLicense(rootDir),
-      },
       {
         title: 'Validate build',
         task: () => validateBuild(rootDir),

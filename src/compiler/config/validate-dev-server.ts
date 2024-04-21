@@ -1,5 +1,5 @@
-import { buildError, isBoolean, isNumber, isOutputTargetWww, isString, normalizePath } from '@utils';
-import { isAbsolute, join } from 'path';
+import { buildError, isBoolean, isNumber, isOutputTargetWww, isString, join, normalizePath } from '@utils';
+import { isAbsolute } from 'path';
 
 import type * as d from '../../declarations';
 
@@ -17,7 +17,7 @@ export const validateDevServer = (config: d.ValidatedConfig, diagnostics: d.Diag
     devServer.address = '0.0.0.0';
   }
 
-  // default to http for localdev
+  // default to http for local dev
   let addressProtocol: 'http' | 'https' = 'http';
   if (devServer.address.toLowerCase().startsWith('http://')) {
     devServer.address = devServer.address.substring(7);

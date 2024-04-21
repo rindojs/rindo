@@ -133,7 +133,7 @@ export async function newSpecPage(opts: NewSpecPageOptions): Promise<SpecPage> {
     BUILD.hydrateClientSide = false;
   }
   BUILD.cloneNodeFix = false;
-  // TODO: Remove code related to legacy shadowDomShim field
+  // TODO(RINDO-854): Remove code related to legacy shadowDomShim field
   BUILD.shadowDomShim = false;
   BUILD.attachStyles = !!opts.attachStyles;
 

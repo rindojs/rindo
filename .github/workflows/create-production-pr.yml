@@ -46,7 +46,7 @@ jobs:
       - name: Get Core Dependencies
         uses: ./.github/workflows/actions/get-core-dependencies
 
-      # TODO: Backport changes to the v3 branch
+      # TODO(RINDO-927): Backport changes to the v3 branch
       - name: Run Publish Preparation Script
         run: npm run release.ci.prepare -- --version ${{ inputs.version }} --any-branch
         shell: bash
@@ -76,7 +76,7 @@ jobs:
           base: ${{ inputs.base }}
           # specifies the name of the branch to create off of the base branch
           branch: '${{ steps.name_gen.outputs.BRANCH_NAME }}'
-          # TODO: Remove this once pipeline is 'ready'
+          # TODO(RINDO-928): Remove this once pipeline is 'ready'
           draft: true
           # create a commit message containing the semver version, prefixed with a 'v' - e.g. 'v4.1.0'
           commit-message: 'v${{ steps.name_gen.outputs.VERSION_STR }}'

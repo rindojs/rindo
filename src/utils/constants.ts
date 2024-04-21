@@ -76,9 +76,9 @@ export const enum CMP_FLAGS {
    * Used to determine if a component does not use the shadow DOM _and_ has `<slot/>` tags in its markup.
    */
   hasSlotRelocation = 1 << 2,
-  // TODO: Remove code related to legacy shadowDomShim field
+  // TODO(RINDO-854): Remove code related to legacy shadowDomShim field
   // Note that when we remove this field we should consider whether we need to
-  // retain a placeholder here, since if we want to have compatability between
+  // retain a placeholder here, since if we want to have compatibility between
   // different versions of the runtime then we'll need to not shift the values
   // of the other higher flags down
   /**
@@ -97,7 +97,7 @@ export const enum CMP_FLAGS {
    * Determines if `mode` is set on the `@Component()` decorator
    */
   hasMode = 1 << 5,
-  // TODO: Remove code related to legacy shadowDomShim field
+  // TODO(RINDO-854): Remove code related to legacy shadowDomShim field
   /**
    * Determines if styles must be scoped due to either:
    * 1. A component is using scoped stylesheets ({@link scopedCssEncapsulation})
@@ -105,6 +105,11 @@ export const enum CMP_FLAGS {
    * met ({@link needsShadowDomShim})
    */
   needsScopedEncapsulation = scopedCssEncapsulation | needsShadowDomShim,
+  /**
+   * Determines if a component is form-associated or not. This is set based on
+   * options passed to the `@Component` decorator.
+   */
+  formAssociated = 1 << 6,
 }
 
 /**
@@ -116,7 +121,7 @@ export const DEFAULT_STYLE_MODE = '$';
  * Reusable empty obj/array
  * Don't add values to these!!
  */
-export const EMPTY_OBJ: any = {};
+export const EMPTY_OBJ: Record<never, never> = {};
 
 /**
  * Namespaces

@@ -74,6 +74,8 @@ export const taskGenerate = async (config: ValidatedConfig): Promise<void> => {
 
   // We use `console.log` here rather than our `config.logger` because we don't want
   // our TUI messages to be prefixed with timestamps and so on.
+  //
+  //
   console.log();
   console.log(`${config.logger.gray('$')} rindo generate ${input}`);
   console.log();

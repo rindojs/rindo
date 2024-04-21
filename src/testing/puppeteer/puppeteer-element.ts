@@ -118,7 +118,17 @@ export class E2EElement extends MockHTMLElement implements pd.E2EElementInternal
         }
       };
       const resolveTmr = setInterval(checkVisible, 10);
-      const timeout = jasmine.DEFAULT_TIMEOUT_INTERVAL * 0.5;
+      /**
+       * When using screenshot functionality in a runner that is not Jasmine (e.g. Jest Circus), we need to set a
+       * default value for timeouts. There are runtime errors that occur if we attempt to use optional chaining +
+       * nullish coalescing with the `jasmine` global stating it's not defined. As a result, we use a ternary here.
+       *
+       * The '2500' value that we default to is the value of `jasmine.DEFAULT_TIMEOUT_INTERVAL` (5000) divided by 2.
+       */
+      const timeout =
+        typeof jasmine !== 'undefined' && jasmine.DEFAULT_TIMEOUT_INTERVAL
+          ? jasmine.DEFAULT_TIMEOUT_INTERVAL * 0.5
+          : 2500;
       const timeoutError = new Error(`waitForVisible timed out: ${timeout}ms`);
       const rejectTmr = setTimeout(() => {
         clearTimeout(resolveTmr);
@@ -138,7 +148,17 @@ export class E2EElement extends MockHTMLElement implements pd.E2EElementInternal
         }
       };
       const resolveTmr = setInterval(checkVisible, 10);
-      const timeout = jasmine.DEFAULT_TIMEOUT_INTERVAL * 0.5;
+      /**
+       * When using screenshot functionality in a runner that is not Jasmine (e.g. Jest Circus), we need to set a
+       * default value for timeouts. There are runtime errors that occur if we attempt to use optional chaining +
+       * nullish coalescing with the `jasmine` global stating it's not defined. As a result, we use a ternary here.
+       *
+       * The '2500' value that we default to is the value of `jasmine.DEFAULT_TIMEOUT_INTERVAL` (5000) divided by 2.
+       */
+      const timeout =
+        typeof jasmine !== 'undefined' && jasmine.DEFAULT_TIMEOUT_INTERVAL
+          ? jasmine.DEFAULT_TIMEOUT_INTERVAL * 0.5
+          : 2500;
       const timeoutError = new Error(`waitForNotVisible timed out: ${timeout}ms`);
       const rejectTmr = setTimeout(() => {
         clearTimeout(resolveTmr);
@@ -573,7 +593,7 @@ async function findWithCssSelector(
       return null;
     }
 
-    elmHandle = shadowHandle.asElement();
+    elmHandle = shadowHandle.asElement() as puppeteer.ElementHandle<Element>;
   }
 
   return elmHandle;
@@ -587,7 +607,7 @@ async function findWithText(
 ) {
   const jsHandle = await page.evaluateHandle(
     (rootElm: Element, text: string, contains: string) => {
-      let foundElm: any = null;
+      let foundElm: HTMLElement | null = null;
 
       function checkContent(elm: Node) {
         if (!elm || foundElm) {
@@ -626,7 +646,7 @@ async function findWithText(
   );
 
   if (jsHandle) {
-    return jsHandle.asElement();
+    return jsHandle.asElement() as puppeteer.ElementHandle<Element>;
   }
 
   return null;
@@ -726,11 +746,11 @@ function getPuppeteerExecution(elmHandle: puppeteer.ElementHandle) {
   const puppeteerMajorVersion = parseInt(process.env.__RINDO_PUPPETEER_VERSION__, 10);
   if (puppeteerMajorVersion >= 17) {
     // in puppeteer v17, a context for executing JS can be retrieved from a frame
-    // the `any` type assertion is necessary for backwards compatability with the type checker
+    // the `any` type assertion is necessary for backwards compatibility with the type checker
     return (elmHandle as any).frame;
   } else {
     // in puppeteer v16 and lower, an execution context could be retrieved from a handle to execute JS
-    // the `any` type assertion is necessary for backwards compatability with the type checker
+    // the `any` type assertion is necessary for backwards compatibility with the type checker
     //
     // if the result of `parseInt` on the puppeteer version is NaN, assume that the user is on a lower version of
     // puppeteer

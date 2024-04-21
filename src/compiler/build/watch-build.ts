@@ -1,5 +1,5 @@
-import { isString } from '@utils';
-import { dirname, resolve } from 'path';
+import { isString, resolve } from '@utils';
+import { dirname } from 'path';
 import type ts from 'typescript';
 
 import type * as d from '../../declarations';
@@ -259,7 +259,7 @@ export const createWatchBuild = async (
  * @param config The Rindo project's config
  * @param compilerCtx The compiler context for the Rindo project
  */
-const watchSrcDirectory = async (config: d.Config, compilerCtx: d.CompilerCtx) => {
+const watchSrcDirectory = async (config: d.ValidatedConfig, compilerCtx: d.CompilerCtx) => {
   const srcFiles = await compilerCtx.fs.readdir(config.srcDir, {
     recursive: true,
     excludeDirNames: ['.cache', '.git', '.github', '.rindo', '.vscode', 'node_modules'],
@@ -290,7 +290,7 @@ const watchSrcDirectory = async (config: d.Config, compilerCtx: d.CompilerCtx) =
  * @param config The Rindo project's config
  * @param compilerCtx The compiler context for the Rindo project
  */
-const watchRootFiles = async (config: d.Config, compilerCtx: d.CompilerCtx) => {
+const watchRootFiles = async (config: d.ValidatedConfig, compilerCtx: d.CompilerCtx) => {
   // non-src files that cause a rebuild
   // mainly for root level config files, and getting an event when they change
   const rootFiles = await compilerCtx.fs.readdir(config.rootDir, {
@@ -322,7 +322,7 @@ const emitFsChange = (compilerCtx: d.CompilerCtx, buildCtx: BuildContext) => {
 };
 
 const updateCompilerCtxCache = (
-  config: d.Config,
+  config: d.ValidatedConfig,
   compilerCtx: d.CompilerCtx,
   path: string,
   kind: d.CompilerFileWatcherEvent,

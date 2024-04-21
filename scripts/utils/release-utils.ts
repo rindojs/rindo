@@ -98,9 +98,8 @@ export function prettyVersionDiff(oldVersion: string, inc: any): string {
  */
 export async function updateChangeLog(opts: BuildOptions): Promise<void> {
   const ccPath = join(opts.nodeModulesDir, '.bin', 'conventional-changelog');
-  const { execa } = await import('execa');
   const ccConfigPath = join(opts.scriptsBuildDir, 'utils', 'conventional-changelog-config.js');
-  // await execa('npm', ['run', 'changelog'], { cwd: opts.rootDir });
+  const { execa } = await import('execa');
   // API Docs for conventional-changelog: https://github.com/conventional-changelog/conventional-changelog/tree/master/packages/conventional-changelog-core#api
   await execa(
     'node',

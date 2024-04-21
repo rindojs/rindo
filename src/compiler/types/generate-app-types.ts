@@ -1,5 +1,5 @@
-import { addDocBlock, GENERATED_DTS, getComponentsDtsSrcFilePath, normalizePath } from '@utils';
-import { isAbsolute, relative, resolve } from 'path';
+import { addDocBlock, GENERATED_DTS, getComponentsDtsSrcFilePath, normalizePath, relative, resolve } from '@utils';
+import { isAbsolute } from 'path';
 
 import type * as d from '../../declarations';
 import { generateComponentTypes } from './generate-component-types';
@@ -60,7 +60,11 @@ export const generateAppTypes = async (
  * @param areTypesInternal determines if non-exported type definitions are being generated or not
  * @returns the contents of the `components.d.ts` file
  */
-const generateComponentTypesFile = (config: d.Config, buildCtx: d.BuildCtx, areTypesInternal: boolean): string => {
+const generateComponentTypesFile = (
+  config: d.ValidatedConfig,
+  buildCtx: d.BuildCtx,
+  areTypesInternal: boolean,
+): string => {
   let typeImportData: d.TypesImportData = {};
   const c: string[] = [];
   const allTypes = new Map<string, number>();
@@ -122,9 +126,9 @@ const generateComponentTypesFile = (config: d.Config, buildCtx: d.BuildCtx, areT
 
   c.push(...modules.map((m) => m.element));
 
-  c.push(`        interface HTMLElementTagNameMap {`);
-  c.push(...modules.map((m) => `                "${m.tagName}": ${m.htmlElementName};`));
-  c.push(`        }`);
+  c.push(`    interface HTMLElementTagNameMap {`);
+  c.push(...modules.map((m) => `        "${m.tagName}": ${m.htmlElementName};`));
+  c.push(`    }`);
 
   c.push(`}`);
 
@@ -132,34 +136,34 @@ const generateComponentTypesFile = (config: d.Config, buildCtx: d.BuildCtx, areT
   c.push(
     ...modules.map((m) => {
       const docs = components.find((c) => c.tagName === m.tagName).docs;
-      return addDocBlock(`  ${m.jsx}`, docs, 4);
+      return addDocBlock(m.jsx, docs, 4);
     }),
   );
 
-  c.push(`        interface IntrinsicElements {`);
-  c.push(...modules.map((m) => `              "${m.tagName}": ${m.tagNameAsPascal};`));
-  c.push(`        }`);
+  c.push(`    interface IntrinsicElements {`);
+  c.push(...modules.map((m) => `        "${m.tagName}": ${m.tagNameAsPascal};`));
+  c.push(`    }`);
 
   c.push(`}`);
 
   c.push(`export { LocalJSX as JSX };`);
 
   c.push(`declare module "@rindo/core" {`);
-  c.push(`        export namespace JSX {`);
-  c.push(`                interface IntrinsicElements {`);
+  c.push(`    export namespace JSX {`);
+  c.push(`        interface IntrinsicElements {`);
   c.push(
     ...modules.map((m) => {
       const docs = components.find((c) => c.tagName === m.tagName).docs;
 
       return addDocBlock(
-        `                        "${m.tagName}": LocalJSX.${m.tagNameAsPascal} & JSXBase.HTMLAttributes<${m.htmlElementName}>;`,
+        `            "${m.tagName}": LocalJSX.${m.tagNameAsPascal} & JSXBase.HTMLAttributes<${m.htmlElementName}>;`,
         docs,
         12,
       );
     }),
   );
-  c.push(`                }`);
   c.push(`        }`);
+  c.push(`    }`);
   c.push(`}`);
 
   return c.join(`\n`) + `\n`;

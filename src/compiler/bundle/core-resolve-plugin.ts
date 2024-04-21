@@ -1,5 +1,5 @@
-import { isRemoteUrl, normalizeFsPath, normalizePath } from '@utils';
-import { dirname, join } from 'path';
+import { isRemoteUrl, join, normalizeFsPath, normalizePath } from '@utils';
+import { dirname } from 'path';
 import type { Plugin } from 'rollup';
 
 import type * as d from '../../declarations';
@@ -16,7 +16,7 @@ import {
 } from './entry-alias-ids';
 
 export const coreResolvePlugin = (
-  config: d.Config,
+  config: d.ValidatedConfig,
   compilerCtx: d.CompilerCtx,
   platform: 'client' | 'hydrate' | 'worker',
   externalRuntime: boolean,
@@ -122,7 +122,7 @@ export const Build = {
   };
 };
 
-export const getRindoInternalModule = (config: d.Config, compilerExe: string, internalModule: string) => {
+export const getRindoInternalModule = (config: d.ValidatedConfig, compilerExe: string, internalModule: string) => {
   if (isRemoteUrl(compilerExe)) {
     return normalizePath(
       config.sys.getLocalModulePath({

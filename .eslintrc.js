@@ -14,7 +14,7 @@ module.exports = {
       'error',
       {
         argsIgnorePattern: '^_',
-        // TODO: Investigate using eslint-plugin-react to remove the need for varsIgnorePattern
+        // TODO(RINDO-452): Investigate using eslint-plugin-react to remove the need for varsIgnorePattern
         varsIgnorePattern: '^(h|Fragment)$',
       },
     ],
@@ -31,7 +31,7 @@ module.exports = {
       },
     ],
     // we...have a number of things disabled :)
-    // TODO: Turn this rule back on once there are no violations of it remaining
+    // TODO(RINDO-488): Turn this rule back on once there are no violations of it remaining
     'jest/no-disabled-tests': ['off'],
     // we use this in enough places that we don't want to do per-line disables
     'jest/no-conditional-expect': ['off'],

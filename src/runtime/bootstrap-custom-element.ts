@@ -39,14 +39,17 @@ export const proxyCustomElement = (Cstr: any, compactMeta: d.ComponentRuntimeMet
     cmpMeta.$attrsToReflect$ = [];
   }
   if (BUILD.shadowDom && !supportsShadow && cmpMeta.$flags$ & CMP_FLAGS.shadowDomEncapsulation) {
-    // TODO: Remove code related to legacy shadowDomShim field
+    // TODO(RINDO-854): Remove code related to legacy shadowDomShim field
     cmpMeta.$flags$ |= CMP_FLAGS.needsShadowDomShim;
   }
 
-  // TODO(RINDO-914): this check and `else` block can go away and be replaced by just `BUILD.scoped` once we
-  // default our pseudo-slot behavior
-  if (BUILD.patchPseudoShadowDom && BUILD.scoped) {
-    patchPseudoShadowDom(Cstr.prototype, cmpMeta);
+  // TODO(RINDO-914): this check and `else` block can go away and be replaced by just the `scoped` check
+  if (BUILD.experimentalSlotFixes) {
+    if (BUILD.scoped && cmpMeta.$flags$ & CMP_FLAGS.scopedCssEncapsulation) {
+      // This check is intentionally not combined with the surrounding `experimentalSlotFixes` check
+      // since, moving forward, we only want to patch the pseudo shadow DOM when the component is scoped
+      patchPseudoShadowDom(Cstr.prototype, cmpMeta);
+    }
   } else {
     if (BUILD.slotChildNodesFix) {
       patchChildSlotNodes(Cstr.prototype, cmpMeta);
@@ -57,8 +60,8 @@ export const proxyCustomElement = (Cstr: any, compactMeta: d.ComponentRuntimeMet
     if (BUILD.appendChildSlotFix) {
       patchSlotAppendChild(Cstr.prototype);
     }
-    if (BUILD.scopedSlotTextContentFix) {
-      patchTextContent(Cstr.prototype, cmpMeta);
+    if (BUILD.scopedSlotTextContentFix && cmpMeta.$flags$ & CMP_FLAGS.scopedCssEncapsulation) {
+      patchTextContent(Cstr.prototype);
     }
   }
 

@@ -49,6 +49,9 @@ export function createElement(ownerDocument: any, tagName: string): any {
 
     case 'title':
       return new MockTitleElement(ownerDocument);
+
+    case 'ul':
+      return new MockUListElement(ownerDocument);
   }
 
   if (ownerDocument != null && tagName.includes('-')) {
@@ -88,7 +91,7 @@ export function createElementNS(ownerDocument: any, namespaceURI: string, tagNam
         return new MockSVGElement(ownerDocument, tagName);
     }
   } else {
-    return new MockElement(ownerDocument, tagName);
+    return new MockElement(ownerDocument, tagName, namespaceURI);
   }
 }
 
@@ -377,6 +380,8 @@ export class MockStyleElement extends MockHTMLElement {
   }
 }
 export class MockSVGElement extends MockElement {
+  override __namespaceURI = 'http://www.w3.org/2000/svg';
+
   // SVGElement properties and methods
   get ownerSVGElement(): SVGSVGElement {
     return null;
@@ -488,6 +493,12 @@ export class MockTitleElement extends MockHTMLElement {
   }
   set text(value: string) {
     this.textContent = value;
+  }
+}
+
+export class MockUListElement extends MockHTMLElement {
+  constructor(ownerDocument: any) {
+    super(ownerDocument, 'ul');
   }
 }
 

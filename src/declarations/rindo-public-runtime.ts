@@ -9,6 +9,16 @@ export interface ComponentDecorator {
 }
 export interface ComponentOptions {
   /**
+   * When set to `true` this component will be form-associated. See
+   * https://rindojs.web.app/docs/next/form-associated documentation on how to
+   * build form-associated Rindo components that integrate into forms like
+   * native browser elements such as `<input>` and `<textarea>`.
+   *
+   * The {@link AttachInternals} decorator allows for access to the
+   * `ElementInternals` object to modify the associated form.
+   */
+  formAssociated?: boolean;
+  /**
    * Tag name of the web component. Ideally, the tag name must be globally unique,
    * so it's recommended to choose an unique prefix for all your components within the same collection.
    *
@@ -74,7 +84,7 @@ export interface PropOptions {
   /**
    * The name of the associated DOM attribute.
    * Rindo uses different heuristics to determine the default name of the attribute,
-   * but using this property, you can override the default behaviour.
+   * but using this property, you can override the default behavior.
    */
   attribute?: string | null;
 
@@ -126,6 +136,10 @@ export interface EventOptions {
   composed?: boolean;
 }
 
+export interface AttachInternalsDecorator {
+  (): PropertyDecorator;
+}
+
 export interface ListenDecorator {
   (eventName: string, opts?: ListenOptions): CustomMethodDecorator<any>;
 }
@@ -149,7 +163,7 @@ export interface ListenOptions {
    * By default, Rindo uses several heuristics to determine if
    * it must attach a `passive` event listener or not.
    *
-   * Using the `passive` option can be used to change the default behaviour.
+   * Using the `passive` option can be used to change the default behavior.
    * Please see https://developers.google.com/web/updates/2016/06/passive-event-listeners for further information.
    */
   passive?: boolean;
@@ -203,6 +217,13 @@ export declare const Element: ElementDecorator;
  * https://rindojs.web.app/docs/events
  */
 export declare const Event: EventDecorator;
+
+/**
+ * If the `formAssociated` option is set in options passed to the
+ * `@Component()` decorator then this decorator may be used to get access to the
+ * `ElementInternals` instance associated with the component.
+ */
+export declare const AttachInternals: AttachInternalsDecorator;
 
 /**
  * The `Listen()` decorator is for listening DOM events, including the ones
@@ -536,7 +557,7 @@ export interface FunctionalUtilities {
   /**
    * Utility for reading the children of a functional component at runtime.
    * Since the Rindo runtime uses a different interface for children it is
-   * not recommendeded to read the children directly, and is preferable to use
+   * not recommended to read the children directly, and is preferable to use
    * this utility to, for instance, perform a side effect for each child.
    */
   forEach: (children: VNode[], cb: (vnode: ChildNode, index: number, array: ChildNode[]) => void) => void;
@@ -878,6 +899,11 @@ export namespace JSXBase {
     name?: string;
     type?: string;
     value?: string | string[] | number;
+
+    // popover
+    popoverTargetAction?: string;
+    popoverTargetElement?: Element | null;
+    popoverTarget?: string;
   }
 
   export interface CanvasHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1053,6 +1079,11 @@ export namespace JSXBase {
     webkitdirectory?: boolean;
     webkitEntries?: any;
     width?: number | string;
+
+    // popover
+    popoverTargetAction?: string;
+    popoverTargetElement?: Element | null;
+    popoverTarget?: string;
   }
 
   export interface KeygenHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1238,11 +1269,13 @@ export namespace JSXBase {
   }
 
   export interface SourceHTMLAttributes<T> extends HTMLAttributes<T> {
+    height?: number;
     media?: string;
     sizes?: string;
     src?: string;
     srcSet?: string;
     type?: string;
+    width?: number;
   }
 
   export interface StyleHTMLAttributes<T> extends HTMLAttributes<T> {
@@ -1335,12 +1368,18 @@ export namespace JSXBase {
     draggable?: boolean;
     hidden?: boolean;
     id?: string;
+    inert?: boolean;
     lang?: string;
     spellcheck?: 'true' | 'false' | any;
     style?: { [key: string]: string | undefined };
     tabIndex?: number;
     tabindex?: number | string;
     title?: string;
+    // These types don't allow you to use popover as a boolean attribute
+    // so you can't write HTML like `<div popover>` and get the default value.
+    // Developer must explicitly specify one of the valid popover values or it will fallback
+    // to `manual` (following the HTML spec).
+    popover?: string | null;
 
     // Unknown
     inputMode?: string;
@@ -1389,7 +1428,6 @@ export namespace JSXBase {
 
   export interface SVGAttributes<T = SVGElement> extends DOMAttributes<T> {
     // Attributes which also defined in HTMLAttributes
-    // See comment in SVGDOMPropertyConfig.js
     class?: string | { [className: string]: boolean };
     color?: string;
     height?: number | string;

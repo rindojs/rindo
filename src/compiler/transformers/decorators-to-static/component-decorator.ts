@@ -3,7 +3,7 @@ import ts from 'typescript';
 
 import type * as d from '../../../declarations';
 import { convertValueToLiteral, createStaticGetter, retrieveTsDecorators } from '../transform-utils';
-import { getDeclarationParameters } from './decorator-utils';
+import { getDecoratorParameters } from './decorator-utils';
 import { styleToStatic } from './style-to-static';
 
 /**
@@ -28,14 +28,14 @@ import { styleToStatic } from './style-to-static';
  * decorator
  */
 export const componentDecoratorToStatic = (
-  config: d.Config,
+  config: d.ValidatedConfig,
   typeChecker: ts.TypeChecker,
   diagnostics: d.Diagnostic[],
   cmpNode: ts.ClassDeclaration,
   newMembers: ts.ClassElement[],
   componentDecorator: ts.Decorator,
 ) => {
-  const [componentOptions] = getDeclarationParameters<d.ComponentOptions>(componentDecorator);
+  const [componentOptions] = getDecoratorParameters<d.ComponentOptions>(componentDecorator, typeChecker);
   if (!componentOptions) {
     return;
   }
@@ -56,6 +56,10 @@ export const componentDecoratorToStatic = (
     }
   } else if (componentOptions.scoped) {
     newMembers.push(createStaticGetter('encapsulation', convertValueToLiteral('scoped')));
+  }
+
+  if (componentOptions.formAssociated === true) {
+    newMembers.push(createStaticGetter('formAssociated', convertValueToLiteral(true)));
   }
 
   styleToStatic(newMembers, componentOptions);
@@ -84,7 +88,7 @@ export const componentDecoratorToStatic = (
  * @returns whether or not the component is valid
  */
 const validateComponent = (
-  config: d.Config,
+  config: d.ValidatedConfig,
   diagnostics: d.Diagnostic[],
   typeChecker: ts.TypeChecker,
   componentOptions: d.ComponentOptions,

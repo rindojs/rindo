@@ -4,10 +4,12 @@ import type * as d from '../../declarations';
 import { optimizeCssId } from '../../version';
 
 export const optimizeCss = async (
-  config: d.Config,
+  config: d.ValidatedConfig,
   compilerCtx: d.CompilerCtx,
   diagnostics: d.Diagnostic[],
   styleText: string,
+  // TODO(RINDO-1076): Investigate removing this parameter, which appears to be unused. This function is exported by
+  // the compiler, making this a breaking change should we remove it.
   filePath: string,
 ) => {
   if (typeof styleText !== 'string' || !styleText.length) {
