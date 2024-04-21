@@ -344,23 +344,20 @@ describe('validateTesting', () => {
       expect(config.testing.setupFilesAfterEnv).toEqual([join('testing', 'jest-setuptestframework.js')]);
     });
 
-    it.each([[[]], [['mock-setup-file.js']]])(
-      "prepends rindo's default file to an array: %s",
-      (setupFilesAfterEnv) => {
-        userConfig.flags = { ...flags, e2e: true };
-        userConfig.testing = {
-          setupFilesAfterEnv: [...setupFilesAfterEnv],
-        };
+    it.each([[[]], [['mock-setup-file.js']]])("prepends rindo's default file to an array: %s", (setupFilesAfterEnv) => {
+      userConfig.flags = { ...flags, e2e: true };
+      userConfig.testing = {
+        setupFilesAfterEnv: [...setupFilesAfterEnv],
+      };
 
-        const { config } = validateConfig(userConfig, mockLoadConfigInit());
+      const { config } = validateConfig(userConfig, mockLoadConfigInit());
 
-        expect(config.testing.setupFilesAfterEnv).toEqual([
-          // 'testing' is the internal directory where the default setup file can be found
-          join('testing', 'jest-setuptestframework.js'),
-          ...setupFilesAfterEnv,
-        ]);
-      },
-    );
+      expect(config.testing.setupFilesAfterEnv).toEqual([
+        // 'testing' is the internal directory where the default setup file can be found
+        join('testing', 'jest-setuptestframework.js'),
+        ...setupFilesAfterEnv,
+      ]);
+    });
   });
 
   describe('testEnvironment', () => {

@@ -226,8 +226,6 @@ describe('rewrite alias module paths transform', () => {
     );
   });
 
-
-
   it("shouldn't get tripped up by regexes!", async () => {
     const t = await pathTransformTranspile(`
       import { foo } from "@namespace/keyboard";
