@@ -1,0 +1,31 @@
+/* Document Level Styles */
+
+/*
+  The imports below are needed to include our light dom css for global styles such as fonts and colors.
+  You can comment out any of these imports if you do not need that css. For example, if you have your own
+  global font family css then you can comment out the typography.css import.
+*/
+
+/** Core CSS required for family components to work property */
+@import "~@familyjs/core/css/core.css";
+
+/** Basic CSS for apps built with Family */
+@import "~@familyjs/core/css/normalize.css";
+@import "~@familyjs/core/css/structure.css";
+@import "~@familyjs/core/css/typography.css";
+
+/** Optional CSS utils that can be commented out */
+@import "~@familyjs/core/css/padding.css";
+@import "~@familyjs/core/css/float-elements.css";
+@import "~@familyjs/core/css/text-alignment.css";
+@import "~@familyjs/core/css/text-transformation.css";
+@import "~@familyjs/core/css/flex-utils.css";
+
+/*
+  The CSS Variables below can be used to theme your app.
+  For more info on CSS variables check out:
+  https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_variables
+
+  More info about color theming using Family:
+  https://family-js.web.app/docs/theming/color-generator
+*/

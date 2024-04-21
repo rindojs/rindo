@@ -1,0 +1,18 @@
+{
+  "name": "wite-bundle-test",
+  "private": true,
+  "version": "1.0.0",
+  "description": "test package to verify wite can be used with rindo's lazy loaded bundle",
+  "scripts": {
+    "build": "wite build",
+    "clean": "rm -rf dist",
+    "start": "wite"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "wite": "^2.9.15"
+  },
+  "dependencies": {
+    "component-library": "file:../component-library"
+  }
+}

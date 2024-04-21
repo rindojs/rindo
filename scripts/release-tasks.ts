@@ -154,6 +154,16 @@ export async function runReleaseTasks(opts: BuildOptions, args: ReadonlyArray<st
   if (!opts.isPublishRelease) {
     tasks.push(
       {
+        title: 'Run jest tests',
+        task: () => execa('npm', ['run', 'test.jest'], { cwd: rootDir }),
+        skip: () => opts.isCI, // this step will occur in GitHub after the PR has been created
+      },
+      {
+        title: 'Run karma tests',
+        task: () => execa('npm', ['run', 'test.karma.prod'], { cwd: rootDir }),
+        skip: () => opts.isCI, // this step will occur in GitHub after the PR has been created
+      },
+      {
         title: 'Validate build',
         task: () => validateBuild(rootDir),
         skip: () => opts.isCI, // this step will occur in GitHub after the PR has been created

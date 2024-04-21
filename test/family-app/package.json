@@ -1,0 +1,21 @@
+{
+  "name": "family-app",
+  "private": true,
+  "version": "1.0.0",
+  "description": "family-app",
+  "license": "MIT",
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "node ../../bin/rindo build --debug",
+    "build.dev": "node ../../bin/rindo build --dev",
+    "start": "node ../../bin/rindo build --dev --watch --serve",
+    "test": "node ../../bin/rindo test --spec --e2e",
+    "test.watch": "node ../../bin/rindo test --spec --e2e --watch",
+    "generate": "node ../../bin/rindo generate"
+  },
+  "dependencies": {
+    "@familyjs/core": "^7.0.0"
+  }
+}

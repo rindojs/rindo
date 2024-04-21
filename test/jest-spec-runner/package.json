@@ -1,0 +1,8 @@
+{
+  "name": "@rindo/jest-spec-runner",
+  "private": true,
+  "scripts": {
+    "build": "node ../../bin/rindo build",
+    "test": "node ../../bin/rindo test --spec"
+  }
+}

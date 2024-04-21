@@ -1,0 +1,14 @@
+{
+  "name": "@rindo/todo-app",
+  "private": true,
+  "scripts": {
+    "build": "node ../../bin/rindo build",
+    "start": "node ../../bin/rindo build --dev --watch --serve",
+    "start.prod": "node ../../bin/rindo build --watch --serve"
+  },
+  "devDependencies": {
+    "todomvc-app-css": "latest",
+    "todomvc-common": "latest",
+    "workbox-build": "4.3.1"
+  }
+}

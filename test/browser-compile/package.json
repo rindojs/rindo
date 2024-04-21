@@ -1,0 +1,13 @@
+{
+  "name": "browser-compile",
+  "private": true,
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node ../../bin/rindo build",
+    "start": "node ../../bin/rindo build --debug --watch --dev --serve"
+  },
+  "author": "Family Team",
+  "license": "MIT"
+}

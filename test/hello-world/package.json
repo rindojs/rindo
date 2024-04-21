@@ -1,0 +1,19 @@
+{
+  "name": "@rindo/hello-world",
+  "private": true,
+  "files": [
+    "dist/"
+  ],
+  "scripts": {
+    "build": "node ../../bin/rindo build --prerender",
+    "start": "node ../../bin/rindo build --dev --watch --serve",
+    "start.prod": "node ../../bin/rindo build --watch --serve"
+  },
+  "main": "dist/index.cjs.js",
+  "module": "dist/index.js",
+  "types": "dist/types/components.d.ts",
+  "collection": "dist/collection/collection-manifest.json",
+  "volta": {
+    "extends": "../../package.json"
+  }
+}

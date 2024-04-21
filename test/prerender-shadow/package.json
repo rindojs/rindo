@@ -1,0 +1,10 @@
+{
+  "name": "@rindo/hello-shadow",
+  "private": true,
+  "scripts": {
+    "build": "node ../../bin/rindo build --prerender --debug",
+    "start": "node ../../bin/rindo build --dev --watch --serve",
+    "start.prod": "node ../../bin/rindo build --watch --serve",
+    "prerender": "node prerender.js"
+  }
+}

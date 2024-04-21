@@ -51,6 +51,66 @@ A nightly build is similar to a 'Dev Release', except that:
 - it is run on a set cadence (it is not expectedthat a developer to manually invoke it)
 - it is published to the npm registry under the 'nightly' tag
 
+### Test Analysis (`test-analysis.yml`)
+
+This workflow is responsible for running the Rindo analysis testing suite.
+
+### Test End-to-End (`test-e2e.yml`)
+
+This workflow is responsible for running the Rindo end-to-end testing suite.
+This suite does _not_ run Rindo's BrowserStack tests.
+Those are handled by a [separate workflow](#browserstack-browserstackyml).
+
+### Test Unit (`test-unit.yml`)
+
+This workflow is responsible for running the Rindo unit testing suite.
+
+### Design
+
+#### Overview
+
+Most of the workflows above are contingent on the build finishing (otherwise there would be nothing to run against).
+The diagram below displays the dependencies between each workflow.
+
+```mermaid
+graph LR;
+    build-core-->test-analysis;
+    build-core-->test-e2e;
+    build-core-->test-unit;
+    format;
+```
+
+Making each 'task' a reusable workflow allows CI to run more jobs in parallel, improving the throughput of Rindo's CI.
+All resusable workflows can be found in the [workflows directory](.).
+This is a GitHub Actions convention that cannot be overridden.
+
+#### Running Tests
+
+All test-related jobs require the build to finish first.
+Upon successful completion of the build workflow, each test workflow will start.
+
+The test-running workflows have been designed to run in parallel and are configured to run against several operating
+systems & versions of node.
+For a test workflow that theoretically runs on Ubuntu and Windows operating systems and targets Node v14, v16 and v18, a
+single test workflow may spawn several jobs:
+
+```mermaid
+graph LR;
+    test-analysis-->ubuntu-node14;
+    test-analysis-->ubuntu-node16;
+    test-analysis-->ubuntu-node18;
+    test-analysis-->windows-node14;
+    test-analysis-->windows-node16;
+    test-analysis-->windows-node18;
+```
+
+These 'os-node jobs' (e.g. `ubuntu-node16`) are designed to _not_ prematurely stop their sibling jobs should one of
+them fail.
+This allows the opportunity for the sibling test jobs to potentially pass, and reduce the number of runners that need to
+be spun up again should a developer wish to 're-run failed jobs'.
+Should a developer feel that it is more appropriate to re-run all os-node jobs, they may do so using GitHub's 're-run
+all jobs' options in the GitHub Actions UI.
+
 #### Concurrency
 
 When a `git push` is made to a branch, Rindo's CI is designed to stop existing job(s) associated with the workflow + 
@@ -60,6 +120,7 @@ A new CI run (of each workflow) will begin upon stopping the existing job(s) usi
 ### BrowserStack (`browserstack.yml`)
 
 This workflow is used to run a series of integration tests using [BrowserStack](https://www.browserstack.com).
+The exact details of which browsers are targeted can be found in the [karma directory](../../test/karma) of the project.
 
 Running this workflow requires a username + access key in order to access BrowserStack.
 These credentials are stored as secrets in GitHub.

@@ -1,0 +1,13 @@
+{
+  "name": "@rindo/style-modes",
+  "private": true,
+  "scripts": {
+    "build": "node ../../bin/rindo build",
+    "start": "node ../../bin/rindo build --dev --watch --serve",
+    "start.prod": "node ../../bin/rindo build --watch --serve"
+  },
+  "dependencies": {
+    "@rindo/sass": "^1.3.2",
+    "npm": "^6.10.3"
+  }
+}
