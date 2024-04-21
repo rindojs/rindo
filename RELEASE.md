@@ -22,6 +22,7 @@ Manual releases should only be performed when there are extenuating circumstance
     1. Close the pull request and reopen it. This allows actions that the team gates pull requests on to run.
     1. Mark the pull request as ready for review.
 1. Ask the Rindo team for an approval on the PR
+   Only one approval is required for pull requests that only include the version bump/prerelease commit.
 1. Once approved, add it to the merge queue.
 1. ⚠️ Wait for the pull request to land before continuing to the next step. ⚠️
 1. Run the [Rindo Production Release Workflow](https://github.com/familyjs/rindo/actions/workflows/release-production.yml)
@@ -53,6 +54,12 @@ The following steps should be always run, regardless of whether an automated or
 manual release was performed.
 
 1. Publish the release notes in GitHub using GitHub's [release notes form](https://github.com/familyjs/rindo/releases/new).
+  1. Set the tag dropdown to the newly-released version's git tag
+  1. Set the version title to `[VERMOJI] v[VERSION] ([yyyy.mm.dd])`.
+     For example, v4.2.0 has a vermoji of 🏕, and was released on 2024.02.18.
+     As a result, it was [released with the title](https://github.com/familyjs/rindo/releases/tag/v4.2.0) of 🏕 4.2.0 (2024-02-18).
+  1. Copy the raw contents of (CHANGELOG.md)[./CHANGELOG.md] into the body
+  1. Ensure that the release is set as the latest (so long as we're not published a pre-release)
   1. If anyone from the community contributed commit(s) to this release,
      append the following to the end of the GitHub release notes:
 
@@ -61,6 +68,7 @@ manual release was performed.
 
      🎉 Thanks <GitHub_Usernames> for their contributions! 🎉
      ```
+   1. Hit "Publish Release"
 1. Navigate to the [Rindo Site](https://github.com/familyjs/rindo-site/pulls) repository and merge PRs
    containing documentation that has been approved, but not merged that is related to the release. Such PRs should be
    labelled as `do not merge: waiting for next rindo release`. It's a good idea to review _all_ PRs though, just in
