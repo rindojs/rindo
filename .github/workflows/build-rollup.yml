@@ -1,4 +1,4 @@
-name: Build Rindo with Esbuild
+name: Build Rindo with Rollup
 
 on:
   workflow_call:
@@ -22,7 +22,7 @@ jobs:
         uses: ./.github/workflows/actions/get-core-dependencies
 
       - name: Core Build
-        run: npm run build.esbuild -- --ci
+        run: npm run build.rollup
         shell: bash
 
       - name: Validate Build
@@ -36,6 +36,6 @@ jobs:
       - name: Upload Build Artifacts
         uses: ./.github/workflows/actions/upload-archive
         with:
-          name: rindo-core-esbuild
+          name: rindo-core-rollup
           output: rindo-core-build.zip
           paths: build cli compiler dev-server internal mock-doc scripts/build screenshot sys testing
