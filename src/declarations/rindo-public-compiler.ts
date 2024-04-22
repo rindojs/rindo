@@ -651,6 +651,15 @@ export interface DevServerConfig extends RindoDevServerConfig {
   prerenderConfig?: string;
   protocol?: 'http' | 'https';
   srcIndexHtml?: string;
+
+  /**
+   * Route to be used for the "ping" sub-route of the Rindo dev server.
+   * This route will return a 200 status code once the Rindo build has finished.
+   * Setting this to `null` will disable the ping route.
+   *
+   * Defaults to `/ping`
+   */
+  pingRoute?: string | null;
 }
 
 export interface HistoryApiFallback {
