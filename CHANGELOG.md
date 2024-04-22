@@ -1,3 +1,12 @@
+# 🐗 [4.12.0](https://github.com/familyjs/rindo/compare/v4.2.1...v4.12.0) (2024-04-22)
+
+
+### Bug Fixes
+
+* **compiler:** restrict config extras slot fix flags ([1503866](https://github.com/familyjs/rindo/commit/1503866346c4c98addae58f1b090eb1048a2cad1))
+
+
+
 ## 💯 [4.2.1](https://github.com/familyjs/rindo/compare/v4.2.0...v4.2.1) (2024-04-21)
 
 
