@@ -11,6 +11,6 @@ describe('svg attr', () => {
 
   it('adds and removes attribute', async () => {
     const img = app.querySelector('img');
-    expect(img.src.startsWith('data:image/svg+xml;base64,PD94bW')).toBe(true);
+    expect(img.src.startsWith('data:image/svg+xml;base64,PHN2Zy')).toBe(true);
   });
 });

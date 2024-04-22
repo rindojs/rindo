@@ -141,6 +141,12 @@ export namespace Components {
     }
     interface FactoryJsx {
     }
+    interface FmlChild {
+    }
+    interface FmlHost {
+    }
+    interface FmlParent {
+    }
     interface FormAssociated {
     }
     interface HostAttrOverride {
@@ -155,12 +161,6 @@ export namespace Components {
     }
     interface InputBasicRoot {
         "value"?: string;
-    }
-    interface FmlChild {
-    }
-    interface FmlHost {
-    }
-    interface FmlParent {
     }
     interface JsonBasic {
     }
@@ -245,6 +245,8 @@ export namespace Components {
     interface ReparentStyleNoVars {
     }
     interface ReparentStyleWithVars {
+    }
+    interface RindoSibling {
     }
     interface SassCmp {
     }
@@ -384,8 +386,6 @@ export namespace Components {
     interface StaticMembersSeparateInitializer {
     }
     interface StaticStyles {
-    }
-    interface RindoSibling {
     }
     interface SvgAttr {
     }
@@ -750,6 +750,24 @@ declare global {
         prototype: HTMLFactoryJsxElement;
         new (): HTMLFactoryJsxElement;
     };
+    interface HTMLFmlChildElement extends Components.FmlChild, HTMLRindoElement {
+    }
+    var HTMLFmlChildElement: {
+        prototype: HTMLFmlChildElement;
+        new (): HTMLFmlChildElement;
+    };
+    interface HTMLFmlHostElement extends Components.FmlHost, HTMLRindoElement {
+    }
+    var HTMLFmlHostElement: {
+        prototype: HTMLFmlHostElement;
+        new (): HTMLFmlHostElement;
+    };
+    interface HTMLFmlParentElement extends Components.FmlParent, HTMLRindoElement {
+    }
+    var HTMLFmlParentElement: {
+        prototype: HTMLFmlParentElement;
+        new (): HTMLFmlParentElement;
+    };
     interface HTMLFormAssociatedElement extends Components.FormAssociated, HTMLRindoElement {
     }
     var HTMLFormAssociatedElement: {
@@ -796,24 +814,6 @@ declare global {
     var HTMLInputBasicRootElement: {
         prototype: HTMLInputBasicRootElement;
         new (): HTMLInputBasicRootElement;
-    };
-    interface HTMLFmlChildElement extends Components.FmlChild, HTMLRindoElement {
-    }
-    var HTMLFmlChildElement: {
-        prototype: HTMLFmlChildElement;
-        new (): HTMLFmlChildElement;
-    };
-    interface HTMLFmlHostElement extends Components.FmlHost, HTMLRindoElement {
-    }
-    var HTMLFmlHostElement: {
-        prototype: HTMLFmlHostElement;
-        new (): HTMLFmlHostElement;
-    };
-    interface HTMLFmlParentElement extends Components.FmlParent, HTMLRindoElement {
-    }
-    var HTMLFmlParentElement: {
-        prototype: HTMLFmlParentElement;
-        new (): HTMLFmlParentElement;
     };
     interface HTMLJsonBasicElement extends Components.JsonBasic, HTMLRindoElement {
     }
@@ -1060,6 +1060,12 @@ declare global {
     var HTMLReparentStyleWithVarsElement: {
         prototype: HTMLReparentStyleWithVarsElement;
         new (): HTMLReparentStyleWithVarsElement;
+    };
+    interface HTMLRindoSiblingElement extends Components.RindoSibling, HTMLRindoElement {
+    }
+    var HTMLRindoSiblingElement: {
+        prototype: HTMLRindoSiblingElement;
+        new (): HTMLRindoSiblingElement;
     };
     interface HTMLSassCmpElement extends Components.SassCmp, HTMLRindoElement {
     }
@@ -1415,12 +1421,6 @@ declare global {
         prototype: HTMLStaticStylesElement;
         new (): HTMLStaticStylesElement;
     };
-    interface HTMLRindoSiblingElement extends Components.RindoSibling, HTMLRindoElement {
-    }
-    var HTMLRindoSiblingElement: {
-        prototype: HTMLRindoSiblingElement;
-        new (): HTMLRindoSiblingElement;
-    };
     interface HTMLSvgAttrElement extends Components.SvgAttr, HTMLRindoElement {
     }
     var HTMLSvgAttrElement: {
@@ -1511,15 +1511,15 @@ declare global {
         "external-import-b": HTMLExternalImportBElement;
         "external-import-c": HTMLExternalImportCElement;
         "factory-jsx": HTMLFactoryJsxElement;
+        "fml-child": HTMLFmlChildElement;
+        "fml-host": HTMLFmlHostElement;
+        "fml-parent": HTMLFmlParentElement;
         "form-associated": HTMLFormAssociatedElement;
         "host-attr-override": HTMLHostAttrOverrideElement;
         "image-import": HTMLImageImportElement;
         "import-aliasing": HTMLImportAliasingElement;
         "init-css-root": HTMLInitCssRootElement;
         "input-basic-root": HTMLInputBasicRootElement;
-        "fml-child": HTMLFmlChildElement;
-        "fml-host": HTMLFmlHostElement;
-        "fml-parent": HTMLFmlParentElement;
         "json-basic": HTMLJsonBasicElement;
         "key-reorder": HTMLKeyReorderElement;
         "key-reorder-root": HTMLKeyReorderRootElement;
@@ -1553,6 +1553,7 @@ declare global {
         "remove-child-patch": HTMLRemoveChildPatchElement;
         "reparent-style-no-vars": HTMLReparentStyleNoVarsElement;
         "reparent-style-with-vars": HTMLReparentStyleWithVarsElement;
+        "rindo-sibling": HTMLRindoSiblingElement;
         "sass-cmp": HTMLSassCmpElement;
         "scoped-basic": HTMLScopedBasicElement;
         "scoped-basic-root": HTMLScopedBasicRootElement;
@@ -1612,7 +1613,6 @@ declare global {
         "static-members-separate-export": HTMLStaticMembersSeparateExportElement;
         "static-members-separate-initializer": HTMLStaticMembersSeparateInitializerElement;
         "static-styles": HTMLStaticStylesElement;
-        "rindo-sibling": HTMLRindoSiblingElement;
         "svg-attr": HTMLSvgAttrElement;
         "svg-class": HTMLSvgClassElement;
         "tag-3d-component": HTMLTag3dComponentElement;
@@ -1752,6 +1752,12 @@ declare namespace LocalJSX {
     }
     interface FactoryJsx {
     }
+    interface FmlChild {
+    }
+    interface FmlHost {
+    }
+    interface FmlParent {
+    }
     interface FormAssociated {
     }
     interface HostAttrOverride {
@@ -1766,12 +1772,6 @@ declare namespace LocalJSX {
     }
     interface InputBasicRoot {
         "value"?: string;
-    }
-    interface FmlChild {
-    }
-    interface FmlHost {
-    }
-    interface FmlParent {
     }
     interface JsonBasic {
     }
@@ -1864,6 +1864,8 @@ declare namespace LocalJSX {
     interface ReparentStyleNoVars {
     }
     interface ReparentStyleWithVars {
+    }
+    interface RindoSibling {
     }
     interface SassCmp {
     }
@@ -2004,8 +2006,6 @@ declare namespace LocalJSX {
     }
     interface StaticStyles {
     }
-    interface RindoSibling {
-    }
     interface SvgAttr {
     }
     interface SvgClass {
@@ -2068,15 +2068,15 @@ declare namespace LocalJSX {
         "external-import-b": ExternalImportB;
         "external-import-c": ExternalImportC;
         "factory-jsx": FactoryJsx;
+        "fml-child": FmlChild;
+        "fml-host": FmlHost;
+        "fml-parent": FmlParent;
         "form-associated": FormAssociated;
         "host-attr-override": HostAttrOverride;
         "image-import": ImageImport;
         "import-aliasing": ImportAliasing;
         "init-css-root": InitCssRoot;
         "input-basic-root": InputBasicRoot;
-        "fml-child": FmlChild;
-        "fml-host": FmlHost;
-        "fml-parent": FmlParent;
         "json-basic": JsonBasic;
         "key-reorder": KeyReorder;
         "key-reorder-root": KeyReorderRoot;
@@ -2110,6 +2110,7 @@ declare namespace LocalJSX {
         "remove-child-patch": RemoveChildPatch;
         "reparent-style-no-vars": ReparentStyleNoVars;
         "reparent-style-with-vars": ReparentStyleWithVars;
+        "rindo-sibling": RindoSibling;
         "sass-cmp": SassCmp;
         "scoped-basic": ScopedBasic;
         "scoped-basic-root": ScopedBasicRoot;
@@ -2169,7 +2170,6 @@ declare namespace LocalJSX {
         "static-members-separate-export": StaticMembersSeparateExport;
         "static-members-separate-initializer": StaticMembersSeparateInitializer;
         "static-styles": StaticStyles;
-        "rindo-sibling": RindoSibling;
         "svg-attr": SvgAttr;
         "svg-class": SvgClass;
         "tag-3d-component": Tag3dComponent;
@@ -2230,15 +2230,15 @@ declare module "@rindo/core" {
             "external-import-b": LocalJSX.ExternalImportB & JSXBase.HTMLAttributes<HTMLExternalImportBElement>;
             "external-import-c": LocalJSX.ExternalImportC & JSXBase.HTMLAttributes<HTMLExternalImportCElement>;
             "factory-jsx": LocalJSX.FactoryJsx & JSXBase.HTMLAttributes<HTMLFactoryJsxElement>;
+            "fml-child": LocalJSX.FmlChild & JSXBase.HTMLAttributes<HTMLFmlChildElement>;
+            "fml-host": LocalJSX.FmlHost & JSXBase.HTMLAttributes<HTMLFmlHostElement>;
+            "fml-parent": LocalJSX.FmlParent & JSXBase.HTMLAttributes<HTMLFmlParentElement>;
             "form-associated": LocalJSX.FormAssociated & JSXBase.HTMLAttributes<HTMLFormAssociatedElement>;
             "host-attr-override": LocalJSX.HostAttrOverride & JSXBase.HTMLAttributes<HTMLHostAttrOverrideElement>;
             "image-import": LocalJSX.ImageImport & JSXBase.HTMLAttributes<HTMLImageImportElement>;
             "import-aliasing": LocalJSX.ImportAliasing & JSXBase.HTMLAttributes<HTMLImportAliasingElement>;
             "init-css-root": LocalJSX.InitCssRoot & JSXBase.HTMLAttributes<HTMLInitCssRootElement>;
             "input-basic-root": LocalJSX.InputBasicRoot & JSXBase.HTMLAttributes<HTMLInputBasicRootElement>;
-            "fml-child": LocalJSX.FmlChild & JSXBase.HTMLAttributes<HTMLFmlChildElement>;
-            "fml-host": LocalJSX.FmlHost & JSXBase.HTMLAttributes<HTMLFmlHostElement>;
-            "fml-parent": LocalJSX.FmlParent & JSXBase.HTMLAttributes<HTMLFmlParentElement>;
             "json-basic": LocalJSX.JsonBasic & JSXBase.HTMLAttributes<HTMLJsonBasicElement>;
             "key-reorder": LocalJSX.KeyReorder & JSXBase.HTMLAttributes<HTMLKeyReorderElement>;
             "key-reorder-root": LocalJSX.KeyReorderRoot & JSXBase.HTMLAttributes<HTMLKeyReorderRootElement>;
@@ -2272,6 +2272,7 @@ declare module "@rindo/core" {
             "remove-child-patch": LocalJSX.RemoveChildPatch & JSXBase.HTMLAttributes<HTMLRemoveChildPatchElement>;
             "reparent-style-no-vars": LocalJSX.ReparentStyleNoVars & JSXBase.HTMLAttributes<HTMLReparentStyleNoVarsElement>;
             "reparent-style-with-vars": LocalJSX.ReparentStyleWithVars & JSXBase.HTMLAttributes<HTMLReparentStyleWithVarsElement>;
+            "rindo-sibling": LocalJSX.RindoSibling & JSXBase.HTMLAttributes<HTMLRindoSiblingElement>;
             "sass-cmp": LocalJSX.SassCmp & JSXBase.HTMLAttributes<HTMLSassCmpElement>;
             "scoped-basic": LocalJSX.ScopedBasic & JSXBase.HTMLAttributes<HTMLScopedBasicElement>;
             "scoped-basic-root": LocalJSX.ScopedBasicRoot & JSXBase.HTMLAttributes<HTMLScopedBasicRootElement>;
@@ -2331,7 +2332,6 @@ declare module "@rindo/core" {
             "static-members-separate-export": LocalJSX.StaticMembersSeparateExport & JSXBase.HTMLAttributes<HTMLStaticMembersSeparateExportElement>;
             "static-members-separate-initializer": LocalJSX.StaticMembersSeparateInitializer & JSXBase.HTMLAttributes<HTMLStaticMembersSeparateInitializerElement>;
             "static-styles": LocalJSX.StaticStyles & JSXBase.HTMLAttributes<HTMLStaticStylesElement>;
-            "rindo-sibling": LocalJSX.RindoSibling & JSXBase.HTMLAttributes<HTMLRindoSiblingElement>;
             "svg-attr": LocalJSX.SvgAttr & JSXBase.HTMLAttributes<HTMLSvgAttrElement>;
             "svg-class": LocalJSX.SvgClass & JSXBase.HTMLAttributes<HTMLSvgClassElement>;
             "tag-3d-component": LocalJSX.Tag3dComponent & JSXBase.HTMLAttributes<HTMLTag3dComponentElement>;

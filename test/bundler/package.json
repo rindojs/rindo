@@ -3,7 +3,7 @@
   "scripts": {
     "build": "npm run build.component-lib && npm run build.wite",
     "build.component-lib": "cd component-library && npm ci && npm run build && cd ..",
-    "build.vite": "cd wite-bundle-test && npm ci && npm run build && cd ..",
+    "build.wite": "cd wite-bundle-test && npm ci && npm run build && cd ..",
     "clean": "npm run clean.component-lib && npm run clean.wite",
     "clean.component-lib": "cd component-library && npm run clean && cd ../",
     "clean.wite": "cd wite-bundle-test && npm run clean && cd ../",
