@@ -1,3 +1,13 @@
+## 🌏 [4.12.2](https://github.com/familyjs/rindo/compare/v4.12.1...v4.12.2) (2024-04-22)
+
+
+### Bug Fixes
+
+* **compiler:** support async globalScripts functions ([84a875e](https://github.com/familyjs/rindo/commit/84a875e18731888217b2208711fc4ca67dfdae5b))
+* **mock-doc:** overwrite parentElement in MockHTMLElement to return null ([bee97ef](https://github.com/familyjs/rindo/commit/bee97ef65dcb9590e2d607aea76adfaca1e299bc))
+
+
+
 ## 📻 [4.12.1](https://github.com/familyjs/rindo/compare/v4.12.0...v4.12.1) (2024-04-22)
 
 
