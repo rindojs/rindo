@@ -77,6 +77,3 @@ In many cases, Rindo can be used as a drop in replacement for traditional fronte
 Thanks for your interest in contributing!
 Please take a moment to read up on our guidelines for [contributing](https://github.com/familyjs/rindo/blob/main/CONTRIBUTING.md).
 Please note that this project is released with a [Contributor Code of Conduct](https://github.com/familyjs/rindo/blob/main/CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
-
-### Thanks
-Rindo's internal testing suite is supported by the [BrowserStack Open-Source Program](https://www.browserstack.com/open-source)
