@@ -1,3 +1,12 @@
+## ⛳️ [4.12.5](https://github.com/familyjs/rindo/compare/v4.12.4...v4.12.5) (2024-04-22)
+
+
+### Bug Fixes
+
+* **custom-elements:** hydrate on client side ([73d6b84](https://github.com/familyjs/rindo/commit/73d6b84821125908e4ae99363489bfb53fda415c))
+
+
+
 ## 👒 [4.12.4](https://github.com/familyjs/rindo/compare/v4.12.3...v4.12.4) (2024-04-22)
 
 
