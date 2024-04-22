@@ -1,3 +1,24 @@
+# 🎤 [4.13.0](https://github.com/familyjs/rindo/compare/v4.12.6...v4.13.0) (2024-04-22)
+
+
+### Bug Fixes
+
+* **compiler:** allow to set custom root directory ([a37ade0](https://github.com/familyjs/rindo/commit/a37ade06f52eb3727b74c84b9de315f0151c27bc))
+* **compiler:** don't validate references for [@prop](https://github.com/prop), [@method](https://github.com/method) and [@event](https://github.com/event) decorator ([74f171b](https://github.com/familyjs/rindo/commit/74f171ba720fd4398b4c61f1667b3913e85bb2f2))
+* **renderer:** fix conditional rendering issue ([4954bc7](https://github.com/familyjs/rindo/commit/4954bc73da4fe6918578162d2c18f8d089e38b21))
+* **renderer:** fix missing slot ref callback handling ([fcea686](https://github.com/familyjs/rindo/commit/fcea6869510c8d4fe068de0a7d7df2787337cb40))
+* **runtime:** remove `forceUpdate` in `appendChild` patch ([9ecd395](https://github.com/familyjs/rindo/commit/9ecd395256602711d375c9ea89bc8eb9b5eb6f0b))
+* **sys:** fix expected types for `createNodeLogger` and `createNodeSys` ([aa4e2cb](https://github.com/familyjs/rindo/commit/aa4e2cb5e59bd476ffe68d8c84dc962915bf899c))
+* **testing:** use viewport for Puppeteer screenshot clip dimensions ([1418704](https://github.com/familyjs/rindo/commit/14187044e0dec0f121ffb8b0e06d3ef0de58fe47))
+
+
+### Features
+
+* **dev-server:** add ping route ([faae714](https://github.com/familyjs/rindo/commit/faae714837fa536e6a171bb81a6d4b32da88a634))
+* **typescript:** Update dependency typescript to ~5.4.0 ([0079ad0](https://github.com/familyjs/rindo/commit/0079ad093bee40f5c373fe53fd808017228ebf28))
+
+
+
 ## 🚡 [4.12.6](https://github.com/familyjs/rindo/compare/v4.12.5...v4.12.6) (2024-04-22)
 
 
