@@ -69,22 +69,22 @@ manual release was performed.
       🎉 Thanks <GitHub_Usernames> for their contributions! 🎉
       ```
    1. Hit "Publish Release"    
-2. Navigate to the [Rindo Site](https://github.com/familyjs/rindo-site/pulls) repository and:
-3. Merge any open PRs containing documentation that has been approved, but
-   not merged that is related to the release. Such PRs should be labelled as
-   `do not merge: waiting for next rindo release`. It's a good idea to
-   review _all_ PRs though, just in case.
-4. If the current release is a major or minor version, open a pull request
-   creating a new version of the docs by following the [guide in the
-   rindo-site
-   repo](https://github.com/familyjs/rindo-site/blob/main/RELEASE.md#creating-a-new-version-section).
-5. If there are any 'next' branches in GitHub, say for a future major version of Rindo (e.g. `v5.0.0-dev`), now is a
+1. Navigate to the [Rindo Site](https://github.com/familyjs/rindo-site/pulls) repository and:
+   1. Merge any open PRs containing documentation that has been approved, but
+      not merged that is related to the release. Such PRs should be labelled as
+      `do not merge: waiting for next stencil release`. It's a good idea to
+      review _all_ PRs though, just in case.
+   1. If the current release is a major or minor version, open a pull request
+     creating a new version of the docs by following the [guide in the
+     rindo-site
+     repo](https://github.com/familyjs/rindo-site/blob/main/RELEASE.md#creating-a-new-version-section).
+1. If there are any 'next' branches in GitHub, say for a future major version of Rindo (e.g. `v5.0.0-dev`), now is a
    good time to rebase them against the `main` branch.
-6. End the code freeze in the Rindo team Slack channel.
-7. Perform the following tasks in JIRA:
+1. End the code freeze in the Rindo team Slack channel.
+1. Perform the following tasks in JIRA:
    1. Ask someone with appropriate permissions to mark this version of Rindo as 'released' in JIRA on the 'Releases' page.
    1. Ask someone with appropriate permissions to stub out the next release and task for the release in JIRA.
-8. Ensure all GitHub Issues associated with stories/tasks that shipped in this version of Rindo are closed.
+1. Ensure all GitHub Issues associated with stories/tasks that shipped in this version of Rindo are closed.
    1. For each issue, add a comment stating the version of Rindo that
       included the fix/feature (be sure to update the version number _and_
       tag):
@@ -93,5 +93,5 @@ manual release was performed.
       The fix for this issue has been released as a part of today's [Rindo
       vNUMBER release](https://github.com/familyjs/rindo/releases/tag/TAG). 
       ```
-9. If there's a blog post to go out (either today or this week), let the folks in the `#ask-family-devrel` channel know about the release and that the blog can go out.
+1. If there's a blog post to go out (either today or this week), let the folks in the `#ask-family-devrel` channel know about the release and that the blog can go out.
 When the blog goes out, put an announcement in the `#announcements` channel in Discord.
