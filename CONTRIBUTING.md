@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in contributing to Rindo! :tada:
+Thanks for your interest in contributing to Rindo! 🎉
 
 
 ## Contributing Etiquette
