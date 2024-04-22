@@ -65,16 +65,6 @@ Those are handled by a [separate workflow](#browserstack-browserstackyml).
 
 This workflow is responsible for running the Rindo unit testing suite.
 
-### WebdriverIO Tests (`test-wdio.yml`)
-
-This workflow runs our integration tests which assert that various Rindo
-features work correctly when components using them are built and then rendered
-in actual browsers. We run these tests using
-[WebdriverIO](https://webdriver.io/) against Firefox, Chrome, and Edge.
-
-For more information on how those tests are set up please see the [WebdriverIO
-test README](../../test/wdio/README.md).
-
 ### Design
 
 #### Overview

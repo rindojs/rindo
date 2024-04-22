@@ -51,10 +51,3 @@ coverage/**
 null_errors*.json
 # TODO(RINDO-454): Remove or change this up once we've eliminated unused exports
 unused-exports*.txt
-
-# TODO(RINDO-1203): check in type files back into the repository after migration
-test/wdio/src/components.d.ts
-test/wdio/www-global-script/
-test/wdio/test-components
-test/wdio/www-prerender-script
-test/wdio/www-invisible-prehydration/
