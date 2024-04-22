@@ -144,7 +144,7 @@ export async function compiler(opts: BuildOptions) {
         name: 'compilerMinify',
         async generateBundle(_, bundleFiles) {
           if (opts.isProd) {
-            const compilerFilename = Object.keys(bundleFiles).find((f) => f.includes('rindo'));
+            const compilerFilename = Object.keys(bundleFiles).find((f) => f.includes('rindo')) as string;
             const compilerBundle = bundleFiles[compilerFilename] as OutputChunk;
             const minified = await minifyRindoCompiler(compilerBundle.code, opts);
             await fs.writeFile(join(opts.output.compilerDir, compilerFilename.replace('.js', '.min.js')), minified);
