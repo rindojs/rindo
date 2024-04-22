@@ -1,3 +1,14 @@
+## 📻 [4.12.1](https://github.com/familyjs/rindo/compare/v4.12.0...v4.12.1) (2024-04-22)
+
+
+### Bug Fixes
+
+* **mock-doc:** improve error message when `:scope` selector is used ([764574b](https://github.com/familyjs/rindo/commit/764574bd6d82e90fab55facd712e28521f1b654d))
+* **runtime:** dynamic slot name change ([c436b40](https://github.com/familyjs/rindo/commit/c436b40edef1ff218529252050061826c42cfcbc))
+* **runtime:** only generate lazy build CSS when there are component tags ([8018841](https://github.com/familyjs/rindo/commit/801884199815f03975af98e3f302d444431a1a9e))
+
+
+
 # 🐗 [4.12.0](https://github.com/familyjs/rindo/compare/v4.2.1...v4.12.0) (2024-04-22)
 
 
