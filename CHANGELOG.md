@@ -1,3 +1,19 @@
+## 🚡 [4.12.6](https://github.com/familyjs/rindo/compare/v4.12.5...v4.12.6) (2024-04-22)
+
+
+### Bug Fixes
+
+* **cli:** move version logging earlier in CLI to allow `-v`, `--version` ([201e996](https://github.com/familyjs/rindo/commit/201e996ff770eb2a58a4c5b5e34c616e096d7ede))
+* **compiler:** fix generated import statement ([b4eba42](https://github.com/familyjs/rindo/commit/b4eba4258acd817aa359a83046a326456a60f2ab))
+* **test:** ensure screenshot dir is cleaned up ([ab87dcf](https://github.com/familyjs/rindo/commit/ab87dcfc34d7595b91ab0db92aaaf1076268fb83))
+
+
+### Features
+
+* **compiler:** update glob and minimatch dependencies ([beb02b1](https://github.com/familyjs/rindo/commit/beb02b10d72467cec3971ff384f80cef70f1741f))
+
+
+
 ## ⛳️ [4.12.5](https://github.com/familyjs/rindo/compare/v4.12.4...v4.12.5) (2024-04-22)
 
 
