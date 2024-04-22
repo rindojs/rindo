@@ -40,7 +40,7 @@ export async function internal(opts: BuildOptions) {
   return [...clientPlatformBundle, ...hydratePlatformBundles, ...testingPlatform, await internalAppData(opts)];
 }
 
-async function copyRindoInternalDts(opts: BuildOptions, outputInternalDir: string) {
+export async function copyRindoInternalDts(opts: BuildOptions, outputInternalDir: string) {
   const declarationsInputDir = join(opts.buildDir, 'declarations');
 
   // copy to @rindo/core/internal

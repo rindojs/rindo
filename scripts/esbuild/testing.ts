@@ -6,7 +6,7 @@ import { copyTestingInternalDts } from '../bundles/testing';
 import { getBanner } from '../utils/banner';
 import type { BuildOptions } from '../utils/options';
 import { writePkgJson } from '../utils/write-pkg-json';
-import { getBaseEsbuildOptions, getEsbuildAliases, getEsbuildExternalModules, runBuilds } from './util';
+import { externalAlias, getBaseEsbuildOptions, getEsbuildAliases, getEsbuildExternalModules, runBuilds } from './util';
 
 const EXTERNAL_TESTING_MODULES = [
   'constants',
@@ -59,11 +59,11 @@ export async function buildTesting(opts: BuildOptions) {
     alias: getEsbuildAliases(),
     banner: { js: getBanner(opts, `Rindo Testing`, true) },
     plugins: [
-      externalAliases('@app-data', '@rindo/core/internal/app-data'),
-      externalAliases('@platform', '@rindo/core/internal/testing'),
-      externalAliases('../internal/testing/index.js', '@rindo/core/internal/testing'),
-      externalAliases('@rindo/core/dev-server', '../dev-server/index.js'),
-      externalAliases('@rindo/core/mock-doc', '../mock-doc/index.cjs'),
+      externalAlias('@app-data', '@rindo/core/internal/app-data'),
+      externalAlias('@platform', '@rindo/core/internal/testing'),
+      externalAlias('../internal/testing/index.js', '@rindo/core/internal/testing'),
+      externalAlias('@rindo/core/dev-server', '../dev-server/index.js'),
+      externalAlias('@rindo/core/mock-doc', '../mock-doc/index.cjs'),
       lazyRequirePlugin(opts, [
         '@rindo/core/internal/app-data',
         '@rindo/core/internal/testing',
@@ -79,20 +79,6 @@ export async function buildTesting(opts: BuildOptions) {
 
 function getLazyRequireFn(opts: BuildOptions) {
   return fs.readFileSync(join(opts.bundleHelpersDir, 'lazy-require.js'), 'utf8').trim();
-}
-
-function externalAliases(moduleId: string, resolveToPath: string): Plugin {
-  return {
-    name: 'externalAliases',
-    setup(build) {
-      build.onResolve({ filter: new RegExp(`^${moduleId}$`) }, () => {
-        return {
-          path: resolveToPath,
-          external: true,
-        };
-      });
-    },
-  };
 }
 
 function lazyRequirePlugin(opts: BuildOptions, moduleIds: string[]): Plugin {
