@@ -1,3 +1,12 @@
+## 👒 [4.12.4](https://github.com/familyjs/rindo/compare/v4.12.3...v4.12.4) (2024-04-22)
+
+
+### Bug Fixes
+
+* **build:** address issue with dynamic import, wite, and lahm ([bc2f41a](https://github.com/familyjs/rindo/commit/bc2f41a1ed9571c3ab5b57392c241cd1cf3c8d7d))
+
+
+
 ## 🚃 [4.12.3](https://github.com/familyjs/rindo/compare/v4.12.2...v4.12.3) (2024-04-22)
 
 
