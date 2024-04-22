@@ -1,3 +1,13 @@
+## 🚃 [4.12.3](https://github.com/familyjs/rindo/compare/v4.12.2...v4.12.3) (2024-04-22)
+
+
+### Bug Fixes
+
+* **compiler:** point crypto import at `crypto` instead of `node:crypt` ([cd8a85a](https://github.com/familyjs/rindo/commit/cd8a85aa13e18ccaff4f2846ffb9f4a7bf1155b1))
+* **runtime:** replace `innerHTML` with `textContent` for CSS injection ([b45211e](https://github.com/familyjs/rindo/commit/b45211e3beae40b968d383778cdf3a95022cc41b))
+
+
+
 ## 🌏 [4.12.2](https://github.com/familyjs/rindo/compare/v4.12.1...v4.12.2) (2024-04-22)
 
 
