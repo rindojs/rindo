@@ -1,3 +1,18 @@
+# 🎰 [4.16.0](https://github.com/familyjs/rindo/compare/v4.15.0...v4.16.0) (2024-04-23)
+
+
+### Bug Fixes
+
+* **cli:** fix a bug in CLI argument parsing ([8f1b907](https://github.com/familyjs/rindo/commit/8f1b9077b7586b27c5dbdee07aefdbf6e4501e38))
+* **testing:** prevent `find` from throwing error when query has no match ([dba99f1](https://github.com/familyjs/rindo/commit/dba99f1f4a3f1f7baa4a0f898ff91ead28b198a8))
+
+
+### Features
+
+* **dev-server:** dark mode support ([b8c62c8](https://github.com/familyjs/rindo/commit/b8c62c86298258c5df2a63b47eee56f455079e5d))
+
+
+
 # 🍔 [4.15.0](https://github.com/familyjs/rindo/compare/v4.14.1...v4.15.0) (2024-04-23)
 
 
