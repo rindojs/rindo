@@ -224,7 +224,7 @@ const setCLIArg = (flags: ConfigFlags, rawArg: string, normalizedArg: string, va
     const parsed =
       typeof value === 'string'
         ? // check if the value is `'true'`
-        value === 'true'
+          value === 'true'
         : // no value was supplied, default to true
           true;
 
