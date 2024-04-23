@@ -1,3 +1,19 @@
+# 🌞 [4.14.0](https://github.com/familyjs/rindo/compare/v4.13.0...v4.14.0) (2024-04-23)
+
+
+### Bug Fixes
+
+* **mock-doc:** provide a local name ([c31246f](https://github.com/familyjs/rindo/commit/c31246f3d9884331727374a24ae14ddef06098cd))
+* **mock-doc:** resolve type issue for `localName` ([4576d66](https://github.com/familyjs/rindo/commit/4576d668d6b929725473d56a01dcf327959f555d))
+
+
+### Features
+
+* **testing:** allow to set screenshot timeout option in Jest v28+ ([6d89542](https://github.com/familyjs/rindo/commit/6d89542802e0e81aa51fa82f80284a61e5a0b2c5))
+* **testing:** support deep piercing with Puppeteer ([c6eef59](https://github.com/familyjs/rindo/commit/c6eef59ba4fa5a301e69216ba595d609aea466bd))
+
+
+
 # 🎤 [4.13.0](https://github.com/familyjs/rindo/compare/v4.12.6...v4.13.0) (2024-04-22)
 
 
