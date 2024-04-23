@@ -143,7 +143,7 @@ export const createSystem = (c?: { logger?: Logger }): CompilerSystem => {
   const getCurrentDirectory = () => '/';
 
   const getCompilerExecutingPath = () => {
-    return sys.getRemoteModuleUrl({ moduleId: '@rindo/core', path: 'compiler/rindo.min.js' });
+    return sys.getRemoteModuleUrl({ moduleId: '@rindo/core', path: 'compiler/rindo.js' });
   };
 
   const isSymbolicLink = async (_p: string) => false;
