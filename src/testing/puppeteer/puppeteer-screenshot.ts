@@ -95,9 +95,7 @@ export async function pageCompareScreenshot(
   }
 
   const screenshotTimeoutMs: number | null =
-    typeof env.__RINDO_SCREENSHOT_TIMEOUT_MS__ === 'string'
-      ? parseInt(env.__RINDO_SCREENSHOT_TIMEOUT_MS__, 10)
-      : null;
+    typeof env.__RINDO_SCREENSHOT_TIMEOUT_MS__ === 'string' ? parseInt(env.__RINDO_SCREENSHOT_TIMEOUT_MS__, 10) : null;
 
   const emulateConfig = JSON.parse(env.__RINDO_EMULATE__) as EmulateConfig;
   const screenshotBuildData = JSON.parse(env.__RINDO_SCREENSHOT_BUILD__) as ScreenshotBuildData;

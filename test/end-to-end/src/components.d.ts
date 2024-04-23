@@ -145,19 +145,19 @@ declare global {
         prototype: HTMLCarListElement;
         new (): HTMLCarListElement;
     };
-    interface HTMLCmpAElement extends Components.CmpA, HTMLStencilElement {
+    interface HTMLCmpAElement extends Components.CmpA, HTMLRindoElement {
     }
     var HTMLCmpAElement: {
         prototype: HTMLCmpAElement;
         new (): HTMLCmpAElement;
     };
-    interface HTMLCmpBElement extends Components.CmpB, HTMLStencilElement {
+    interface HTMLCmpBElement extends Components.CmpB, HTMLRindoElement {
     }
     var HTMLCmpBElement: {
         prototype: HTMLCmpBElement;
         new (): HTMLCmpBElement;
     };
-    interface HTMLCmpCElement extends Components.CmpC, HTMLStencilElement {
+    interface HTMLCmpCElement extends Components.CmpC, HTMLRindoElement {
     }
     var HTMLCmpCElement: {
         prototype: HTMLCmpCElement;

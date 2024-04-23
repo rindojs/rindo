@@ -9,7 +9,7 @@
 
 ### Used by
 
-- [cmp-b](.)
+ - [cmp-b](.)
 
 ### Graph
 ```mermaid
