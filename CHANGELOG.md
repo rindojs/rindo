@@ -1,3 +1,12 @@
+# 🍔 [4.15.0](https://github.com/familyjs/rindo/compare/v4.14.1...v4.15.0) (2024-04-23)
+
+
+### Features
+
+* **compiler:** perform automatic key insertion in more situations ([bdf5a45](https://github.com/familyjs/rindo/commit/bdf5a45991f1d1649a4eb91e643b58bdc2f242d8))
+
+
+
 ## 🍾 [4.14.1](https://github.com/familyjs/rindo/compare/v4.14.0...v4.14.1) (2024-04-23)
 
 
