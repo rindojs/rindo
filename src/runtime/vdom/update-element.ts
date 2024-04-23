@@ -50,7 +50,7 @@ export const updateElement = (
 function sortedAttrNames(attrNames: string[]): string[] {
   return attrNames.includes('ref')
     ? // we need to sort these to ensure that `'ref'` is the last attr
-    [...attrNames.filter((attr) => attr !== 'ref'), 'ref']
+      [...attrNames.filter((attr) => attr !== 'ref'), 'ref']
     : // no need to sort, return the original array
-    attrNames;
+      attrNames;
 }
