@@ -1,3 +1,14 @@
+## 🍾 [4.14.1](https://github.com/familyjs/rindo/compare/v4.14.0...v4.14.1) (2024-04-23)
+
+
+### Bug Fixes
+
+* **compiler:** don't mistake aliased paths for collections imports ([38ddc3e](https://github.com/familyjs/rindo/commit/38ddc3e5f972bcd39c2f2ec4bfb5f9af5f41df2c))
+* **runtime:** nested multiple default slot relocation ([3c6b2aa](https://github.com/familyjs/rindo/commit/3c6b2aa1994e8d49490c611cbe0d5e8c98327b26))
+* **runtime:** prevent ref callbacks from being called too early ([55dd1c1](https://github.com/familyjs/rindo/commit/55dd1c113f4a93593f83b07cd38329cb7f41bd67))
+
+
+
 # 🌞 [4.14.0](https://github.com/familyjs/rindo/compare/v4.13.0...v4.14.0) (2024-04-23)
 
 
