@@ -6,32 +6,32 @@
  */
 import { HTMLRindoElement, JSXBase } from "@rindo/core/internal";
 export namespace Components {
-  interface StyleurlsComponent {
-  }
+    interface StyleurlsComponent {
+    }
 }
 declare global {
-  interface HTMLStyleurlsComponentElement extends Components.StyleurlsComponent, HTMLRindoElement {
-  }
-  var HTMLStyleurlsComponentElement: {
-    prototype: HTMLStyleurlsComponentElement;
-    new (): HTMLStyleurlsComponentElement;
-  };
-  interface HTMLElementTagNameMap {
-    "styleurls-component": HTMLStyleurlsComponentElement;
-  }
+    interface HTMLStyleurlsComponentElement extends Components.StyleurlsComponent, HTMLRindoElement {
+    }
+    var HTMLStyleurlsComponentElement: {
+        prototype: HTMLStyleurlsComponentElement;
+        new (): HTMLStyleurlsComponentElement;
+    };
+    interface HTMLElementTagNameMap {
+        "styleurls-component": HTMLStyleurlsComponentElement;
+    }
 }
 declare namespace LocalJSX {
-  interface StyleurlsComponent {
-  }
-  interface IntrinsicElements {
-    "styleurls-component": StyleurlsComponent;
-  }
+    interface StyleurlsComponent {
+    }
+    interface IntrinsicElements {
+        "styleurls-component": StyleurlsComponent;
+    }
 }
 export { LocalJSX as JSX };
 declare module "@rindo/core" {
-  export namespace JSX {
-    interface IntrinsicElements {
-      "styleurls-component": LocalJSX.StyleurlsComponent & JSXBase.HTMLAttributes<HTMLStyleurlsComponentElement>;
+    export namespace JSX {
+        interface IntrinsicElements {
+            "styleurls-component": LocalJSX.StyleurlsComponent & JSXBase.HTMLAttributes<HTMLStyleurlsComponentElement>;
+        }
     }
-  }
 }
