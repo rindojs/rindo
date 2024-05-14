@@ -51,7 +51,7 @@ export const generateReadme = async (
             ? // The user set a custom `.dir` property, which is where we're going
               // to write the updated README. We need to read the non-automatically
               // generated content from that file and preserve that.
-            await getUserReadmeContent(compilerCtx, readmeOutputPath)
+              await getUserReadmeContent(compilerCtx, readmeOutputPath)
             : userContent;
 
         const readmeContent = generateMarkdown(currentReadmeContent, docsData, cmps, readmeOutput);
