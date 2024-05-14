@@ -47,7 +47,7 @@ Please see our [Contributor Code of Conduct](https://github.com/familyjs/rindo/b
    1. There's no need to install a specific version of npm or Node right now, it shall be done automatically for you in
       the next step
 5. Run `npm ci`
-6. (Optional) If you are working on [Jest support](./src/testing/jest), [see the installation steps in that directory's README](./src/testing/jest/README.md#installing-dependencies).
+6. Run `npm install.jest` to install dependencies for Rindo's testing submodule
 
 
 ### Updates
