@@ -1,3 +1,15 @@
+# 🐉 [4.17.0](https://github.com/familyjs/rindo/compare/v4.16.0...v4.17.0) (2024-05-15)
+
+
+### Bug Fixes
+
+* **docs:** merge together style docs from multiple CSS files ([f301220](https://github.com/familyjs/rindo/commit/f3012204aeb7381f2aa6ebc4442bf003ac60bb0a))
+* **docs:** respect custom README content when writing to a custom path ([fb2cec8](https://github.com/familyjs/rindo/commit/fb2cec85176263d1d7f3cafba031c8a30a4418e2))
+* **slot-fallback:** fix hiding fallback slot content issue when the slotted element is a text node ([34220e3](https://github.com/familyjs/rindo/commit/34220e3877fda3b0d62727a7e532ead7c7d9cc3a))
+* **testing:** perform string -> boolean type casting for Jest config ([d050a65](https://github.com/familyjs/rindo/commit/d050a652c248decc0bac21dc8a1303160055102d))
+
+
+
 # 🎰 [4.16.0](https://github.com/familyjs/rindo/compare/v4.15.0...v4.16.0) (2024-04-23)
 
 
