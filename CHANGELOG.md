@@ -1,3 +1,12 @@
+## 🌵 [4.17.1](https://github.com/familyjs/rindo/compare/v4.17.0...v4.17.1) (2024-05-15)
+
+
+### Bug Fixes
+
+* **cli:** prevent generate task from crashing ([02c1a31](https://github.com/familyjs/rindo/commit/02c1a3101956fbe7ebff973ff2af5a663aaf2023))
+
+
+
 # 🐉 [4.17.0](https://github.com/familyjs/rindo/compare/v4.16.0...v4.17.0) (2024-05-15)
 
 
