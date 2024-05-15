@@ -40,8 +40,12 @@ jobs:
         run: npm run build -- --ci
         shell: bash
 
-      - name: Publish to Github Packages
-        run: npm publish
+      - name: Prepare NPM Token
+        run: echo //npm.pkg.github.com/:_authToken=${NPM_TOKEN} > .npmrc
         shell: bash
         env:
-          NODE_AUTH_TOKEN: ${{secrets.FAMIBOT_GITHUB_TOKEN}}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Publish to Github Packages
+        run: npm run release.ci
+        shell: bash
