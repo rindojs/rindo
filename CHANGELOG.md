@@ -1,3 +1,13 @@
+## 🚙 [4.17.2](https://github.com/familyjs/rindo/compare/v4.17.1...v4.17.2) (2024-05-15)
+
+
+### Bug Fixes
+
+* **build:** bundle size issue ([8a5da32](https://github.com/familyjs/rindo/commit/8a5da322a3e45759258dd8016f49fffb312ff099))
+* **compiler:** recognize loud comments when generating style docs ([9d6060e](https://github.com/familyjs/rindo/commit/9d6060ead619f743bce17f3f5b9bf2376014d1a4))
+
+
+
 ## 🌵 [4.17.1](https://github.com/familyjs/rindo/compare/v4.17.0...v4.17.1) (2024-05-15)
 
 
