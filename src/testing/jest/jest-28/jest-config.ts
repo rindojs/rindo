@@ -54,6 +54,7 @@ export function buildJestArgv(config: d.ValidatedConfig): Config.Argv {
     if (typeof jestArgv[flag] === 'string') {
       jestArgv[flag] = jestArgv[flag] === 'true';
     }
+  }
 
   return jestArgv;
 }
