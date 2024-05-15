@@ -21,6 +21,7 @@ export function getEsbuildAliases(): Record<string, string> {
     '@rindo/core/dev-server': './dev-server/index.js',
     '@rindo/core/mock-doc': './mock-doc/index.cjs',
     '@rindo/core/internal/testing': './internal/testing/index.js',
+    '@rindo/core/cli': './cli/index.js',
     '@sys-api-node': './sys/node/index.js',
 
     // mapping node.js module names to `sys/node` "cache"

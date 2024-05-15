@@ -59,6 +59,9 @@ export function aliasPlugin(opts: BuildOptions): Plugin {
       if (id === '@sys-api-node') {
         return join(opts.buildDir, 'sys', 'node', 'index.js');
       }
+      if (id === '@rindo/core/cli') {
+        return join(opts.buildDir, 'cli', 'index.js');
+      }
       if (helperResolvers.has(id)) {
         return join(opts.bundleHelpersDir, `${id}.js`);
       }

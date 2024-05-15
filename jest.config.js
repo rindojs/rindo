@@ -4,7 +4,7 @@ module.exports = {
     '@app-globals': '<rootDir>/internal/app-globals/index.cjs',
     '@platform': '<rootDir>/internal/testing/index.js',
     '@runtime': '<rootDir>/internal/testing/index.js',
-    '@rindo/core/cli': '<rootDir>/cli/index.js',
+    '@rindo/core/cli': '<rootDir>/cli/index.cjs',
     '@rindo/core/compiler': '<rootDir>/compiler/rindo.js',
     '@rindo/core/mock-doc': '<rootDir>/mock-doc/index.cjs',
     '@rindo/core/testing': '<rootDir>/testing/index.js',
