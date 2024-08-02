@@ -44,12 +44,12 @@ a pull request is merged.
 This workflow initiates a developer build of Rindo from the `main` branch.
 It is intended to be manually invoked by a member of the Rindo team.
 
-### Nightly Release (`release-nightly.yml`)
+### Weekly Release (`release-weekly.yml`)
 
-This workflow initiates a nightly build of Rindo from the `main` branch.
-A nightly build is similar to a 'Dev Release', except that:
+This workflow initiates a weekly build of Rindo from the `main` branch.
+A weekly build is similar to a 'Dev Release', except that:
 - it is run on a set cadence (it is not expectedthat a developer to manually invoke it)
-- it is published to the npm registry under the 'nightly' tag
+- it is published to the npm registry under the 'weekly' tag
 
 ### Test Analysis (`test-analysis.yml`)
 

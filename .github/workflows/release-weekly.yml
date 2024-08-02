@@ -1,11 +1,11 @@
-name: 'Rindo Nightly Release'
+name: 'Rindo Weekly Release'
 
 on:
   schedule:
-    # Run every Monday-Friday at 5:00 AM (UTC) (https://crontab.guru/#00_05_*_*_1-5)
-    # This is done to have a nightly build ready for the Family Framework/Rindo Eval Workflow:
+    # Run every Sunday at 11:00 PM (UTC) (https://crontab.guru/#00_23_*_*_sun)
+    # This is done to have a weekly build on Sunday ready for the Family Framework/Rindo Eval Workflow:
     # https://github.com/familyjs/family-framework/blob/main/.github/workflows/rindo-eval.yml
-    - cron: '00 05 * * 1-5'
+    - cron: '00 23 * * sun'
   workflow_dispatch:
     # Allow this workflow to be run on-demand
 
@@ -14,12 +14,12 @@ jobs:
     name: Build
     uses: ./.github/workflows/build.yml
 
-  get-nightly-version:
-    name: Get Nightly Build Version
+  get-weekly-version:
+    name: Get Weekly Build Version
     needs: [build_core]
     runs-on: ubuntu-22.04
     outputs:
-      nightly-version: ${{ steps.get-nightly-version.outputs.NIGHTLY_VERSION }}
+      weekly-version: ${{ steps.get-weekly-version.outputs.WEEKLY_VERSION }}
     steps:
       - name: Checkout Code
         uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
@@ -38,28 +38,28 @@ jobs:
         run: chmod +x ./bin/rindo
 
       - name: Get Version
-        id: get-nightly-version
+        id: get-weekly-version
         run: |
           # A unique string to publish Rindo under
           # e.g. "3.0.1-dev.1677185104.7c87e34"
           #
-          # Note: A 'nightly' build is just a 'dev' build that is published at
-          # night, under the 'nightly' tag in npm
+          # Note: A 'weekly' build is just a 'dev' build that is published at
+          # weekend, under the 'weekly' tag in npm
           #
           # Pull this value from the compiled artifacts
-          NIGHTLY_VERSION=$(./bin/rindo version)
+          WEEKLY_VERSION=$(./bin/rindo version)
 
-          echo "Using version $NIGHTLY_VERSION"
+          echo "Using version $WEEKLY_VERSION"
 
           # store a key/value pair in GITHUB_OUTPUT
-          # e.g. "NIGHTLY_VERSION=3.0.1-dev.1677185104.7c87e34"
-          echo "NIGHTLY_VERSION=$NIGHTLY_VERSION" >> $GITHUB_OUTPUT
+          # e.g. "WEEKLY_VERSION=3.0.1-dev.1677185104.7c87e34"
+          echo "WEEKLY_VERSION=$WEEKLY_VERSION" >> $GITHUB_OUTPUT
 
         shell: bash
 
-  release-rindo-nightly-build:
-    name: Publish Nightly Build
-    needs: [get-nightly-version, build_core]
+  release-rindo-weekly-build:
+    name: Publish Weekly Build
+    needs: [get-weekly-version, build_core]
     runs-on: ubuntu-22.04
     permissions:
       id-token: write
@@ -68,6 +68,6 @@ jobs:
         uses: actions/checkout@44c2b7a8a4ea60a981eaca3cf939b5f4305c123b # v4.1.5
       - uses: ./.github/workflows/actions/publish-npm
         with:
-          tag: nightly
-          version: ${{ needs.get-nightly-version.outputs.nightly-version }}
+          tag: weekly
+          version: ${{ needs.get-weekly-version.outputs.weekly-version }}
           token: ${{ secrets.NPM_TOKEN }}
