@@ -75,7 +75,9 @@ Using `npm link` is beneficial to the development cycle in that consecutive buil
     "baseUrl": ".",
     "paths": {
       "@rindo/core/internal": ["node_modules/@rindo/core/internal"],
-      "@rindo/core/internal/*": ["node_modules/@rindo/core/internal/*"]
+      "@rindo/core/internal/*": ["node_modules/@rindo/core/internal/*"],
+      "@rindo/core/mock-doc": ["node_modules/@rindo/core/mock-doc"],
+      "@rindo/core/mock-doc/*": ["node_modules/@rindo/core/mock-doc/*"]
     }
   }
 }
@@ -89,6 +91,28 @@ Afterwards, to clean up:
     1. Run `npm unlink @rindo/core`
     2. Remove the modifications to your tsconfig.json
 2. In the directory of _rindo core_, run `npm unlink`
+
+> [!NOTE]  
+> Instead of linking, you can reference Rindo from a local directory in the `package.json` after updating your project's `tsconfig.json` file, e.g.
+> ```patch
+> diff --git a/package.json b/package.json
+> index 1a8320a..bb1fa3a 100644
+> --- a/package.json
+> +++ b/package.json
+> @@ -39,11 +39,12 @@
+>      "generate": "rindo generate"
+>    },
+>    "devDependencies": {
+> -    "@rindo/core": "^4.12.0",
+> +    "@rindo/core": "file:/path/to/local/rindo",
+>      "@types/jest": "^29.5.6",
+>      "@types/node": "^16.18.11",
+>      "jest": "^29.7.0",
+>      "jest-cli": "^29.7.0",
+>      "puppeteer": "^21.9.0"
+>    },
+>    "license": "MIT"
+> ```
 
 #### Testing with `npm pack`:
 
