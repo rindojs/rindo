@@ -1,3 +1,19 @@
+# 🚘 [4.18.0](https://github.com/familyjs/rindo/compare/v4.17.2...v4.18.0) (2024-08-29)
+
+
+### Bug Fixes
+
+* **hydrate:** output track elements as void elms ([6c81280](https://github.com/familyjs/rindo/commit/6c81280814479b45872ff1b10c6100c987e8ec79))
+* **runtime:** add root scope id to the nested child as classname ([f4b62c0](https://github.com/familyjs/rindo/commit/f4b62c0ae160709b0c8e0f50954c54d6b804fbd1))
+* **testing:** support functional components in unit tests ([5d4bd25](https://github.com/familyjs/rindo/commit/5d4bd25d34f175b3dcc062e92d39519518fc9ed7))
+
+
+### Features
+
+* **docs:** add style mode to `docs-json` output ([23b8230](https://github.com/familyjs/rindo/commit/23b823003d43d4f41cc2d54f3d5fa20e74c1b60d))
+
+
+
 ## 🚙 [4.17.2](https://github.com/familyjs/rindo/compare/v4.17.1...v4.17.2) (2024-05-15)
 
 
