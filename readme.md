@@ -7,10 +7,10 @@
 <h1 align="center">Rindo</h1>
 
 <p align="center">
-  A compiler for generating{' '}
+  A compiler for generating
   <a href="https://www.webcomponents.org/introduction" target="_blank" rel="noopener noref">
     Web Components
-  </a>{' '}
+  </a>
   using technologies like TypeScript and JSX, built by the <a href="https://family-js.web.app/">Family team</a>.
 </p>
 
