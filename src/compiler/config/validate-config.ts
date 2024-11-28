@@ -271,7 +271,7 @@ export const validateConfig = (
     const warn = buildWarn(diagnostics);
     // this message is particularly long - let the underlying logger implementation take responsibility for breaking it
     // up to fit in a terminal window
-    warn.messageText = `nodeResolve.customResolveOptions is a deprecated option in a Rindo Configuration file. If you need this option, please open a new issue in the Rindo repository (https://github.com/familyjs/rindo/issues/new/choose)`;
+    warn.messageText = `nodeResolve.customResolveOptions is a deprecated option in a Rindo Configuration file. If you need this option, please open a new issue in the Rindo repository (https://github.com/rindojs/rindo/issues/new/choose)`;
   }
 
   CACHED_VALIDATED_CONFIG = validatedConfig;

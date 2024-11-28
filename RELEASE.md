@@ -8,28 +8,28 @@ Manual releases should only be performed when there are extenuating circumstance
 
 1. Call a `code-freeze` in the Rindo team channel
 1. Check that [Rindo's Merge
-   Queue](https://github.com/familyjs/rindo/queue/) is empty (nothing is
+   Queue](https://github.com/rindojs/rindo/queue/) is empty (nothing is
    queued for merge).
-1. Run the [Rindo Production Release PR Creation Workflow](https://github.com/familyjs/rindo/actions/workflows/create-production-pr.yml)
+1. Run the [Rindo Production Release PR Creation Workflow](https://github.com/rindojs/rindo/actions/workflows/create-production-pr.yml)
    in GitHub
-    1. Run the workflow from the `main` branch, _unless_ the release is for a previous major version of Rindo.
-       In that scenario, select the `v#-maintenance` branch corresponding to the version of Rindo being released.
-       For example, `v3-maintenance` to release a new version of Rindo v3.
-    1. Rindo follows semantic versioning. Select the appropriate version from the dropdown for this release.
-    1. Hit "Run Workflow" and wait for a new pull request to be created.
+   1. Run the workflow from the `main` branch, _unless_ the release is for a previous major version of Rindo.
+      In that scenario, select the `v#-maintenance` branch corresponding to the version of Rindo being released.
+      For example, `v3-maintenance` to release a new version of Rindo v3.
+   1. Rindo follows semantic versioning. Select the appropriate version from the dropdown for this release.
+   1. Hit "Run Workflow" and wait for a new pull request to be created.
 1. Navigate to the pull request that was opened as a result of running the Rindo Production Release PR Creation Workflow.
 1. Complete the following (temporary) steps:
-    1. Close the pull request and reopen it. This allows actions that the team gates pull requests on to run.
-    1. Mark the pull request as ready for review.
+   1. Close the pull request and reopen it. This allows actions that the team gates pull requests on to run.
+   1. Mark the pull request as ready for review.
 1. Ask the Rindo team for an approval on the PR.
    Only one approval is required for pull requests that only include the version bump/prerelease commit.
 1. Once approved, add it to the merge queue.
 1. ⚠️ Wait for the pull request to land before continuing to the next step. ⚠️
-1. Run the [Rindo Production Release Workflow](https://github.com/familyjs/rindo/actions/workflows/release-production.yml)
-    1. Rindo should be published under the `latest` tag, _unless_ the release is for a previous major version of
-     Rindo.
-    1. The base branch should be set to `main`, _unless_ the release is for a previous major version of Rindo.
-    1. Tail the logs to verify everything runs successfully.
+1. Run the [Rindo Production Release Workflow](https://github.com/rindojs/rindo/actions/workflows/release-production.yml)
+   1. Rindo should be published under the `latest` tag, _unless_ the release is for a previous major version of
+      Rindo.
+   1. The base branch should be set to `main`, _unless_ the release is for a previous major version of Rindo.
+   1. Tail the logs to verify everything runs successfully.
 1. Proceed to the [Follow-Up section](#follow-up-steps) of this document to run manual follow-up tasks.
 
 ## Manual Releases
@@ -41,10 +41,10 @@ Manual releases should only be performed when there are extenuating circumstance
 1. Call a `code-freeze` in the Rindo team channel
 1. Run `npm run clean` locally to clear out any cached build artifacts.
 1. Run `npm run release.prepare`. This will install dependencies, bundle Rindo, run tests, etc.
-1. Check the [CHANGELOG.md](../CHANGELOG.md) and make sure it includes all the changes that have landed since the last 
-release.
-1. Commit the changes - use the commit message '<emoji> v<VERSION>'. e.g. `git commit -m '🤦‍ v2.7.0'` (note the emoji is 
-used literally, as opposed to ':facepalm:').
+1. Check the [CHANGELOG.md](../CHANGELOG.md) and make sure it includes all the changes that have landed since the last
+   release.
+1. Commit the changes - use the commit message '<emoji> v<VERSION>'. e.g. `git commit -m '🤦‍ v2.7.0'` (note the emoji is
+   used literally, as opposed to ':facepalm:').
 1. Run `npm run release`, which will push the commit/tag to GitHub and publish to NPM.
 1. Proceed to the [Follow-Up section](#follow-up-steps) of this document to run manual follow-up tasks.
 
@@ -53,11 +53,12 @@ used literally, as opposed to ':facepalm:').
 The following steps should be always run, regardless of whether an automated or
 manual release was performed.
 
-1. Publish the release notes in GitHub using GitHub's [release notes form](https://github.com/familyjs/rindo/releases/new).
+1. Publish the release notes in GitHub using GitHub's [release notes form](https://github.com/rindojs/rindo/releases/new).
+
    1. Set the tag dropdown to the newly-released version's git tag
    1. Set the version title to `[VERMOJI] v[VERSION] ([yyyy.mm.dd])`.
       For example, v4.2.0 has a vermoji of 🏕, and was released on 2024.02.18.
-      As a result, it was [released with the title](https://github.com/familyjs/rindo/releases/tag/v4.2.0) of 🏕 4.2.0 (2024-02-18).
+      As a result, it was [released with the title](https://github.com/rindojs/rindo/releases/tag/v4.2.0) of 🏕 4.2.0 (2024-02-18).
    1. Copy the raw contents of [CHANGELOG.md](./CHANGELOG.md) into the body
    1. Ensure that the release is set as the latest (so long as we're not published a pre-release)
    1. If anyone from the community contributed commit(s) to this release,
@@ -68,16 +69,18 @@ manual release was performed.
 
       🎉 Thanks <GitHub_Usernames> for their contributions! 🎉
       ```
-   1. Hit "Publish Release"    
-1. Navigate to the [Rindo Site](https://github.com/familyjs/rindo-site/pulls) repository and:
+
+   1. Hit "Publish Release"
+
+1. Navigate to the [Rindo Site](https://github.com/rindojs/rindo-site/pulls) repository and:
    1. Merge any open PRs containing documentation that has been approved, but
       not merged that is related to the release. Such PRs should be labelled as
       `do not merge: waiting for next stencil release`. It's a good idea to
       review _all_ PRs though, just in case.
    1. If the current release is a major or minor version, open a pull request
-     creating a new version of the docs by following the [guide in the
-     rindo-site
-     repo](https://github.com/familyjs/rindo-site/blob/main/RELEASE.md#creating-a-new-version-section).
+      creating a new version of the docs by following the [guide in the
+      rindo-site
+      repo](https://github.com/rindojs/rindo-site/blob/main/RELEASE.md#creating-a-new-version-section).
 1. If there are any 'next' branches in GitHub, say for a future major version of Rindo (e.g. `v5.0.0-dev`), now is a
    good time to rebase them against the `main` branch.
 1. End the code freeze in the Rindo team Slack channel.
@@ -88,10 +91,10 @@ manual release was performed.
    1. For each issue, add a comment stating the version of Rindo that
       included the fix/feature (be sure to update the version number _and_
       tag):
-      
+
       ```md
       The fix for this issue has been released as a part of today's [Rindo
-      vNUMBER release](https://github.com/familyjs/rindo/releases/tag/TAG). 
+      vNUMBER release](https://github.com/rindojs/rindo/releases/tag/TAG).
       ```
 1. If there's a blog post to go out (either today or this week), let the folks in the `#ask-family-devrel` channel know about the release and that the blog can go out.
-When the blog goes out, put an announcement in the `#announcements` channel in Discord.
+   When the blog goes out, put an announcement in the `#announcements` channel in Discord.

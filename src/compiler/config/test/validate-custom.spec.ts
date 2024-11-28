@@ -42,7 +42,7 @@ describe('validateCustom', () => {
       level: 'warn',
       lines: [],
       messageText:
-        'nodeResolve.customResolveOptions is a deprecated option in a Rindo Configuration file. If you need this option, please open a new issue in the Rindo repository (https://github.com/familyjs/rindo/issues/new/choose)',
+        'nodeResolve.customResolveOptions is a deprecated option in a Rindo Configuration file. If you need this option, please open a new issue in the Rindo repository (https://github.com/rindojs/rindo/issues/new/choose)',
       type: 'build',
     });
   });

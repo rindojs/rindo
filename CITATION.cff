@@ -1,10 +1,10 @@
 cff-version: 1.2.0
-message: "If you use this software, please cite it as below."
+message: 'If you use this software, please cite it as below.'
 authors:
-- family-names: "Nguyen"
-  given-names: "Khanh Duy"
-  orcid: "https://orcid.org/0009-0005-9666-4294"
-title: "Rindo"
+  - family-names: 'Nguyen'
+    given-names: 'Khanh Duy'
+    orcid: 'https://orcid.org/0009-0005-9666-4294'
+title: 'Rindo'
 version: 0.0.0
 date-released: 2022-10-14
-url: "https://github.com/familyjs/rindo"
+url: 'https://github.com/rindojs/rindo'

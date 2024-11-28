@@ -126,7 +126,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/familyjs/rindo.git"
+    "url": "git+https://github.com/rindojs/rindo.git"
   },
   "author": "Family Team",
   "homepage": "https://rindojs.web.app/",

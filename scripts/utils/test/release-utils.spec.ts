@@ -46,7 +46,7 @@ describe('release-utils', () => {
 
       expect(openMock).toHaveBeenCalledTimes(1);
       expect(openMock).toHaveBeenCalledWith(
-        'https://github.com/familyjs/rindo/releases/new?tag=v0.0.0&title=%F0%9F%9A%97+0.0.0+%282022-01-01%29&body=',
+        'https://github.com/rindojs/rindo/releases/new?tag=v0.0.0&title=%F0%9F%9A%97+0.0.0+%282022-01-01%29&body=',
       );
     });
 
@@ -82,7 +82,7 @@ describe('release-utils', () => {
 
       expect(openMock).toHaveBeenCalledTimes(1);
       expect(openMock).toHaveBeenCalledWith(
-        'https://github.com/familyjs/rindo/releases/new?tag=v0.0.0&title=%F0%9F%9A%97+0.0.0+%282022-01-01%29&body=%23%23%23+Features%0A%0A*+**mock-doc%3A**+add+simple+MockEvent%23composedPath%28%29+impl%0A*+**test%3A**+jest+27+support',
+        'https://github.com/rindojs/rindo/releases/new?tag=v0.0.0&title=%F0%9F%9A%97+0.0.0+%282022-01-01%29&body=%23%23%23+Features%0A%0A*+**mock-doc%3A**+add+simple+MockEvent%23composedPath%28%29+impl%0A*+**test%3A**+jest+27+support',
       );
     });
 
@@ -125,7 +125,7 @@ describe('release-utils', () => {
 
       expect(openMock).toHaveBeenCalledTimes(1);
       expect(openMock).toHaveBeenCalledWith(
-        'https://github.com/familyjs/rindo/releases/new?tag=v0.0.0&title=%F0%9F%9A%97+0.0.0+%282022-01-01%29&body=%23%23%23+Bug+Fixes%0A%0A*+**cli%3A**+wait+for+help+task+to+finish+before+exiting%0A*+**mock-doc%3A**+make+Node.contains%28%29+return+true+for+self%0A*+**mock-doc%3A**+allow+urls+as+css+values%0A*+**sourcemaps%3A**+do+not+encode+inline+sourcemaps%0A%0A%0A%23%23%23+Features%0A%0A*+**dist-custom-elements-bundle%3A**+add+deprecation+warning',
+        'https://github.com/rindojs/rindo/releases/new?tag=v0.0.0&title=%F0%9F%9A%97+0.0.0+%282022-01-01%29&body=%23%23%23+Bug+Fixes%0A%0A*+**cli%3A**+wait+for+help+task+to+finish+before+exiting%0A*+**mock-doc%3A**+make+Node.contains%28%29+return+true+for+self%0A*+**mock-doc%3A**+allow+urls+as+css+values%0A*+**sourcemaps%3A**+do+not+encode+inline+sourcemaps%0A%0A%0A%23%23%23+Features%0A%0A*+**dist-custom-elements-bundle%3A**+add+deprecation+warning',
       );
     });
 
@@ -161,7 +161,7 @@ describe('release-utils', () => {
 
       expect(openMock).toHaveBeenCalledTimes(1);
       expect(openMock).toHaveBeenCalledWith(
-        'https://github.com/familyjs/rindo/releases/new?tag=v0.0.0&title=%F0%9F%9A%97+0.0.0+%282022-01-01%29&body=%23%23%23+Features%0A%0A*+**mock-doc%3A**+add+simple+MockEvent%23composedPath%28%29+impl%0A*+**test%3A**+jest+27+support',
+        'https://github.com/rindojs/rindo/releases/new?tag=v0.0.0&title=%F0%9F%9A%97+0.0.0+%282022-01-01%29&body=%23%23%23+Features%0A%0A*+**mock-doc%3A**+add+simple+MockEvent%23composedPath%28%29+impl%0A*+**test%3A**+jest+27+support',
       );
     });
   });

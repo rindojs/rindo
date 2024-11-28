@@ -4,10 +4,9 @@ This file is in a custom location, set with `.dir` on the `docs-readme` OT.
 
 The content here above the 'auto-generation' comment shouldn't be overwritten.
 
-This is a regression test for the issue reported in familyjs/rindo.
+This is a regression test for the issue reported in rindojs/rindo.
 
 <!-- Auto Generated Below -->
-
 
 ## CSS Custom Properties
 
@@ -16,7 +15,6 @@ This is a regression test for the issue reported in familyjs/rindo.
 | `--one` | Property One |
 | `--two` | Property Two |
 
+---
 
-----------------------------------------------
-
-*Built with [RindoJS](https://rindojs.web.app/)*
+_Built with [RindoJS](https://rindojs.web.app/)_
