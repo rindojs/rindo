@@ -29,7 +29,7 @@ describe('release options', () => {
         bundleHelpersDir: path.join(ROOT_DIR, 'scripts', 'bundles', 'helpers'),
         changelogPath: path.join(ROOT_DIR, 'CHANGELOG.md'),
         ghRepoName: 'rindo',
-        ghRepoOrg: 'familyjs',
+        ghRepoOrg: 'rindojs',
         isCI: false,
         isProd: false,
         isPublishRelease: false,

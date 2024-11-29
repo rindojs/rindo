@@ -22,7 +22,7 @@ describe('release-utils', () => {
       buildOptions = {
         changelogPath: 'some/mock/CHANGELOG.md',
         ghRepoName: 'rindo',
-        ghRepoOrg: 'familyjs',
+        ghRepoOrg: 'rindojs',
         tag: 'dev',
         vermoji: '🚗',
         version: '0.0.0',

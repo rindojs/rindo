@@ -53,7 +53,7 @@ export function getOptions(rootDir: string, inputOpts: Partial<BuildOptions> = {
   const jqueryVersion = jqueryPkg.version;
 
   const opts: BuildOptions = {
-    ghRepoOrg: 'familyjs',
+    ghRepoOrg: 'rindojs',
     ghRepoName: 'rindo',
     rootDir,
     srcDir,
