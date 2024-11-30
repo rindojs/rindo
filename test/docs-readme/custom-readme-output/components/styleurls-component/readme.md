@@ -8,6 +8,7 @@ This is a regression test for the issue reported in rindojs/rindo.
 
 <!-- Auto Generated Below -->
 
+
 ## CSS Custom Properties
 
 | Name    | Description  |
@@ -15,6 +16,7 @@ This is a regression test for the issue reported in rindojs/rindo.
 | `--one` | Property One |
 | `--two` | Property Two |
 
----
 
-_Built with [RindoJS](https://rindojs.web.app/)_
+----------------------------------------------
+
+*Built with [RindoJS](https://rindojs.web.app/)*
