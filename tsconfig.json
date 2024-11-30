@@ -41,15 +41,16 @@
       "@sys-api-node": ["src/sys/node/index.ts"],
       "@utils": ["src/utils/index.ts"],
       "@utils/*": ["src/utils/*"],
-      "@utils/shadow-css": ["src/utils/shadow-css"]
+      "@utils/shadow-css": ["src/utils/shadow-css"],
     },
     "pretty": true,
     "resolveJsonModule": true,
+    "skipLibCheck": true,
     "sourceMap": true,
     "strictBindCallApply": true,
     "strictFunctionTypes": true,
     "target": "es2018",
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
   },
   "files": [
     "src/app-data/index.ts",
@@ -75,7 +76,7 @@
     "src/sys/node/public.ts",
     "src/sys/node/worker.ts",
     "src/testing/index.ts",
-    "src/testing/platform/index.ts"
+    "src/testing/platform/index.ts",
   ],
-  "include": ["types/*.d.ts", "src/declarations/*.ts", "src/**/*.spec.ts", "src/utils/**/*.ts"]
+  "include": ["types/*.d.ts", "src/declarations/*.ts", "src/**/*.spec.ts", "src/utils/**/*.ts"],
 }
