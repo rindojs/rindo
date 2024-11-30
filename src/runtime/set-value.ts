@@ -24,8 +24,8 @@ export const setValue = (ref: d.RuntimeRef, propName: string, newVal: any, cmpMe
   if (BUILD.lazyLoad && !hostRef) {
     throw new Error(
       `Couldn't find host element for "${cmpMeta.$tagName$}" as it is ` +
-      'unknown to this Rindo runtime. This usually happens when integrating ' +
-      'a 3rd party Rindo component with another Rindo component or application.',
+        'unknown to this Rindo runtime. This usually happens when integrating ' +
+        'a 3rd party Rindo component with another Rindo component or application.',
     );
   }
 
