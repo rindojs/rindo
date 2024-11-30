@@ -181,6 +181,7 @@ export interface BuildConditionals extends Partial<BuildFeatures> {
   hydratedAttribute?: boolean;
   hydratedClass?: boolean;
   initializeNextTick?: boolean;
+  // TODO(RINDO-1305): remove this option
   scriptDataOpts?: boolean;
   // TODO(RINDO-854): Remove code related to legacy shadowDomShim field
   shadowDomShim?: boolean;

@@ -88,6 +88,7 @@ export const BUILD: BuildConditionals = {
   cloneNodeFix: false,
   hydratedAttribute: false,
   hydratedClass: true,
+  // TODO(RINDO-1305): remove this option
   scriptDataOpts: false,
   // TODO(RINDO-914): remove this option when `experimentalSlotFixes` is the default behavior
   scopedSlotTextContentFix: false,
