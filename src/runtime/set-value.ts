@@ -11,6 +11,24 @@ export const getValue = (ref: d.RuntimeRef, propName: string) => getHostRef(ref)
 export const setValue = (ref: d.RuntimeRef, propName: string, newVal: any, cmpMeta: d.ComponentRuntimeMeta) => {
   // check our new property value against our internal value
   const hostRef = getHostRef(ref);
+
+  /**
+   * If the host element is not found, let's fail with a better error message and provide
+   * details on why this may happen. In certain cases, users might import a component through
+   * e.g. a loader script, which causes confusions in runtime as there are multiple runtimes
+   * being loaded and/or different components used with different loading strategies,
+   * e.g. lazy vs implicitly loaded.
+   *
+   * Todo(RINDO-1308): remove, once a solution for this was identified and implemented
+   */
+  if (BUILD.lazyLoad && !hostRef) {
+    throw new Error(
+      `Couldn't find host element for "${cmpMeta.$tagName$}" as it is ` +
+      'unknown to this Rindo runtime. This usually happens when integrating ' +
+      'a 3rd party Rindo component with another Rindo component or application.',
+    );
+  }
+
   const elm = BUILD.lazyLoad ? hostRef.$hostElement$ : (ref as d.HostElement);
   const oldVal = hostRef.$instanceValues$.get(propName);
   const flags = hostRef.$flags$;
