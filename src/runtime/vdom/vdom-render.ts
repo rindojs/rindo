@@ -922,11 +922,11 @@ export const nullifyVNodeRefs = (vNode: d.VNode) => {
  */
 export const insertBefore = (parent: Node, newNode: Node, reference?: Node): Node => {
   const inserted = parent?.insertBefore(newNode, reference);
-  
+
   if (BUILD.scoped) {
     setParentScopeIdAsClassName(newNode as d.RenderNode, parent as d.RenderNode);
   }
-  
+
   return inserted;
 };
 
@@ -947,7 +947,7 @@ const findParentScopeId = (element: d.RenderNode): string | undefined => {
 export const setParentScopeIdAsClassName = (element: d.RenderNode, parent: d.RenderNode) => {
   if (element && parent) {
     const oldRootScopeId = element['s-rsc'];
-    
+
     const newRootScopeId = findParentScopeId(parent);
     oldRootScopeId && element.classList?.contains(oldRootScopeId) && element.classList.remove(oldRootScopeId);
     if (newRootScopeId) {
