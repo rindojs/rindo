@@ -1,3 +1,17 @@
+## 🌶 [4.18.2](https://github.com/rindojs/rindo/compare/v4.18.1...v4.18.2) (2024-12-01)
+
+
+### Bug Fixes
+
+* **e2e:** allow to fetch CSS variables assigned to host elements ([a632372](https://github.com/rindojs/rindo/commit/a632372cd7da19506881bb4fd1a766b024488b3c))
+* **hydrate:** respect `HydratedFlag` configuration in hydrate script ([fff9935](https://github.com/rindojs/rindo/commit/fff99356776aed0d32ab1ba31b120b4152671107))
+* **runtime:** always throw if component can not be loaded ([f941626](https://github.com/rindojs/rindo/commit/f941626b37fa732d8de5d05e6cab53e02d8088b2))
+* **runtime:** support watch for components with custom tag names ([0c71425](https://github.com/rindojs/rindo/commit/0c71425e4979e8ab171a5920ae5b493a4e4cf150))
+* **runtime:** throw proper error if component is loaded with invalid runtime ([ff1a988](https://github.com/rindojs/rindo/commit/ff1a988a3f96f88878834c09fe71f43a7f64dffa))
+* **types:** move `autofocus` attr/prop definition to `HTMLAttributes` ([e992c61](https://github.com/rindojs/rindo/commit/e992c61f2bbd384fd6bf28d7fae9d12ad8c70c1e))
+
+
+
 ## 🐣 [4.18.1](https://github.com/rindojs/rindo/compare/v4.18.0...v4.18.1) (2024-12-01)
 
 
