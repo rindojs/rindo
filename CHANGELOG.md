@@ -1,3 +1,16 @@
+## 🐣 [4.18.1](https://github.com/rindojs/rindo/compare/v4.18.0...v4.18.1) (2024-12-01)
+
+
+### Bug Fixes
+
+* **build:** do not copy polyfills to the  OT unless building es5 ([4a72bfb](https://github.com/rindojs/rindo/commit/4a72bfb6f496356f1f924683d0d5db27585ab07b))
+* **compiler:** Allow `OutputTargetCustom` to be called on `devMode` ([d0d1960](https://github.com/rindojs/rindo/commit/d0d1960cf20a6ec8d01b01ac36e22e883d49222a))
+* **compiler:** deprecate `scriptDataOpts` [ci skip] ([0ffd197](https://github.com/rindojs/rindo/commit/0ffd197aa4255b56cd3261f4e1cc78dce4bb8b70))
+* **declarations:** Attribute `ping` is missing on `AnchorHTMLAttributes` ([89e1467](https://github.com/rindojs/rindo/commit/89e1467fb9fd525cc3d692570bfda338127c8967))
+* **runtime:** add root scope id to the user provided nested children as classname ([61e13a3](https://github.com/rindojs/rindo/commit/61e13a36ff753330747d49e1ee4f6caad3699618))
+
+
+
 # 🚘 [4.18.0](https://github.com/rindojs/rindo/compare/v4.17.2...v4.18.0) (2024-08-29)
 
 ### Bug Fixes
