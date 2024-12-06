@@ -43,13 +43,17 @@ const getJestFacade = (): JestFacade => {
     if (version <= 27) {
       JEST_RINDO_FACADE = new Jest27Rindo();
     } else if (version === 28) {
-      JEST_RINDO_FACADE = new Jest28Rindo();
+      JEST_RINDO_FACADE = new Jest28Rindo() as JestFacade;
     } else if (version === 29) {
-      JEST_RINDO_FACADE = new Jest29Rindo();
+      JEST_RINDO_FACADE = new Jest29Rindo() as JestFacade;
     } else {
       // in Rindo 4.X, defaulting to jest 27 infrastructure is the default behavior.
       JEST_RINDO_FACADE = new Jest27Rindo();
     }
+  }
+
+  if (!JEST_RINDO_FACADE) {
+    throw new Error('Rindo could not determine the Jest version being used.');
   }
 
   return JEST_RINDO_FACADE;
