@@ -1,3 +1,19 @@
+## 🚣 [4.18.3](https://github.com/rindojs/rindo/compare/v4.18.2...v4.18.3) (2024-12-12)
+
+
+### Bug Fixes
+
+* **esbuild:** remove all `node:` imports from glob script to keep support for Jest v26 ([bfb4f7e](https://github.com/rindojs/rindo/commit/bfb4f7eb34926779b531912483f9d2f249479d0c))
+* **mock-doc:** support `toDataURL` method in `canvas` ([1d998a2](https://github.com/rindojs/rindo/commit/1d998a22a20b87e2901c687e7e38db4a3bac964c))
+* **runtime:** add missing intermediate parents scope ids to the elements ([9e9e335](https://github.com/rindojs/rindo/commit/9e9e335f2c1a5ee4aa48aeeb817962cb45a5380e))
+
+
+### Features
+
+* **ci:** remove need to compile scripts ([aa065ce](https://github.com/rindojs/rindo/commit/aa065ce06b06fbd3b7ed2899dc21a09dac856c93))
+
+
+
 ## 🌶 [4.18.2](https://github.com/rindojs/rindo/compare/v4.18.1...v4.18.2) (2024-12-01)
 
 
