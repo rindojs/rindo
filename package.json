@@ -55,7 +55,7 @@
     "@rollup/plugin-commonjs": "21.1.0",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-node-resolve": "9.0.0",
-    "@rollup/plugin-replace": "5.0.5",
+    "@rollup/plugin-replace": "5.0.7",
     "@rollup/pluginutils": "5.1.0",
     "@types/eslint": "^8.4.6",
     "@types/exit": "^0.1.31",
@@ -104,16 +104,16 @@
     "parse5": "7.1.2",
     "pixelmatch": "5.3.0",
     "postcss": "^8.2.8",
-    "prettier": "3.2.4",
+    "prettier": "3.3.1",
     "prompts": "2.4.2",
     "puppeteer": "^21.0.0",
     "rollup": "2.56.3",
     "semver": "^7.3.7",
-    "terser": "5.31.0",
+    "terser": "5.31.1",
     "tsx": "^4.10.3",
     "typescript": "~5.4.0",
     "webpack": "^5.75.0",
-    "ws": "8.17.0"
+    "ws": "8.17.1"
   },
   "engines": {
     "node": ">=16.0.0",
@@ -139,6 +139,6 @@
   "prettier": "@familyjs/prettier-config",
   "volta": {
     "node": "22.2.0",
-    "npm": "10.8.0"
+    "npm": "10.8.1"
   }
 }
