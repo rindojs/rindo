@@ -157,6 +157,8 @@ export function createPuppeteerScreenshotOptions(
   };
 
   if (opts.clip) {
+    puppeteerOpts.captureBeyondViewport =
+      typeof opts.captureBeyondViewport === 'boolean' ? opts.captureBeyondViewport : true;
     puppeteerOpts.clip = {
       x: opts.clip.x,
       y: opts.clip.y,
@@ -164,6 +166,8 @@ export function createPuppeteerScreenshotOptions(
       height: opts.clip.height,
     };
   } else {
+    puppeteerOpts.captureBeyondViewport =
+      typeof opts.captureBeyondViewport === 'boolean' ? opts.captureBeyondViewport : false;
     puppeteerOpts.clip = {
       x: 0,
       y: 0,
