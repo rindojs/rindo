@@ -1,4 +1,5 @@
 import { E2EElement, E2EPage, newE2EPage } from '@rindo/core/testing';
+
 import { CarData } from './car-data';
 
 describe('car-list', () => {
