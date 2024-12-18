@@ -32,7 +32,9 @@ export async function getInternalClientBundles(opts: BuildOptions): Promise<ESBu
     name: '@rindo/core/internal/client',
     description:
       'Rindo internal client platform to be imported by the Rindo Compiler and internal runtime. Breaking changes can and will happen at any time.',
-    main: 'index.js',
+    exports: './index.js',
+    main: './index.js',
+    type: 'module',
     sideEffects: false,
   });
 
