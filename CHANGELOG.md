@@ -1,3 +1,34 @@
+# 🐧 [4.19.0](https://github.com/rindojs/rindo/compare/v4.18.3...v4.19.0) (2024-12-19)
+
+
+### Bug Fixes
+
+* **compiler:** support rollup's external input option ([b155c66](https://github.com/rindojs/rindo/commit/b155c66c07f5bea533781daf2fd0e4d6fc557f64))
+* **declarations:** fix weekly build ([b04fc01](https://github.com/rindojs/rindo/commit/b04fc01afd40dc1003368f12abfaee015629b010))
+* **emit:** don't emit test files ([1f5676b](https://github.com/rindojs/rindo/commit/1f5676b2086426200fa469ae416e0bd1e89ae197))
+* **hyrdate:** support vdom annotation in nested dsd structures ([aa99726](https://github.com/rindojs/rindo/commit/aa99726f90b0c9a0295753a88c733bf3085f9e2b))
+* label attribute not toggling input ([1217ea5](https://github.com/rindojs/rindo/commit/1217ea58821438cdf1455ec72cb62d55d144b463))
+* **mock-doc:** expose `ShadowRoot` and `DocumentFragment` globals ([642de46](https://github.com/rindojs/rindo/commit/642de46b637dfd71013f2cecbd7063c026ac4901))
+* **runtime:** allow watchers to fire w/ no Rindo members ([9d3a9bb](https://github.com/rindojs/rindo/commit/9d3a9bb5221a90de564ca437481be734c3d96a2c))
+* **runtime:** catch errors in async lifecycle methods ([297a163](https://github.com/rindojs/rindo/commit/297a163c505dab0b7446cb1e15351adff5892ee1))
+* **runtime:** don't register listener before connected to DOM ([95866c3](https://github.com/rindojs/rindo/commit/95866c371cd6eafb9e85078f893cd703f040370f))
+* **runtime:** properly assign style declarations ([cd3b874](https://github.com/rindojs/rindo/commit/cd3b874c8d5bac07527d32063ed67c9a664bf8ee))
+* **testing:** allow to re-use pages across it blocks ([ca7046f](https://github.com/rindojs/rindo/commit/ca7046f483dc62f2d3eafdb6e401e3f78184a8d9))
+* **typescript:** remove unsupported label property ([b9d1cb1](https://github.com/rindojs/rindo/commit/b9d1cb162fe7d43390848808fb6bc28c7a2eb960))
+
+
+### Features
+
+* **cli:** support generation of sass and less files ([7e0b8a7](https://github.com/rindojs/rindo/commit/7e0b8a7220d0a1f30cafc1f4c2548c0db57e658e))
+* **compiler:** generate export maps on build ([626f291](https://github.com/rindojs/rindo/commit/626f2917c23acc7b1736b52b07a66891114975bd))
+* **complier:** support type import aliasing ([964229b](https://github.com/rindojs/rindo/commit/964229b3ebe5710cc65f43d89d68b5730ff54d70))
+* **runtime:** support declarative shadow DOM ([bee6483](https://github.com/rindojs/rindo/commit/bee648342ab242a89f806d2083f667d71bb86325))
+* **testing:** add `toHaveLastReceivedEventDetail` event spy matcher ([00192ca](https://github.com/rindojs/rindo/commit/00192ca1c8d3a549422596d3b3f6bbb9c5e200be))
+* **testing:** allow to disable network error logging via `logFailingNetworkRequests` option ([7a1f83d](https://github.com/rindojs/rindo/commit/7a1f83d7ffa73eea4b49a6394e79d703801629d2))
+* **testing:** expose `captureBeyondViewport` in `pageCompareScreenshot` ([ff832ca](https://github.com/rindojs/rindo/commit/ff832ca51971e64ac771565ce07647f20e33f5c1))
+
+
+
 ## 🚣 [4.18.3](https://github.com/rindojs/rindo/compare/v4.18.2...v4.18.3) (2024-12-12)
 
 
