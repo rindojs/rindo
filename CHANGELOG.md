@@ -1,76 +1,62 @@
 # 🐧 [4.19.0](https://github.com/rindojs/rindo/compare/v4.18.3...v4.19.0) (2024-12-19)
 
-
 ### Bug Fixes
 
-* **compiler:** support rollup's external input option ([b155c66](https://github.com/rindojs/rindo/commit/b155c66c07f5bea533781daf2fd0e4d6fc557f64))
-* **declarations:** fix weekly build ([b04fc01](https://github.com/rindojs/rindo/commit/b04fc01afd40dc1003368f12abfaee015629b010))
-* **emit:** don't emit test files ([1f5676b](https://github.com/rindojs/rindo/commit/1f5676b2086426200fa469ae416e0bd1e89ae197))
-* **hyrdate:** support vdom annotation in nested dsd structures ([aa99726](https://github.com/rindojs/rindo/commit/aa99726f90b0c9a0295753a88c733bf3085f9e2b))
-* label attribute not toggling input ([1217ea5](https://github.com/rindojs/rindo/commit/1217ea58821438cdf1455ec72cb62d55d144b463))
-* **mock-doc:** expose `ShadowRoot` and `DocumentFragment` globals ([642de46](https://github.com/rindojs/rindo/commit/642de46b637dfd71013f2cecbd7063c026ac4901))
-* **runtime:** allow watchers to fire w/ no Rindo members ([9d3a9bb](https://github.com/rindojs/rindo/commit/9d3a9bb5221a90de564ca437481be734c3d96a2c))
-* **runtime:** catch errors in async lifecycle methods ([297a163](https://github.com/rindojs/rindo/commit/297a163c505dab0b7446cb1e15351adff5892ee1))
-* **runtime:** don't register listener before connected to DOM ([95866c3](https://github.com/rindojs/rindo/commit/95866c371cd6eafb9e85078f893cd703f040370f))
-* **runtime:** properly assign style declarations ([cd3b874](https://github.com/rindojs/rindo/commit/cd3b874c8d5bac07527d32063ed67c9a664bf8ee))
-* **testing:** allow to re-use pages across it blocks ([ca7046f](https://github.com/rindojs/rindo/commit/ca7046f483dc62f2d3eafdb6e401e3f78184a8d9))
-* **typescript:** remove unsupported label property ([b9d1cb1](https://github.com/rindojs/rindo/commit/b9d1cb162fe7d43390848808fb6bc28c7a2eb960))
-
+- **compiler:** support rollup's external input option ([b155c66](https://github.com/rindojs/rindo/commit/b155c66c07f5bea533781daf2fd0e4d6fc557f64))
+- **declarations:** fix weekly build ([b04fc01](https://github.com/rindojs/rindo/commit/b04fc01afd40dc1003368f12abfaee015629b010))
+- **emit:** don't emit test files ([1f5676b](https://github.com/rindojs/rindo/commit/1f5676b2086426200fa469ae416e0bd1e89ae197))
+- **hydrate:** support vdom annotation in nested dsd structures ([aa99726](https://github.com/rindojs/rindo/commit/aa99726f90b0c9a0295753a88c733bf3085f9e2b))
+- label attribute not toggling input ([1217ea5](https://github.com/rindojs/rindo/commit/1217ea58821438cdf1455ec72cb62d55d144b463))
+- **mock-doc:** expose `ShadowRoot` and `DocumentFragment` globals ([642de46](https://github.com/rindojs/rindo/commit/642de46b637dfd71013f2cecbd7063c026ac4901))
+- **runtime:** allow watchers to fire w/ no Rindo members ([9d3a9bb](https://github.com/rindojs/rindo/commit/9d3a9bb5221a90de564ca437481be734c3d96a2c))
+- **runtime:** catch errors in async lifecycle methods ([297a163](https://github.com/rindojs/rindo/commit/297a163c505dab0b7446cb1e15351adff5892ee1))
+- **runtime:** don't register listener before connected to DOM ([95866c3](https://github.com/rindojs/rindo/commit/95866c371cd6eafb9e85078f893cd703f040370f))
+- **runtime:** properly assign style declarations ([cd3b874](https://github.com/rindojs/rindo/commit/cd3b874c8d5bac07527d32063ed67c9a664bf8ee))
+- **testing:** allow to re-use pages across it blocks ([ca7046f](https://github.com/rindojs/rindo/commit/ca7046f483dc62f2d3eafdb6e401e3f78184a8d9))
+- **typescript:** remove unsupported label property ([b9d1cb1](https://github.com/rindojs/rindo/commit/b9d1cb162fe7d43390848808fb6bc28c7a2eb960))
 
 ### Features
 
-* **cli:** support generation of sass and less files ([7e0b8a7](https://github.com/rindojs/rindo/commit/7e0b8a7220d0a1f30cafc1f4c2548c0db57e658e))
-* **compiler:** generate export maps on build ([626f291](https://github.com/rindojs/rindo/commit/626f2917c23acc7b1736b52b07a66891114975bd))
-* **complier:** support type import aliasing ([964229b](https://github.com/rindojs/rindo/commit/964229b3ebe5710cc65f43d89d68b5730ff54d70))
-* **runtime:** support declarative shadow DOM ([bee6483](https://github.com/rindojs/rindo/commit/bee648342ab242a89f806d2083f667d71bb86325))
-* **testing:** add `toHaveLastReceivedEventDetail` event spy matcher ([00192ca](https://github.com/rindojs/rindo/commit/00192ca1c8d3a549422596d3b3f6bbb9c5e200be))
-* **testing:** allow to disable network error logging via `logFailingNetworkRequests` option ([7a1f83d](https://github.com/rindojs/rindo/commit/7a1f83d7ffa73eea4b49a6394e79d703801629d2))
-* **testing:** expose `captureBeyondViewport` in `pageCompareScreenshot` ([ff832ca](https://github.com/rindojs/rindo/commit/ff832ca51971e64ac771565ce07647f20e33f5c1))
-
-
+- **cli:** support generation of sass and less files ([7e0b8a7](https://github.com/rindojs/rindo/commit/7e0b8a7220d0a1f30cafc1f4c2548c0db57e658e))
+- **compiler:** generate export maps on build ([626f291](https://github.com/rindojs/rindo/commit/626f2917c23acc7b1736b52b07a66891114975bd))
+- **complier:** support type import aliasing ([964229b](https://github.com/rindojs/rindo/commit/964229b3ebe5710cc65f43d89d68b5730ff54d70))
+- **runtime:** support declarative shadow DOM ([bee6483](https://github.com/rindojs/rindo/commit/bee648342ab242a89f806d2083f667d71bb86325))
+- **testing:** add `toHaveLastReceivedEventDetail` event spy matcher ([00192ca](https://github.com/rindojs/rindo/commit/00192ca1c8d3a549422596d3b3f6bbb9c5e200be))
+- **testing:** allow to disable network error logging via `logFailingNetworkRequests` option ([7a1f83d](https://github.com/rindojs/rindo/commit/7a1f83d7ffa73eea4b49a6394e79d703801629d2))
+- **testing:** expose `captureBeyondViewport` in `pageCompareScreenshot` ([ff832ca](https://github.com/rindojs/rindo/commit/ff832ca51971e64ac771565ce07647f20e33f5c1))
 
 ## 🚣 [4.18.3](https://github.com/rindojs/rindo/compare/v4.18.2...v4.18.3) (2024-12-12)
 
-
 ### Bug Fixes
 
-* **esbuild:** remove all `node:` imports from glob script to keep support for Jest v26 ([bfb4f7e](https://github.com/rindojs/rindo/commit/bfb4f7eb34926779b531912483f9d2f249479d0c))
-* **mock-doc:** support `toDataURL` method in `canvas` ([1d998a2](https://github.com/rindojs/rindo/commit/1d998a22a20b87e2901c687e7e38db4a3bac964c))
-* **runtime:** add missing intermediate parents scope ids to the elements ([9e9e335](https://github.com/rindojs/rindo/commit/9e9e335f2c1a5ee4aa48aeeb817962cb45a5380e))
-
+- **esbuild:** remove all `node:` imports from glob script to keep support for Jest v26 ([bfb4f7e](https://github.com/rindojs/rindo/commit/bfb4f7eb34926779b531912483f9d2f249479d0c))
+- **mock-doc:** support `toDataURL` method in `canvas` ([1d998a2](https://github.com/rindojs/rindo/commit/1d998a22a20b87e2901c687e7e38db4a3bac964c))
+- **runtime:** add missing intermediate parents scope ids to the elements ([9e9e335](https://github.com/rindojs/rindo/commit/9e9e335f2c1a5ee4aa48aeeb817962cb45a5380e))
 
 ### Features
 
-* **ci:** remove need to compile scripts ([aa065ce](https://github.com/rindojs/rindo/commit/aa065ce06b06fbd3b7ed2899dc21a09dac856c93))
-
-
+- **ci:** remove need to compile scripts ([aa065ce](https://github.com/rindojs/rindo/commit/aa065ce06b06fbd3b7ed2899dc21a09dac856c93))
 
 ## 🌶 [4.18.2](https://github.com/rindojs/rindo/compare/v4.18.1...v4.18.2) (2024-12-01)
 
-
 ### Bug Fixes
 
-* **e2e:** allow to fetch CSS variables assigned to host elements ([a632372](https://github.com/rindojs/rindo/commit/a632372cd7da19506881bb4fd1a766b024488b3c))
-* **hydrate:** respect `HydratedFlag` configuration in hydrate script ([fff9935](https://github.com/rindojs/rindo/commit/fff99356776aed0d32ab1ba31b120b4152671107))
-* **runtime:** always throw if component can not be loaded ([f941626](https://github.com/rindojs/rindo/commit/f941626b37fa732d8de5d05e6cab53e02d8088b2))
-* **runtime:** support watch for components with custom tag names ([0c71425](https://github.com/rindojs/rindo/commit/0c71425e4979e8ab171a5920ae5b493a4e4cf150))
-* **runtime:** throw proper error if component is loaded with invalid runtime ([ff1a988](https://github.com/rindojs/rindo/commit/ff1a988a3f96f88878834c09fe71f43a7f64dffa))
-* **types:** move `autofocus` attr/prop definition to `HTMLAttributes` ([e992c61](https://github.com/rindojs/rindo/commit/e992c61f2bbd384fd6bf28d7fae9d12ad8c70c1e))
-
-
+- **e2e:** allow to fetch CSS variables assigned to host elements ([a632372](https://github.com/rindojs/rindo/commit/a632372cd7da19506881bb4fd1a766b024488b3c))
+- **hydrate:** respect `HydratedFlag` configuration in hydrate script ([fff9935](https://github.com/rindojs/rindo/commit/fff99356776aed0d32ab1ba31b120b4152671107))
+- **runtime:** always throw if component can not be loaded ([f941626](https://github.com/rindojs/rindo/commit/f941626b37fa732d8de5d05e6cab53e02d8088b2))
+- **runtime:** support watch for components with custom tag names ([0c71425](https://github.com/rindojs/rindo/commit/0c71425e4979e8ab171a5920ae5b493a4e4cf150))
+- **runtime:** throw proper error if component is loaded with invalid runtime ([ff1a988](https://github.com/rindojs/rindo/commit/ff1a988a3f96f88878834c09fe71f43a7f64dffa))
+- **types:** move `autofocus` attr/prop definition to `HTMLAttributes` ([e992c61](https://github.com/rindojs/rindo/commit/e992c61f2bbd384fd6bf28d7fae9d12ad8c70c1e))
 
 ## 🐣 [4.18.1](https://github.com/rindojs/rindo/compare/v4.18.0...v4.18.1) (2024-12-01)
 
-
 ### Bug Fixes
 
-* **build:** do not copy polyfills to the  OT unless building es5 ([4a72bfb](https://github.com/rindojs/rindo/commit/4a72bfb6f496356f1f924683d0d5db27585ab07b))
-* **compiler:** Allow `OutputTargetCustom` to be called on `devMode` ([d0d1960](https://github.com/rindojs/rindo/commit/d0d1960cf20a6ec8d01b01ac36e22e883d49222a))
-* **compiler:** deprecate `scriptDataOpts` [ci skip] ([0ffd197](https://github.com/rindojs/rindo/commit/0ffd197aa4255b56cd3261f4e1cc78dce4bb8b70))
-* **declarations:** Attribute `ping` is missing on `AnchorHTMLAttributes` ([89e1467](https://github.com/rindojs/rindo/commit/89e1467fb9fd525cc3d692570bfda338127c8967))
-* **runtime:** add root scope id to the user provided nested children as classname ([61e13a3](https://github.com/rindojs/rindo/commit/61e13a36ff753330747d49e1ee4f6caad3699618))
-
-
+- **build:** do not copy polyfills to the OT unless building es5 ([4a72bfb](https://github.com/rindojs/rindo/commit/4a72bfb6f496356f1f924683d0d5db27585ab07b))
+- **compiler:** Allow `OutputTargetCustom` to be called on `devMode` ([d0d1960](https://github.com/rindojs/rindo/commit/d0d1960cf20a6ec8d01b01ac36e22e883d49222a))
+- **compiler:** deprecate `scriptDataOpts` [ci skip] ([0ffd197](https://github.com/rindojs/rindo/commit/0ffd197aa4255b56cd3261f4e1cc78dce4bb8b70))
+- **declarations:** Attribute `ping` is missing on `AnchorHTMLAttributes` ([89e1467](https://github.com/rindojs/rindo/commit/89e1467fb9fd525cc3d692570bfda338127c8967))
+- **runtime:** add root scope id to the user provided nested children as classname ([61e13a3](https://github.com/rindojs/rindo/commit/61e13a36ff753330747d49e1ee4f6caad3699618))
 
 # 🚘 [4.18.0](https://github.com/rindojs/rindo/compare/v4.17.2...v4.18.0) (2024-08-29)
 
