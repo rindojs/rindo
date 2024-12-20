@@ -6,7 +6,7 @@
   "types": "dist/types/components.d.ts",
   "collection": " dist/collection/collection-manifest.json",
   "scripts": {
-    "build": "node ../../bin/rindo build --docs",
+    "build": "node ../../bin/rindo build --config ./rindo.build.config.ts --docs",
     "start": "node ../../bin/rindo build --debug --watch --dev --serve",
     "test": "node ../../bin/rindo test --ci --e2e --spec --screenshot --debug",
     "test.dist": "npm run build && node test-end-to-end-dist.js && node test-end-to-end-hydrate.js",
