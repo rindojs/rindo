@@ -25,14 +25,16 @@
   "exports": {
     ".": {
       "import": "./internal/rindo-core/index.js",
-      "require": "./internal/rindo-core/index.cjs"
+      "require": "./internal/rindo-core/index.cjs",
+      "types": "./internal/rindo-core/index.d.ts"
     },
     "./cli": {
       "import": "./cli/index.js",
       "require": "./cli/index.cjs"
     },
     "./internal": {
-      "import": "./internal/index.js"
+      "import": "./internal/index.js",
+      "types": "./internal/index.d.ts"
     },
     "./internal/client": {
       "import": "./internal/client/index.js"
@@ -45,17 +47,30 @@
     },
     "./internal/app-data": {
       "import": "./internal/app-data/index.js",
-      "require": "./internal/app-data/index.cjs"
+      "require": "./internal/app-data/index.cjs",
+      "types": "./internal/app-data/index.d.ts"
     },
     "./mock-doc": {
       "import": "./mock-doc/index.js",
-      "require": "./mock-doc/index.cjs"
+      "require": "./mock-doc/index.cjs",
+      "types": "./mock-doc/index.d.ts"
     },
     "./compiler": {
-      "import": "./compiler/rindo.js"
+      "import": "./compiler/rindo.js",
+      "require": "./compiler/rindo.js",
+      "types": "./compiler/rindo.d.ts"
     },
     "./compiler/*": {
       "import": "./compiler/*"
+    },
+    "./sys/node": {
+      "import": "./sys/node/index.js",
+      "require": "./sys/node/index.js",
+      "types": "./sys/node/index.d.ts"
+    },
+    "./sys/node/*": {
+      "import": "./sys/node/*",
+      "require": "./sys/node/*"
     }
   },
   "scripts": {
