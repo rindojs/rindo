@@ -1,3 +1,15 @@
+## 🔔 [4.19.1](https://github.com/rindojs/rindo/compare/v4.19.0...v4.19.1) (2024-12-23)
+
+
+### Bug Fixes
+
+* **compiler:** account for package imports in aliasing ([8ec2a30](https://github.com/rindojs/rindo/commit/8ec2a3037963297be275bd0edbc839755268af51))
+* **compiler:** try to create web worker with the `workerPath` before falling back to `blob` ([5d488e8](https://github.com/rindojs/rindo/commit/5d488e82960370209d5ee89841979b735b1f0f44))
+* **hydrate:** change type resolve order ([96af66b](https://github.com/rindojs/rindo/commit/96af66b8eb3c4f16bee1196d894a850403d48e5f))
+* **internal:** add cli sub package to export map ([9052658](https://github.com/rindojs/rindo/commit/9052658965510b73ec20903becda2931f6d814c5))
+
+
+
 # 🐧 [4.19.0](https://github.com/rindojs/rindo/compare/v4.18.3...v4.19.0) (2024-12-19)
 
 ### Bug Fixes
