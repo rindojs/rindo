@@ -1,3 +1,14 @@
+## 🤓 [4.19.2](https://github.com/rindojs/rindo/compare/v4.19.1...v4.19.2) (2025-01-24)
+
+
+### Bug Fixes
+
+* **hydrate:** partially revert ([a48d984](https://github.com/rindojs/rindo/commit/a48d984fdf0124f69c01d2acef6ec8d21c72f51b))
+* **hydrate:** support server side rendering of components with listener ([80e6897](https://github.com/rindojs/rindo/commit/80e6897e177955c2e8af2eeabcf2c6e73011dc7d))
+* **testing:** add testing sub module to export map ([e2ddb42](https://github.com/rindojs/rindo/commit/e2ddb42b7cfc46d1cc42f93ae48432b8db10b64b))
+
+
+
 ## 🔔 [4.19.1](https://github.com/rindojs/rindo/compare/v4.19.0...v4.19.1) (2024-12-23)
 
 
