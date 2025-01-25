@@ -2,6 +2,7 @@ import { Component, h, Prop, State } from '@rindo/core';
 
 @Component({
   tag: 'cmp-dsd',
+  styleUrl: 'cmp-dsd.css',
   shadow: true,
 })
 export class ComponentDSD {
