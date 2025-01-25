@@ -8,6 +8,7 @@ const appData = require('@rindo/core/internal/app-data');
 const { createNodeLogger } = require('@rindo/core/sys/node');
 const { createTesting } = require('@rindo/core/testing');
 const preset = require('@rindo/core/testing/jest-preset');
+const { ScreenshotLocalConnector } = require('@rindo/core/screenshot');
 
 assert(typeof version === 'string');
 assert(typeof run, 'function');
@@ -17,6 +18,7 @@ assert(Object.keys(appData).length === 3);
 assert(typeof createNodeLogger === 'function');
 assert(typeof createTesting === 'function');
 assert(preset.moduleFileExtensions);
+assert(ScreenshotLocalConnector);
 
 console.log(`🎉 All CJS imports successfully resolved!`);
 console.log('✅ passed!\n');
