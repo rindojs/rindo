@@ -4,7 +4,7 @@ Continuous integration (CI) is an important aspect of any project, and is used t
 codebase work as intended, to avoid introducing regressions (bugs), and to adhere to coding standards (e.g. formatting
 rules). It provides a consistent means of performing a series of checks over the entire codebase on behalf of the team.
 
-This document explains Rindo's CI setup. 
+This document explains Rindo's CI setup.
 
 ## CI Environment
 
@@ -48,6 +48,7 @@ It is intended to be manually invoked by a member of the Rindo team.
 
 This workflow initiates a weekly build of Rindo from the `main` branch.
 A weekly build is similar to a 'Dev Release', except that:
+
 - it is run on a set cadence (it is not expectedthat a developer to manually invoke it)
 - it is published to the npm registry under the 'weekly' tag
 
@@ -113,7 +114,7 @@ all jobs' options in the GitHub Actions UI.
 
 #### Concurrency
 
-When a `git push` is made to a branch, Rindo's CI is designed to stop existing job(s) associated with the workflow + 
+When a `git push` is made to a branch, Rindo's CI is designed to stop existing job(s) associated with the workflow +
 branch.
 A new CI run (of each workflow) will begin upon stopping the existing job(s) using the new `HEAD` of the branch.
 
