@@ -1,4 +1,5 @@
 import { Component, h } from '@rindo/core';
+
 import styles from './prerender-cmp.css';
 
 @Component({

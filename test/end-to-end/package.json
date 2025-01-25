@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "@rindo/core": "file:../../",
-    "@rindo/react-output-target": "^0.5.1",
+    "@rindo/react-output-target": "0.0.9",
     "@types/file-saver": "^2.0.1",
     "@types/lodash": "^4.14.165",
     "@types/lodash-es": "^4.17.4",
