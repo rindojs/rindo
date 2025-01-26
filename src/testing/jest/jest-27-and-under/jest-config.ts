@@ -153,6 +153,16 @@ export function buildJestConfig(config: d.ValidatedConfig): string {
   if (rindoConfigTesting.verbose) {
     jestConfig.verbose = rindoConfigTesting.verbose;
   }
+  if (typeof rindoConfigTesting.bail !== 'undefined') {
+    jestConfig.bail =
+      typeof rindoConfigTesting.bail === 'number' ? rindoConfigTesting.bail : rindoConfigTesting.bail ? 1 : 0;
+  }
+  if (rindoConfigTesting.prettierPath) {
+    jestConfig.prettierPath = rindoConfigTesting.prettierPath;
+  }
+  if (rindoConfigTesting.restoreMocks) {
+    jestConfig.restoreMocks = rindoConfigTesting.restoreMocks;
+  }
 
   jestConfig.testRunner = new Jest27Rindo().getDefaultJestRunner();
 
