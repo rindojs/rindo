@@ -1,3 +1,26 @@
+# 🚢 [4.20.0](https://github.com/rindojs/rindo/compare/v4.19.1...v4.20.0) (2025-01-26)
+
+
+### Bug Fixes
+
+* add `@rindo/core/testing/jest-preset` to export map ([2918f2c](https://github.com/rindojs/rindo/commit/2918f2c8aba126d3bb1aae8fb2dc631105fd9512))
+* **ci:** revert usage of `pull_request_target` trigger ([c5c11c7](https://github.com/rindojs/rindo/commit/c5c11c7a3b60d0c032b42fc54e439290f3f4dd68))
+* **compiler:** don't allow `shadowRoot` getter to avoid hydration issues ([396e80b](https://github.com/rindojs/rindo/commit/396e80b3330bcc8cdd78fbe37be75147dbae8113))
+* **compiler:** no need for commenting selectors anymore ([c906725](https://github.com/rindojs/rindo/commit/c906725bbca798a014d6d0827c34fa7ce8298698))
+* **compiler:** respect project tsconfig watch options ([8a76d30](https://github.com/rindojs/rindo/commit/8a76d3066c7e1b475b5f0a5cf826f6bf4cafafa4))
+* **compiler:** run copy task after other output targets ([843f8db](https://github.com/rindojs/rindo/commit/843f8dba7aa7d4c333ed8fd4b88a19f06acafb8a))
+* **core:** add missing `screenshot` export ([bfd338b](https://github.com/rindojs/rindo/commit/bfd338bbfd670264a9b76a547fa0181d6c6d7432))
+* **hydrate:** ensure `beforeHydrateFn` and `afterHydrateFn` always return a function ([afe0507](https://github.com/rindojs/rindo/commit/afe0507cbc06849153a53a489dce4b425bf665e5))
+* **hydrate:** partially revert ([a48d984](https://github.com/rindojs/rindo/commit/a48d984fdf0124f69c01d2acef6ec8d21c72f51b))
+* **hydrate:** support server side rendering of components with listener ([80e6897](https://github.com/rindojs/rindo/commit/80e6897e177955c2e8af2eeabcf2c6e73011dc7d))
+* **runtime:** hydrate shadow dom first ([70111dd](https://github.com/rindojs/rindo/commit/70111dd66b9efd8bdbfb4fce1f5072e0ff60eb8a))
+* **runtime:** make `isSameVnode` return false on initial render in a hydration case ([a05673c](https://github.com/rindojs/rindo/commit/a05673c427045e99e375119e0e07d569d440d90c))
+* **testing:** add testing sub module to export map ([e2ddb42](https://github.com/rindojs/rindo/commit/e2ddb42b7cfc46d1cc42f93ae48432b8db10b64b))
+* **testing:** update Jest types ([4509626](https://github.com/rindojs/rindo/commit/4509626f6e89703670bf185ca8f1d64e6362592e))
+* update TypeScript to v5.5 ([420b2ce](https://github.com/rindojs/rindo/commit/420b2ce9a54302ef06821e12d5ab149bca7a7ec6))
+
+
+
 ## 🤓 [4.19.2](https://github.com/rindojs/rindo/compare/v4.19.1...v4.19.2) (2025-01-24)
 
 
