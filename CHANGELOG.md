@@ -19,6 +19,9 @@
 * **testing:** update Jest types ([4509626](https://github.com/rindojs/rindo/commit/4509626f6e89703670bf185ca8f1d64e6362592e))
 * update TypeScript to v5.5 ([420b2ce](https://github.com/rindojs/rindo/commit/420b2ce9a54302ef06821e12d5ab149bca7a7ec6))
 
+### Note
+As we’ve made further enhancements to support declarative Shadow DOM, the Rindo team has determined that it’s not feasible to allow users to render a shadow component as a scoped component after compilation, such as by calling `renderToString` with `serializeShadowRoot: false`. This is because Rindo compiles styles for either shadow or scoped mode during the compilation process, embedding these styles into the hydrate module. Once this compilation is complete, the styles cannot be transformed to support the other mode. Recognizing that this change would impact the current functionality, the Rindo team has decided to proceed with this update. Moving forward, we recommend serializing all components marked with shadow: true as declarative Shadow DOM.
+
 
 
 ## 🤓 [4.19.2](https://github.com/rindojs/rindo/compare/v4.19.1...v4.19.2) (2025-01-24)
