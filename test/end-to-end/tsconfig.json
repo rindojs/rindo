@@ -10,10 +10,7 @@
     "jsx": "react",
     "jsxFactory": "h",
     "jsxFragmentFactory": "Fragment",
-    "lib": [
-      "dom",
-      "es2017"
-    ],
+    "lib": ["dom", "es2021"],
     "module": "esnext",
     "moduleResolution": "node",
     "noImplicitAny": true,
@@ -25,24 +22,12 @@
     "useUnknownInCatchVariables": true,
     "baseUrl": ".",
     "paths": {
-      "@rindo/core": [
-        "../../internal"
-      ],
-      "@rindo/core/mock-doc": [
-        "../../mock-doc"
-      ],
-      "@rindo/core/internal": [
-        "../../internal"
-      ],
-      "@rindo/core/testing": [
-        "../../testing"
-      ],
-      "@path-alias": [
-        "./src/path-alias-cmp/path-alias-lib"
-      ]
+      "@rindo/core": ["../../internal"],
+      "@rindo/core/mock-doc": ["../../mock-doc"],
+      "@rindo/core/internal": ["../../internal"],
+      "@rindo/core/testing": ["../../testing"],
+      "@path-alias": ["./src/path-alias-cmp/path-alias-lib"]
     }
   },
-  "include": [
-    "src"
-  ]
+  "include": ["src"]
 }
