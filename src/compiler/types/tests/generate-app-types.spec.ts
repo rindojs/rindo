@@ -1747,6 +1747,11 @@ declare module "@rindo/core" {
                 location: 'import',
                 path: '@utils',
               },
+              Fragment: {
+                location: 'import',
+                path: '@rindo/core',
+                id: '',
+              },
             },
           },
         }),
@@ -1765,7 +1770,9 @@ declare module "@rindo/core" {
  */
 import { HTMLRindoElement, JSXBase } from "@rindo/core/internal";
 import { MyType as UserImplementedPropType } from "@utils";
+import { Fragment } from "@rindo/core";
 export { MyType as UserImplementedPropType } from "@utils";
+export { Fragment } from "@rindo/core";
 export namespace Components {
     /**
      * docs
