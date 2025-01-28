@@ -1,4 +1,4 @@
-import { Component, Prop, h, Host } from '@rindo/core';
+import { Component, h, Host, Prop } from '@rindo/core';
 import { saveAs } from 'file-saver';
 
 /**

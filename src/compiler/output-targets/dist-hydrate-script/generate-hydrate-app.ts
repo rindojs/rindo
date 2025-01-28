@@ -4,9 +4,18 @@ import MagicString from 'magic-string';
 import { RollupOptions } from 'rollup';
 import { rollup, type RollupBuild } from 'rollup';
 
-import { RINDO_HYDRATE_FACTORY_ID, RINDO_INTERNAL_HYDRATE_ID, RINDO_MOCK_DOC_ID } from '../../bundle/entry-alias-ids';
+import {
+  RINDO_APP_DATA_ID,
+  RINDO_HYDRATE_FACTORY_ID,
+  RINDO_INTERNAL_HYDRATE_ID,
+  RINDO_MOCK_DOC_ID,
+} from '../../bundle/entry-alias-ids';
 import { bundleHydrateFactory } from './bundle-hydrate-factory';
-import { HYDRATE_FACTORY_INTRO, HYDRATE_FACTORY_OUTRO } from './hydrate-factory-closure';
+import {
+  HYDRATE_FACTORY_INTRO,
+  HYDRATE_FACTORY_OUTRO,
+  MODE_RESOLUTION_CHAIN_DECLARATION,
+} from './hydrate-factory-closure';
 import { updateToHydrateComponents } from './update-to-hydrate-components';
 import { writeHydrateOutputs } from './write-hydrate-outputs';
 
@@ -46,6 +55,7 @@ export const generateHydrateApp = async (
     const packageDir = join(config.sys.getCompilerExecutingPath(), '..', '..');
     const input = join(packageDir, 'internal', 'hydrate', 'runner.js');
     const mockDoc = join(packageDir, 'mock-doc', 'index.js');
+    const appData = join(packageDir, 'internal', 'app-data', 'index.js');
 
     const rollupOptions: RollupOptions = {
       ...config.rollupConfig.inputOptions,
@@ -63,6 +73,9 @@ export const generateHydrateApp = async (
             if (id === RINDO_MOCK_DOC_ID) {
               return mockDoc;
             }
+            if (id === RINDO_APP_DATA_ID) {
+              return appData;
+            }
             return null;
           },
           load(id) {
@@ -70,6 +83,14 @@ export const generateHydrateApp = async (
               return generateHydrateFactory(config, compilerCtx, buildCtx);
             }
             return null;
+          },
+          transform(code) {
+            /**
+             * Remove the modeResolutionChain variable from the generated code.
+             * This variable is redefined in `HYDRATE_FACTORY_INTRO` to ensure we can
+             * use it within the hydrate and global runtime.
+             */
+            return code.replace(`var ${MODE_RESOLUTION_CHAIN_DECLARATION}`, '');
           },
         },
       ],

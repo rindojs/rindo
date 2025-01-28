@@ -2,6 +2,7 @@ import type { ConfigFlags } from '../cli/config-flags';
 import type { PrerenderUrlResults, PrintLine } from '../internal';
 import type { BuildCtx, CompilerCtx } from './rindo-private';
 import type { JsonDocs } from './rindo-public-docs';
+import type { ResolutionHandler } from './rindo-public-runtime';
 
 export * from './rindo-public-docs';
 
@@ -955,6 +956,11 @@ export interface SerializeDocumentOptions extends HydrateDocumentOptions {
    * @default true
    */
   fullDocument?: boolean;
+  /**
+   * Style modes to render the component in.
+   * @see https://rindojs.web.app/docs/styling#style-modes
+   */
+  modes?: ResolutionHandler[];
 }
 
 export interface HydrateFactoryOptions extends SerializeDocumentOptions {
