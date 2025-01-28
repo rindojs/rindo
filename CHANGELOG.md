@@ -1,3 +1,26 @@
+# ⛵️ [4.21.0](https://github.com/rindojs/rindo/compare/v4.20.0...v4.21.0) (2025-01-28)
+
+
+### Bug Fixes
+
+* **compiler:** default `asyncLoading` build conditional to `true` ([242a39d](https://github.com/rindojs/rindo/commit/242a39d2c683aa0f6945e0f6a91c5e9459a7627b))
+* **compiler:** prefer `localName` over `originalName` by running an empty check on `originalName` ([7bacaa8](https://github.com/rindojs/rindo/commit/7bacaa8ebb59792597f2563701817dcce7295687))
+* **compiler:** verify parent node when validating component members ([7634560](https://github.com/rindojs/rindo/commit/76345602fafa069b0075b10c8811e6496397986b))
+* **runtime:** have fallback for style setting ([2ed1704](https://github.com/rindojs/rindo/commit/2ed1704af75e450e70dfa3a8cadc9a25c1680cbd))
+* **runtime:** only use setter if existing ([fd72882](https://github.com/rindojs/rindo/commit/fd7288215b191ed78176c24e5697bec990a24c35))
+* **runtime:** place scoped component styles after preconnect links but before custom styles ([d435bd2](https://github.com/rindojs/rindo/commit/d435bd2f54cdbd7a730952426d1c18a7d11c55f6))
+* **runtime:** provide second arg to `insertBefore` ([71a3e59](https://github.com/rindojs/rindo/commit/71a3e597945a7835d01a886d2c1c2e8b0e646534))
+* **runtime:** render component styles at the end of the head tag ([bbf2c58](https://github.com/rindojs/rindo/commit/bbf2c5843012da4dfaf297c4ac7cf0167affce37))
+* **runtime:** update call to `prepend` to remove `null` node ([000dd4c](https://github.com/rindojs/rindo/commit/000dd4cf02bf7b944b65024071b610a20561894b))
+* **typescript:** fix documentation on `serializeShadowRoot` flag ([3dfa8cf](https://github.com/rindojs/rindo/commit/3dfa8cf06bc6936087e6c7cb033eab647e28043d))
+
+
+### Features
+
+* **compiler:** allow ignore pattern for copy task ([2fa3a32](https://github.com/rindojs/rindo/commit/2fa3a3293e1d86b52a6605600b045457b13285b5))
+
+
+
 # 🚢 [4.20.0](https://github.com/rindojs/rindo/compare/v4.19.1...v4.20.0) (2025-01-26)
 
 
