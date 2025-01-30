@@ -1,3 +1,28 @@
+# ☀️ [4.22.0](https://github.com/rindojs/rindo/compare/v4.21.0...v4.22.0) (2025-01-30)
+
+
+### Bug Fixes
+
+* **compiler:** add reserved keyword ([cd2db23](https://github.com/rindojs/rindo/commit/cd2db23594634196bf1ce3393867285c1f80a243))
+* **compiler:** handle file rename in watch mode ([bcecaee](https://github.com/rindojs/rindo/commit/bcecaee9777819f9e2b93003e08bc99059b55ff4))
+* **compiler:** no generate custom output ([f2ad2da](https://github.com/rindojs/rindo/commit/f2ad2da42535cb8917facea2ab0a64c45ce7addc))
+* **declarations:** add missing event handler types ([38f00ec](https://github.com/rindojs/rindo/commit/38f00ecf8c4355be094f37a1e4f9cb1597acf967))
+* **hydrate:** Add missing alias to hydrate build to fix app globals ([7550957](https://github.com/rindojs/rindo/commit/755095719c7594e0186c92d8e74bcd75eeb7b767))
+* **hydrate:** support style modes in hydrate modules ([9930603](https://github.com/rindojs/rindo/commit/993060315f17d6bd65cc4c0d105fc9ea81bd5aea))
+* **mock-doc:** avoid double hydration of components ([e9106f3](https://github.com/rindojs/rindo/commit/e9106f32b207a9b3ddbdf9cdf46442559ee1a7f6))
+* **mock-doc:** provide mock for resize observer ([6d827ae](https://github.com/rindojs/rindo/commit/6d827ae238f56bde227652f52270419a81ace99f))
+* **runtime:** ensure `referenceNode` is child node of `styleContainerNode` ([dbddccf](https://github.com/rindojs/rindo/commit/dbddccf33d2186a3813b530b735f9bfe7453bc84))
+* **runtime:** scoped slot append/prepend correct order after interaction ([f7a49d8](https://github.com/rindojs/rindo/commit/f7a49d8ee5689e49c182b053ef50e617fefc97eb))
+* **scripts:** fix Esbuild scripts to allow to run on Windows ([12b399b](https://github.com/rindojs/rindo/commit/12b399b98acd1da72ba12ec7c611a3a467b21bab))
+
+
+### Features
+
+* **compiler:** customize readme mermaid diagram colors ([37a1114](https://github.com/rindojs/rindo/commit/37a1114b54b92560e85ab9200b9163fbb0164944))
+* **typescript:** Update to 5.5.4 ([fa06086](https://github.com/rindojs/rindo/commit/fa060861f3cee9ceaf6a8c2e0aa27bac01cfc954))
+
+
+
 # ⛵️ [4.21.0](https://github.com/rindojs/rindo/compare/v4.20.0...v4.21.0) (2025-01-28)
 
 
