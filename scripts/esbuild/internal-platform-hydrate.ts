@@ -54,6 +54,7 @@ export async function getInternalPlatformHydrateBundles(opts: BuildOptions): Pro
     plugins: [
       externalAlias('@utils/shadow-css', '../client/shadow-css.js'),
       externalAlias('@app-data', '@rindo/core/internal/app-data'),
+      externalAlias('@app-globals', '@rindo/core/internal/app-globals'),
     ],
   };
 
