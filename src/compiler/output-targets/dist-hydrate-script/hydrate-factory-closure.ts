@@ -63,6 +63,7 @@ export function hydrateFactory($rindoWindow, $rindoHydrateOpts, $rindoHydrateRes
   var HTMLTemplateElement = $rindoWindow.HTMLTemplateElement;
   var HTMLTitleElement = $rindoWindow.HTMLTitleElement;
   var IntersectionObserver = $rindoWindow.IntersectionObserver;
+  var ResizeObserver = $rindoWindow.ResizeObserver;
   var KeyboardEvent = $rindoWindow.KeyboardEvent;
   var MouseEvent = $rindoWindow.MouseEvent;
   var Node = $rindoWindow.Node;
