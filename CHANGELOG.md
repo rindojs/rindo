@@ -1,3 +1,15 @@
+## ⛹ [4.22.1](https://github.com/rindojs/rindo/compare/v4.22.0...v4.22.1) (2025-01-31)
+
+
+### Bug Fixes
+
+* **mock-doc:** add missing `ShadowRoot` window primitive ([fe7f263](https://github.com/rindojs/rindo/commit/fe7f263d295f42a4caa181d15b54255a3fdb2bec))
+* **mock-doc:** get native primitive from `globalThis` ([cab07aa](https://github.com/rindojs/rindo/commit/cab07aaa9370992e3074a79abfd9ff780faf6b17))
+* **runtime:** create unique host ids ([a6d40cf](https://github.com/rindojs/rindo/commit/a6d40cffec31ac63a69f193d57d9e4b4bf9f9c09))
+* **runtime:** merge styles within ShadowRoot into a single node ([f319c9b](https://github.com/rindojs/rindo/commit/f319c9bfabbec8f3aff040d0197aa4f580bb27fb))
+
+
+
 # ☀️ [4.22.0](https://github.com/rindojs/rindo/compare/v4.21.0...v4.22.0) (2025-01-30)
 
 
