@@ -1,3 +1,15 @@
+## 🌙 [4.22.3](https://github.com/rindojs/rindo/compare/v4.22.2...v4.22.3) (2025-01-31)
+
+
+### Bug Fixes
+
+* **mock-doc:** return empty string if anchor has no href attribute ([5f7cc15](https://github.com/rindojs/rindo/commit/5f7cc1518a7cf780eeeedc04136f14e95c87fa30))
+* **runtime:** correctly call proxied `formAssociated` callbacks ([a2bdc35](https://github.com/rindojs/rindo/commit/a2bdc35c794b74047e5b49a7710b04f6e4096379))
+* **runtime:** ensure event listener are not registered twice ([942586d](https://github.com/rindojs/rindo/commit/942586d13793f07c4ae273997eb10017f8bf3e73))
+* **runtime:** scope id fix for component children for typescript issue ([0e4e81c](https://github.com/rindojs/rindo/commit/0e4e81c6c27476bd816ffd08c0af72aad1a6e524))
+
+
+
 ## 🐝 [4.22.2](https://github.com/rindojs/rindo/compare/v4.22.1...v4.22.2) (2025-01-31)
 
 
