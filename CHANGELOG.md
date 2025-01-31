@@ -1,3 +1,18 @@
+## 🐝 [4.22.2](https://github.com/rindojs/rindo/compare/v4.22.1...v4.22.2) (2025-01-31)
+
+
+### Bug Fixes
+
+* **docs:** escape backticks in type or default value columns ([a9e4460](https://github.com/rindojs/rindo/commit/a9e4460ef018f335cbfd97f38590ab1a96d0ee1b))
+* **types:** add `controlslist` to html declarations ([84fb487](https://github.com/rindojs/rindo/commit/84fb4874dbe89865d596680d36ed042f7d08aac1))
+
+
+### Features
+
+* **runtime:** make shadow root adopt scoped component styles ([e788d7c](https://github.com/rindojs/rindo/commit/e788d7c2d31cdc57e1108d912abeeeadecedda09))
+
+
+
 ## 🎳 [4.22.1](https://github.com/rindojs/rindo/compare/v4.22.0...v4.22.1) (2025-01-31)
 
 
