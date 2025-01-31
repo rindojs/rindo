@@ -31,6 +31,13 @@ import type {
 import type { JsonDocMethodParameter } from './rindo-public-docs';
 import type { ComponentInterface, ListenTargetOptions, VNode } from './rindo-public-runtime';
 
+export interface DocData {
+  hostIds: number;
+  rootLevelIds: number;
+  staticComponents: Set<string>;
+}
+export type RindoDocument = Document & { _rindoDocData: DocData };
+
 export interface SourceMap {
   file: string;
   mappings: string;
