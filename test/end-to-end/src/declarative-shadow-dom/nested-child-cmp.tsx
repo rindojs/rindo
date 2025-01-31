@@ -2,6 +2,7 @@ import { Component, h } from '@rindo/core';
 
 @Component({
   tag: 'nested-cmp-child',
+  styleUrl: `nested-child-cmp.css`,
   shadow: true,
 })
 export class NestedCmpChild {

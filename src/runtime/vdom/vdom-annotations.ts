@@ -8,8 +8,8 @@ import {
   HYDRATE_ID,
   NODE_TYPE,
   ORG_LOCATION_ID,
-  SLOT_NODE_ID,
   RINDO_DOC_DATA,
+  SLOT_NODE_ID,
   TEXT_NODE_ID,
 } from '../runtime-constants';
 import { insertBefore } from './vdom-render';
