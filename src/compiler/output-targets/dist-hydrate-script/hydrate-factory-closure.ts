@@ -43,6 +43,7 @@ export function hydrateFactory($rindoWindow, $rindoHydrateOpts, $rindoHydrateRes
   var CSS = $rindoWindow.CSS;
   var CustomEvent = $rindoWindow.CustomEvent;
   var Document = $rindoWindow.Document;
+  var ShadowRoot = $rindoWindow.ShadowRoot;
   var DocumentFragment = $rindoWindow.DocumentFragment;
   var DocumentType = $rindoWindow.DocumentType;
   var DOMTokenList = $rindoWindow.DOMTokenList;
