@@ -1,3 +1,22 @@
+# 🧀 [4.23.0](https://github.com/rindojs/rindo/compare/v4.22.3...v4.23.0) (2025-09-04)
+
+
+### Bug Fixes
+
+* `patchChildSlotNodes` & `scopedSlotTextContentFix` not being applied ([855717c](https://github.com/rindojs/rindo/commit/855717c0814c3b1b4f1a4e60046e44564c0b6da0))
+* change `hasHostListenerAttached` from var to protoype property ([b98e0bb](https://github.com/rindojs/rindo/commit/b98e0bbb9adb51bd5395f7c4064773a33ed0d07a))
+* **mock-doc:** don't show error message for SSR workflows ([e031f3e](https://github.com/rindojs/rindo/commit/e031f3ea40448727b0d860cbb043b09cdcc34593))
+* rewrite SSR client-side hydration ([9403593](https://github.com/rindojs/rindo/commit/9403593fd9431cfc3239f39ab098eb1b737f8a86))
+* **runtime:** ensure `Node` is defined ([8ca7e1d](https://github.com/rindojs/rindo/commit/8ca7e1d14923893ed83338b25f4e614859de0f6a))
+* stop `experimentalScopedSlotChanges` warning msg on startup ([e68ff08](https://github.com/rindojs/rindo/commit/e68ff0831d7b74cedfe06ddb95bbaff28cb4ee62))
+
+
+### Features
+
+* prop `get` `set` new ([5223cbf](https://github.com/rindojs/rindo/commit/5223cbfa61853ab2a45a7a89a591463c81787a95))
+
+
+
 ## 🌙 [4.22.3](https://github.com/rindojs/rindo/compare/v4.22.2...v4.22.3) (2025-01-31)
 
 
