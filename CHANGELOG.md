@@ -1,3 +1,16 @@
+## 🚑 [4.23.1](https://github.com/rindojs/rindo/compare/v4.23.0...v4.23.1) (2025-09-05)
+
+
+### Bug Fixes
+
+* correctly handle svg class attribute within `parseClassList` ([dd2e33f](https://github.com/rindojs/rindo/commit/dd2e33fb9b3c4f611ea3f1068bc8ac6ae4857b78))
+* **mock-doc:** don't force template tags to have a shadowroot ([88a6c7c](https://github.com/rindojs/rindo/commit/88a6c7ce41c8ede5245fbaa079ab85873fff51d7))
+* runtime decorators ([b5215b2](https://github.com/rindojs/rindo/commit/b5215b24d5e12742887f29648db47d9e738c33c8))
+* **scoped:** fixes for `<slot />` and slotted nodes ([1f6f68a](https://github.com/rindojs/rindo/commit/1f6f68a60312310afe80bb3f849ebea5d08ef1c6))
+* **SSR:** patch `scoped: true` SSR-ed, slotted nodes next/prev sibling accessors ([5f447a2](https://github.com/rindojs/rindo/commit/5f447a2c693c8812c9333d081a444dfdc43335a5))
+
+
+
 # 🧀 [4.23.0](https://github.com/rindojs/rindo/compare/v4.22.3...v4.23.0) (2025-09-04)
 
 
