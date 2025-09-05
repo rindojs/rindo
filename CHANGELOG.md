@@ -1,3 +1,12 @@
+## 🕹 [4.23.2](https://github.com/rindojs/rindo/compare/v4.23.1...v4.23.2) (2025-09-05)
+
+
+### Bug Fixes
+
+* **runtime:** clear up `rootAppliedStyles` ([9b7d94d](https://github.com/rindojs/rindo/commit/9b7d94dd2e4732a58555d5e127ab891f1ee48020))
+
+
+
 ## 🚑 [4.23.1](https://github.com/rindojs/rindo/compare/v4.23.0...v4.23.1) (2025-09-05)
 
 
