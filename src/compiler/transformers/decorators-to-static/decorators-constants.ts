@@ -37,12 +37,6 @@ export const MEMBER_DECORATORS_TO_REMOVE = [
 ] as const satisfies readonly RindoDecorator[];
 
 /**
- * Decorators whose 'decorees' we need to rewrite during compilation from
- * class fields to instead initialize them in a constructor.
- */
-export const CONSTRUCTOR_DEFINED_MEMBER_DECORATORS = ['State', 'Prop'] as const satisfies readonly RindoDecorator[];
-
-/**
  * The names used for the static getters added to Rindo components when they
  * are transformed to remove decorated properties.
  */

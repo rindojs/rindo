@@ -29,7 +29,7 @@ describe('lazy-component', () => {
 
     const transformer = lazyComponentTransform(compilerCtx, transformOpts);
 
-    const t = transpileModule(code, null, compilerCtx, [], [transformer]);
+    const t = transpileModule(code, null, compilerCtx, [], [transformer], []);
 
     expect(t.outputText).toContain(`import { registerInstance as __rindo_registerInstance } from "@rindo/core"`);
     expect(t.outputText).toContain(`__rindo_registerInstance(this, hostRef)`);
@@ -87,7 +87,6 @@ describe('lazy-component', () => {
     `;
 
     const transformer = lazyComponentTransform(compilerCtx, transformOpts);
-
     const t = transpileModule(code, null, compilerCtx, [], [transformer]);
 
     expect(await formatCode(t.outputText)).toBe(
