@@ -1,3 +1,19 @@
+# 🐞 [4.24.0](https://github.com/rindojs/rindo/compare/v4.23.2...v4.24.0) (2025-11-12)
+
+
+### Bug Fixes
+
+* **runtime:** clean up ancestor nodes on resolve ([551999c](https://github.com/rindojs/rindo/commit/551999cc4cad03616da6a4ef4e80cbb9f9c79e5f))
+* **testing:** update puppeteer, default to `new` headless ([569f9e6](https://github.com/rindojs/rindo/commit/569f9e65be8310fad63171cdbab58f961c79fb18))
+
+
+### Features
+
+* **runtime:** `@Prop` / `@State` now work with runtime decorators ([049a645](https://github.com/rindojs/rindo/commit/049a645a973de1c78c0f3adaeadb6acbd0c0bc45))
+* **slot-polyfill:** patch `insertBefore` & slotted node `parentNode` ([8f7d84e](https://github.com/rindojs/rindo/commit/8f7d84ef5c774599d18a37a9cccce4bfd60a78ea))
+
+
+
 ## 🕹 [4.23.2](https://github.com/rindojs/rindo/compare/v4.23.1...v4.23.2) (2025-09-05)
 
 
