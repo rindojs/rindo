@@ -4,7 +4,7 @@ import type * as d from '../declarations';
 
 let customError: d.ErrorHandler;
 
-export const consoleError: d.ErrorHandler = (e: any, el?: any) => (customError || console.error)(e, el);
+export const consoleError: d.ErrorHandler = (e: any, el?: HTMLElement) => (customError || console.error)(e, el);
 
 export const RINDO_DEV_MODE = BUILD.isTesting
   ? ['RINDO:'] // E2E testing
