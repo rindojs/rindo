@@ -1,3 +1,15 @@
+## 🎆 [4.25.1](https://github.com/rindojs/rindo/compare/v4.25.0...v4.25.1) (2025-12-05)
+
+
+### Bug Fixes
+
+* **dist-custom-elements:** stop duplicate @rindo/core ([6ec6db9](https://github.com/rindojs/rindo/commit/6ec6db9f9785fa5bc6949bd56ca546f56dced9a9))
+* **runtime:** allow `classList` to be null ([aa6b857](https://github.com/rindojs/rindo/commit/aa6b85708074e1c0131be947b0e7d2e2e6ad2298))
+* **runtime:** fix `NotFoundError` in `addStyle` function with `referenceNode` parent check ([e8fac18](https://github.com/rindojs/rindo/commit/e8fac18f1f6cf5f07222ea8aa66d498db7af6eb5))
+* **runtime:** SSR class handling breaks normal class handling ([e0d797c](https://github.com/rindojs/rindo/commit/e0d797c1ea91ceff353225ab3fc153dafd48d204))
+
+
+
 # 🚩 [4.25.0](https://github.com/rindojs/rindo/compare/v4.24.0...v4.25.0) (2025-12-05)
 
 
