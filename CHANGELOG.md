@@ -1,3 +1,19 @@
+# 🚩 [4.25.0](https://github.com/rindojs/rindo/compare/v4.24.0...v4.25.0) (2025-12-05)
+
+
+### Bug Fixes
+
+* **SSR:** class prop / state reactivity for target es2022 ([e4876ba](https://github.com/rindojs/rindo/commit/e4876ba901aeacc1e9014ed3d00f1657b0cb0bc1))
+* **test:** stop re-running prototype augment in spec tests ([1d4c373](https://github.com/rindojs/rindo/commit/1d4c37364932efe658e9fa378cd5a11c251714ff))
+
+
+### Features
+
+* **mock-doc:** `assignednodes` and `assignedElements` ([13e50c5](https://github.com/rindojs/rindo/commit/13e50c5d6ae8fa535ed21f1dce4275cf43b05c4a))
+* **runtime:** Add element to component error handler. Enables error boundaries ([4df8597](https://github.com/rindojs/rindo/commit/4df8597a6f8e862f401e12f10da7bcf58ee53731))
+
+
+
 # 🐞 [4.24.0](https://github.com/rindojs/rindo/compare/v4.23.2...v4.24.0) (2025-11-12)
 
 
