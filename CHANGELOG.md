@@ -1,3 +1,21 @@
+## 🍖 [4.25.2](https://github.com/rindojs/rindo/compare/v4.25.0...v4.25.2) (2025-12-06)
+
+
+### Bug Fixes
+
+* **dist-custom-elements:** stop duplicate @rindo/core ([6ec6db9](https://github.com/rindojs/rindo/commit/6ec6db9f9785fa5bc6949bd56ca546f56dced9a9))
+* **runtime:** allow `classList` to be null ([aa6b857](https://github.com/rindojs/rindo/commit/aa6b85708074e1c0131be947b0e7d2e2e6ad2298))
+* **runtime:** clean `deferredConnectedCallbacks` array on `disconnectedCallback` ([6002180](https://github.com/rindojs/rindo/commit/600218051055bcb234de4fb5ac6ba6e59ee8e99a))
+* **runtime:** don't flag html tag with hydrate flag anymore ([d347be8](https://github.com/rindojs/rindo/commit/d347be8ebc1bfd32d6db364c46758afc5c537834))
+* **runtime:** fix `NotFoundError` in `addStyle` function with `referenceNode` parent check ([e8fac18](https://github.com/rindojs/rindo/commit/e8fac18f1f6cf5f07222ea8aa66d498db7af6eb5))
+* **runtime:** SSR class handling breaks normal class handling ([e0d797c](https://github.com/rindojs/rindo/commit/e0d797c1ea91ceff353225ab3fc153dafd48d204))
+* **ssr:** correctly resolve slots during hydration ([9b77308](https://github.com/rindojs/rindo/commit/9b773087d1a60e6b4c46b6d685191138a38c9dcb))
+* **ssr:** exponential perf slow down ([3a32f0b](https://github.com/rindojs/rindo/commit/3a32f0b2ead724fd67ea9caf72c1aacee1062f28))
+* **ssr:** multiple component instances sharing initial properties ([7d4d7e1](https://github.com/rindojs/rindo/commit/7d4d7e1eb8a3f6b4e4af8ac7ae4642769bb5f041))
+* **ssr:** stop stripping comment nodes ([d10b1f5](https://github.com/rindojs/rindo/commit/d10b1f59ca6e4b3fd96ddc5df6803fd77d87271e))
+
+
+
 ## 🎆 [4.25.1](https://github.com/rindojs/rindo/compare/v4.25.0...v4.25.1) (2025-12-05)
 
 
