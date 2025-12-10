@@ -1,3 +1,12 @@
+## 🍧 [4.25.3](https://github.com/rindojs/rindo/compare/v4.25.2...v4.25.3) (2025-12-10)
+
+
+### Bug Fixes
+
+* **runtime:** don't include loadModule logic in hydrate runtime ([36d3137](https://github.com/rindojs/rindo/commit/36d3137eae6e051cdf25bfc53d8e1c556031218f))
+
+
+
 ## 🍖 [4.25.2](https://github.com/rindojs/rindo/compare/v4.25.0...v4.25.2) (2025-12-06)
 
 
