@@ -1,3 +1,12 @@
+# 🏈 [4.26.0](https://github.com/rindojs/rindo/compare/v4.25.3...v4.26.0) (2025-12-11)
+
+
+### Features
+
+* **ssr:** shadow dom components can render as declarative-shadow-dom or as `'scoped'` ([705cc3f](https://github.com/rindojs/rindo/commit/705cc3f1bad127d9b1ca039d3fca77a316e3fc8a))
+
+
+
 ## 🍧 [4.25.3](https://github.com/rindojs/rindo/compare/v4.25.2...v4.25.3) (2025-12-10)
 
 
