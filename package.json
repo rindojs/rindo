@@ -148,7 +148,7 @@
     "autoprefixer": "10.4.19",
     "conventional-changelog-cli": "^5.0.0",
     "dts-bundle-generator": "~9.5.0",
-    "esbuild": "^0.21.0",
+    "esbuild": "^0.25.0",
     "esbuild-plugin-replace": "^1.4.0",
     "eslint": "^8.23.1",
     "eslint-config-prettier": "^9.0.0",
