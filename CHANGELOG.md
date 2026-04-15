@@ -1,3 +1,20 @@
+# 🐂 [4.27.0](https://github.com/rindojs/rindo/compare/v4.26.0...v4.27.0) (2026-04-15)
+
+
+### Bug Fixes
+
+* **hydrate:** support dash-case case in hydrate mode ([efd8360](https://github.com/rindojs/rindo/commit/efd8360a36bfe457815d0897d4ea93509d799fe7))
+* **runtime:** `scoped: true` slot fallback with forwarded slot ([c356e11](https://github.com/rindojs/rindo/commit/c356e112cd8b7da31ee0e27d5449889b49662f4a))
+* **runtime:** always call component lifecycle hooks ([16121e0](https://github.com/rindojs/rindo/commit/16121e0139ec85c123ed537f9a8e4d0b1b8153f8))
+* **runtime:** append `newChild` if parent node doesn't match with patched node ([3ad4d5c](https://github.com/rindojs/rindo/commit/3ad4d5ce152098ba2c874451181b6ef39e012fc1))
+
+
+### Features
+
+* **runtime:** add `slotchange` event and `assignedNodes` / `assignedElements` methods for `scoped: true` slots ([7b74526](https://github.com/rindojs/rindo/commit/7b745263dddbf8c39963059c99a47eb6ce5c3bb6))
+
+
+
 # 🏈 [4.26.0](https://github.com/rindojs/rindo/compare/v4.25.3...v4.26.0) (2025-12-11)
 
 
