@@ -1,3 +1,12 @@
+## 🎨 [4.27.1](https://github.com/rindojs/rindo/compare/v4.27.0...v4.27.1) (2026-04-16)
+
+
+### Bug Fixes
+
+* **runtime:** mock `querySelectorAll` ([961348c](https://github.com/rindojs/rindo/commit/961348cb1c6d77708cbf4c15c3d876aaa832965f))
+
+
+
 # 🐂 [4.27.0](https://github.com/rindojs/rindo/compare/v4.26.0...v4.27.0) (2026-04-15)
 
 
