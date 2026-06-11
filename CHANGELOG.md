@@ -1,3 +1,15 @@
+## 🐼 [4.28.1](https://github.com/rindojs/rindo/compare/v4.28.0...v4.28.1) (2026-06-11)
+
+
+### Bug Fixes
+
+* **build:** add more platform specific `optionalDependencies` ([8d96aab](https://github.com/rindojs/rindo/commit/8d96aabfce011156d56263bebe159233598e14a3))
+* **build:** get ts to handle `.d.mts` files ([6a945ba](https://github.com/rindojs/rindo/commit/6a945ba9cd7b2c83b2bda22e6ff015d56acbc820))
+* **compiler:** get to handle `.cts` files ([ff77fa8](https://github.com/rindojs/rindo/commit/ff77fa8cc9996aafa9297fc23d88d29b335fd148))
+* **loader:** remove `package.json` as it interferes with main ([5589966](https://github.com/rindojs/rindo/commit/558996642da9d4105b62231946f9831dff8f0cec))
+
+
+
 # 🐎 [4.28.0](https://github.com/rindojs/rindo/compare/v4.27.2...v4.28.0) (2026-06-11)
 
 
