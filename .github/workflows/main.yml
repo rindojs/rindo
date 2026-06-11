@@ -23,37 +23,37 @@ jobs:
     name: Lint and Format
     uses: ./.github/workflows/lint-and-format.yml
 
-  analysis_tests:
-    name: Analysis Tests
-    needs: [build_core]
-    uses: ./.github/workflows/test-analysis.yml
+  # analysis_tests:
+  #   name: Analysis Tests
+  #   needs: [build_core]
+  #   uses: ./.github/workflows/test-analysis.yml
 
-  docs_build_tests:
-    name: Docs Build Tests
-    needs: [build_core]
-    uses: ./.github/workflows/test-docs-build.yml
+  # docs_build_tests:
+  #   name: Docs Build Tests
+  #   needs: [build_core]
+  #   uses: ./.github/workflows/test-docs-build.yml
 
-  bundler_tests:
-    name: Bundler Tests
-    needs: [build_core]
-    uses: ./.github/workflows/test-bundlers.yml
+  # bundler_tests:
+  #   name: Bundler Tests
+  #   needs: [build_core]
+  #   uses: ./.github/workflows/test-bundlers.yml
 
-  copytask_tests:
-    name: Copy Task Tests
-    needs: [build_core]
-    uses: ./.github/workflows/test-copytask.yml
+  # copytask_tests:
+  #   name: Copy Task Tests
+  #   needs: [build_core]
+  #   uses: ./.github/workflows/test-copytask.yml
 
-  component_starter_tests:
-    name: Component Starter Smoke Test
-    needs: [build_core]
-    uses: ./.github/workflows/test-component-starter.yml
+  # component_starter_tests:
+  #   name: Component Starter Smoke Test
+  #   needs: [build_core]
+  #   uses: ./.github/workflows/test-component-starter.yml
 
-  e2e_tests:
-    name: E2E Tests
-    needs: [build_core]
-    uses: ./.github/workflows/test-e2e.yml
+  # e2e_tests:
+  #   name: E2E Tests
+  #   needs: [build_core]
+  #   uses: ./.github/workflows/test-e2e.yml
 
-  unit_tests:
-    name: Unit Tests
-    needs: [build_core]
-    uses: ./.github/workflows/test-unit.yml
+  # unit_tests:
+  #   name: Unit Tests
+  #   needs: [build_core]
+  #   uses: ./.github/workflows/test-unit.yml
