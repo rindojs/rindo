@@ -1,3 +1,12 @@
+## 🍸 [4.27.2](https://github.com/rindojs/rindo/compare/v4.27.1...v4.27.2) (2026-06-11)
+
+
+### Bug Fixes
+
+* **compiler:** revert deprecation changes to `components.d.ts` ([46b92a0](https://github.com/rindojs/rindo/commit/46b92a07f39d52a625ffb4281b20e9a3474ee906))
+
+
+
 ## 🎨 [4.27.1](https://github.com/rindojs/rindo/compare/v4.27.0...v4.27.1) (2026-04-16)
 
 
