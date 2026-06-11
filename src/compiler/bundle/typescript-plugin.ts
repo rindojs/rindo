@@ -1,4 +1,4 @@
-import { isString, normalizeFsPath } from '@utils';
+import { isDtsFile, isString, normalizeFsPath } from '@utils';
 import { basename, isAbsolute } from 'path';
 import type { LoadResult, Plugin, TransformResult } from 'rollup';
 import ts from 'typescript';
@@ -88,7 +88,7 @@ export const resolveIdWithTypeScript = (config: d.ValidatedConfig, compilerCtx: 
         // this is probably a .d.ts file for whatever reason in how TS resolves this
         // use this resolved file as the "importer"
         const tsResolvedPath = tsResolved.resolvedModule.resolvedFileName;
-        if (isString(tsResolvedPath) && !(tsResolvedPath.endsWith('.d.ts') || tsResolvedPath.endsWith('.d.mts'))) {
+        if (isString(tsResolvedPath) && !isDtsFile(tsResolvedPath)) {
           return tsResolvedPath;
         }
       }
