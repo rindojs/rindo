@@ -1,3 +1,13 @@
+# 🐎 [4.28.0](https://github.com/rindojs/rindo/compare/v4.27.2...v4.28.0) (2026-06-11)
+
+
+### Bug Fixes
+
+* add missing name attribute for details html element ([4860774](https://github.com/rindojs/rindo/commit/4860774b4a08ee9fb202d313677d27ca119d1daf))
+* **compiler:** fix file watcher sometimes doesn't trigger rebuild ([618d0dc](https://github.com/rindojs/rindo/commit/618d0dcf8280f7c77e08e447f33680b083c176d9))
+
+
+
 ## 🍸 [4.27.2](https://github.com/rindojs/rindo/compare/v4.27.1...v4.27.2) (2026-06-11)
 
 
